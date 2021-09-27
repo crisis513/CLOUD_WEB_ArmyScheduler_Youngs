@@ -8,18 +8,13 @@
       <nav>
         <ul>
           <li>
-            <a href="https://www.creative-tim.com">
-              Creative Tim
-            </a>
-          </li>
-          <li>
-            <a href="https:///presentation.creative-tim.com">
+            <a href="/#/landing">
               About Us
             </a>
           </li>
           <li>
-            <a href="https:///blog.creative-tim.com">
-              Blog
+            <a href="https://github.com/osamhack2021/CLOUD_WEB_ArmyScheduler_Youngs">
+              Git
             </a>
           </li>
           <li>
@@ -31,8 +26,8 @@
       </nav>
       <div class="copyright">
         &copy; {{ year }}, made with <md-icon>favorite</md-icon> by
-        <a href="https://www.creative-tim.com/" target="_blank">Creative Tim</a>
-        for a better web.
+        <a href="https://github.com/osamhack2021/CLOUD_WEB_ArmyScheduler_Youngs" target="_blank">Army Scheduler</a>
+        for a better military life.
       </div>
     </div>
   </footer>
