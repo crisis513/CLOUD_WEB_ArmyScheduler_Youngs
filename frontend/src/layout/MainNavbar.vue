@@ -1,14 +1,19 @@
 <template>
-  <md-toolbar 
+  <md-toolbar
     id="toolbar"
     md-elevation="0"
     class="md-transparent md-absolute md-white"
     :class="extraNavClasses"
-    :color-on-scroll="colorOnScroll">
+    :color-on-scroll="colorOnScroll"
+  >
     <div class="md-toolbar-row">
       <div class="md-toolbar-section-start">
         <a href="/">
-          <img class="navbar-logo" src="../assets/img/armyscheduler_logo.png" alt="Army Scheduler Logo">
+          <img
+            class="navbar-logo"
+            src="../assets/img/armyscheduler_logo.png"
+            alt="Army Scheduler Logo"
+          />
         </a>
       </div>
       <div class="md-toolbar-section-end">
@@ -46,7 +51,10 @@
             </md-list-item>
 
             <li class="md-list-item">
-              <a href="/#/login" class="md-list-item-router md-list-item-container md-button-clean">
+              <a
+                href="/#/login"
+                class="md-list-item-router md-list-item-container md-button-clean"
+              >
                 <div class="md-list-item-content">
                   <md-button class="md-rose md-round">회원가입</md-button>
                 </div>
@@ -103,7 +111,16 @@ export default {
   },
   computed: {
     showDownload() {
-      const excludedRoutes = ["home", "schedule", "board", "manage-unit", "manage-work", "login", "landing", "profile"];
+      const excludedRoutes = [
+        "home",
+        "schedule",
+        "board",
+        "manage-unit",
+        "manage-work",
+        "login",
+        "landing",
+        "profile"
+      ];
       return excludedRoutes.every(r => r !== this.$route.name);
     }
   },

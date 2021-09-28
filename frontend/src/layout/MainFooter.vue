@@ -13,7 +13,9 @@
             </a>
           </li>
           <li>
-            <a href="https://github.com/osamhack2021/CLOUD_WEB_ArmyScheduler_Youngs">
+            <a
+              href="https://github.com/osamhack2021/CLOUD_WEB_ArmyScheduler_Youngs"
+            >
               Git
             </a>
           </li>
@@ -26,7 +28,11 @@
       </nav>
       <div class="copyright">
         &copy; {{ year }}, made with <md-icon>favorite</md-icon> by
-        <a href="https://github.com/osamhack2021/CLOUD_WEB_ArmyScheduler_Youngs" target="_blank">Army Scheduler</a>
+        <a
+          href="https://github.com/osamhack2021/CLOUD_WEB_ArmyScheduler_Youngs"
+          target="_blank"
+          >Army Scheduler</a
+        >
         for a better military life.
       </div>
     </div>
