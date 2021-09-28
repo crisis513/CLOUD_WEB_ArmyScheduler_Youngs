@@ -2,7 +2,7 @@
   <md-toolbar 
     id="toolbar"
     md-elevation="0"
-    class="md-white"
+    class="md-transparent md-absolute md-white"
     :class="extraNavClasses"
     :color-on-scroll="colorOnScroll">
     <div class="md-toolbar-row">
@@ -20,26 +20,35 @@
 
         <div class="md-collapse">
           <md-list>
+            <md-list-item href="/#/home">
+              <md-icon>home</md-icon>
+              <p>홈</p>
+            </md-list-item>
+
             <md-list-item href="/#/schedule">
+              <md-icon>schedule</md-icon>
               <p>일정</p>
             </md-list-item>
 
             <md-list-item href="/#/board">
+              <md-icon>note</md-icon>
               <p>게시판</p>
             </md-list-item>
 
             <md-list-item href="/#/munit">
+              <md-icon>person</md-icon>
               <p>부대관리</p>
             </md-list-item>
 
             <md-list-item href="/#/mwork">
+              <md-icon>work</md-icon>
               <p>근무관리</p>
             </md-list-item>
 
             <li class="md-list-item">
               <a href="/#/login" class="md-list-item-router md-list-item-container md-button-clean">
                 <div class="md-list-item-content">
-                  <md-button class="md-rose md-round">Register</md-button>
+                  <md-button class="md-rose md-round">회원가입</md-button>
                 </div>
               </a>
             </li>
@@ -94,7 +103,7 @@ export default {
   },
   computed: {
     showDownload() {
-      const excludedRoutes = ["schedule", "board", "manage-unit", "manage-work", "login", "landing", "profile"];
+      const excludedRoutes = ["home", "schedule", "board", "manage-unit", "manage-work", "login", "landing", "profile"];
       return excludedRoutes.every(r => r !== this.$route.name);
     }
   },

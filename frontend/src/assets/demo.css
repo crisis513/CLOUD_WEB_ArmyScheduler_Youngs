@@ -8,6 +8,13 @@
     min-height: 32px;
 }
 
+.title-center{
+    margin-top: 30px;
+    margin-bottom: 25px;
+    min-height: 32px;
+    text-align: center;
+}
+
 #tooltips .md-button{
   margin-left: 6px;
 }
