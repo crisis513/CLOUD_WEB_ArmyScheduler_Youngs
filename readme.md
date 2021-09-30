@@ -2,12 +2,11 @@
 <p align="center">
     <img src="https://img.shields.io/badge/version-v0.1-orange" alt="version"/>
     <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT"></a>
-    <a href="https://github.com/osamhack2021/CLOUD_WEB_ArmyScheduler_Youngs"><img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/osamhack2021/Web_ArmyForm_LFDF/Build%20&%20deploy"></a>
     <a href="https://github.com/osamhack2021/CLOUD_WEB_ArmyScheduler_Youngs/graphs/contributors"><img alt="Github contributors" src="https://img.shields.io/github/contributors/osamhack2021/CLOUD_WEB_ArmyScheduler_Youngs?color=success"></a>
 </p>
 <br/>
 
-![Logo](https://github.com/osamhack2021/CLOUD_WEB_ArmyScheduler_Youngs/tree/master/frontend/src/assets/img/armyscheduler_logo.png)
+![Logo](frontend/src/assets/img/armyscheduler_logo.png)
 
 
 ## 프로잭트 소개
