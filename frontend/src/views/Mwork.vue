@@ -1,175 +1,222 @@
 <template>
-  <div class="wrapper">
-    <parallax
-      class="section page-header header-filter"
-      :style="headerStyle"
-    ></parallax>
-    <div class="main main-raised">
-      <div class="section profile-content">
-        <div class="container">
-          <div class="md-layout">
-            <div class="md-layout-item md-size-50 mx-auto">
-              <div class="profile">
-                <div class="avatar">
-                  <img
-                    :src="img"
-                    alt="Circle Image"
-                    class="img-raised rounded-circle img-fluid"
-                  />
-                </div>
-                <div class="name">
-                  <h3 class="title">Carla Hortensia</h3>
-                  <h6>Designer</h6>
-                  <md-button
-                    href="javascript:void(0)"
-                    class="md-just-icon md-simple md-dribbble"
-                    ><i class="fab fa-dribbble"></i
-                  ></md-button>
-                  <md-button
-                    href="javascript:void(0)"
-                    class="md-just-icon md-simple md-twitter"
-                    ><i class="fab fa-twitter"></i
-                  ></md-button>
-                  <md-button
-                    href="javascript:void(0)"
-                    class="md-just-icon md-simple md-pinterest"
-                    ><i class="fab fa-pinterest"></i
-                  ></md-button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="description text-center">
-            <p>
-              An artist of considerable range, Chet Faker — the name taken by
-              Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs
-              and records all of his own music, giving it a warm, intimate feel
-              with a solid groove structure.
-            </p>
-          </div>
-          <div class="profile-tabs">
-            <tabs
-              :tab-name="['Studio', 'Work', 'Favorite']"
-              :tab-icon="['camera', 'palette', 'favorite']"
-              plain
-              nav-pills-icons
-              color-button="success"
+  <v-app class="wrapper">
+    <v-app class="main main-raised-sub">
+      <div class="title-center">
+        <h2>근무 관리</h2>
+      </div>
+      <div class="parent">
+        <div class="child1">
+          <v-card
+            class="mx-auto"
+            max-width="300"
+            elevation="1"
+            tile
+          >
+            <v-list dense>
+              <v-subheader>근무지</v-subheader>
+              <v-list-item-group
+                v-model="selectedItem"
+                color="primary"
+              >
+                <v-list-item
+                  v-for="(item, i) in items"
+                  :key="i"
+                >
+                  <v-list-item-content>
+                    <v-list-item-title v-text="item.text"></v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list-item-group>
+            </v-list>
+          </v-card>
+        </div>
+
+        <v-divider vertical></v-divider>
+
+        <div class="child2">
+          <v-container fluid>
+            <v-row align="center">
+              <v-col cols="3">
+                <v-subheader>
+                  근무명
+                </v-subheader>
+              </v-col>
+              <v-col cols="6">
+                <v-select
+                  v-model="select"
+                  :hint="`${select.state}, ${select.abbr}`"
+                  :items="works"
+                  item-text="state"
+                  item-value="abbr"
+                  label="근무지 선택"
+                  persistent-hint
+                  return-object
+                  single-line
+                ></v-select>
+              </v-col>
+            </v-row>
+          </v-container>
+
+          <v-container fluid>
+            <v-row align="center">
+              <v-col cols="3">
+                <v-subheader>
+                  근무설정
+                </v-subheader>
+              </v-col>
+              <v-col cols="9">
+                <table>
+                  <tr v-for="(row, index) in rows" :key="index">
+                    <td>
+                      <v-text-field
+                        slot="activator"
+                        v-model="row.start"
+                        label="시작시간 입력"
+                        prepend-icon="access_time"
+                        placeholder="00:00"
+                        class="between-blank-10" ></v-text-field>
+                    </td>
+                    &nbsp;&nbsp;
+                    <td>
+                      <v-text-field
+                        slot="activator"
+                        v-model="row.end"
+                        label="종료시간 입력"
+                        prepend-icon="access_time"
+                        placeholder="00:00"
+                        class="between-blank-10" ></v-text-field>
+                    </td>
+                    <td>
+                      <v-text-field
+                        label="근무인원"
+                        placeholder="0"
+                      ></v-text-field>
+                    </td>
+                    <td><v-icon @click='deleteTableRow(index)'>delete</v-icon></td>
+                  </tr>
+                </table>
+                <v-btn @click='addTableRow()' >근무 추가</v-btn>
+              </v-col>
+            </v-row>
+          </v-container>
+
+          <v-container fluid>
+            <v-row align="center">
+              <v-col cols="3">
+                <v-subheader>
+                  근무옵션
+                </v-subheader>
+              </v-col>
+              <v-col cols="9">
+                <table>
+                  <tr>
+                    <td>1. 이것은 테스트입니다.</td>
+                    <td>
+                      <v-radio-group
+                        v-model="row"
+                        row
+                      >
+                        <v-radio
+                          label="Option 1"
+                          value="radio-1"
+                        ></v-radio>
+                        <v-radio
+                          label="Option 2"
+                          value="radio-2"
+                        ></v-radio>
+                      </v-radio-group>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>2. 이것은 테스트</td>
+                    <td>
+                      <v-radio-group
+                        v-model="row"
+                        row
+                      >
+                        <v-radio
+                          label="Option 1"
+                          value="radio-1"
+                        ></v-radio>
+                        <v-radio
+                          label="Option 2"
+                          value="radio-2"
+                        ></v-radio>
+                      </v-radio-group>
+                    </td>
+                  </tr>
+                </table>
+              </v-col>
+            </v-row>
+          </v-container>
+
+          <v-container fluid>
+            <v-row align="center">
+              <v-col cols="3">
+                <v-subheader>
+                  근무주기
+                </v-subheader>
+              </v-col>
+              <v-col cols="6">
+                <v-text-field
+                  label="최소 근무주기 입력"
+                  placeholder="2"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+          </v-container>
+
+          <div class="title-center">
+            <v-row
+              align="center"
+              justify="center"
             >
-              <!-- here you can add your content for tab-content -->
-              <template slot="tab-pane-1">
-                <div class="md-layout">
-                  <div class="md-layout-item md-size-25 ml-auto">
-                    <img :src="tabPane1[0].image" class="rounded" />
-                    <img :src="tabPane1[1].image" class="rounded" />
-                  </div>
-                  <div class="md-layout-item md-size-25 mr-auto">
-                    <img :src="tabPane1[3].image" class="rounded" />
-                    <img :src="tabPane1[2].image" class="rounded" />
-                  </div>
-                </div>
-              </template>
-              <template slot="tab-pane-2">
-                <div class="md-layout">
-                  <div class="md-layout-item md-size-25 ml-auto">
-                    <img :src="tabPane2[0].image" class="rounded" />
-                    <img :src="tabPane2[1].image" class="rounded" />
-                    <img :src="tabPane2[2].image" class="rounded" />
-                  </div>
-                  <div class="md-layout-item md-size-25 mr-auto">
-                    <img :src="tabPane2[3].image" class="rounded" />
-                    <img :src="tabPane2[4].image" class="rounded" />
-                  </div>
-                </div>
-              </template>
-              <template slot="tab-pane-3">
-                <div class="md-layout">
-                  <div class="md-layout-item md-size-25 ml-auto">
-                    <img :src="tabPane3[0].image" class="rounded" />
-                    <img :src="tabPane3[1].image" class="rounded" />
-                  </div>
-                  <div class="md-layout-item md-size-25 mr-auto">
-                    <img :src="tabPane3[2].image" class="rounded" />
-                    <img :src="tabPane3[3].image" class="rounded" />
-                    <img :src="tabPane3[4].image" class="rounded" />
-                  </div>
-                </div>
-              </template>
-            </tabs>
+              <v-btn class="between-blank-50">초기화</v-btn>
+              <v-btn class="between-blank-50" color="primary">
+                저장
+              </v-btn>
+            </v-row>
           </div>
         </div>
       </div>
-    </div>
-  </div>
+    </v-app>
+  </v-app>
 </template>
 
 <script>
-import { Tabs } from "@/components";
-export default {
-  components: {
-    Tabs
-  },
-  bodyClass: "profile-page",
-  data() {
-    return {
-      tabPane1: [
-        { image: require("@/assets/img/examples/studio-1.jpg") },
-        { image: require("@/assets/img/examples/studio-2.jpg") },
-        { image: require("@/assets/img/examples/studio-4.jpg") },
-        { image: require("@/assets/img/examples/studio-5.jpg") }
+  export default {
+    data: () => ({
+      selectedItem: 1,
+      items: [
+        { text: '위병소' },
+        { text: 'CCTV' },
+        { text: '순찰' },
       ],
-      tabPane2: [
-        { image: require("@/assets/img/examples/olu-eletu.jpg") },
-        { image: require("@/assets/img/examples/clem-onojeghuo.jpg") },
-        { image: require("@/assets/img/examples/cynthia-del-rio.jpg") },
-        { image: require("@/assets/img/examples/mariya-georgieva.jpg") },
-        { image: require("@/assets/img/examples/clem-onojegaw.jpg") }
+      select: { state: '위병소', abbr: 'WB' },
+      works: [
+        { state: '위병소', abbr: 'WB' },
+        { state: 'CCTV', abbr: 'CC' },
+        { state: '순찰', abbr: 'SC' },
+        { state: '창당직', abbr: 'CD' },
       ],
-      tabPane3: [
-        { image: require("@/assets/img/examples/mariya-georgieva.jpg") },
-        { image: require("@/assets/img/examples/studio-3.jpg") },
-        { image: require("@/assets/img/examples/clem-onojeghuo.jpg") },
-        { image: require("@/assets/img/examples/olu-eletu.jpg") },
-        { image: require("@/assets/img/examples/studio-1.jpg") }
-      ]
-    };
-  },
-  props: {
-    header: {
-      type: String,
-      default: require("@/assets/img/city-profile.jpg")
-    },
-    img: {
-      type: String,
-      default: require("@/assets/img/faces/christian.jpg")
-    }
-  },
-  computed: {
-    headerStyle() {
-      return {
-        backgroundImage: `url(${this.header})`
-      };
+      work_cycle: [
+        
+      ],
+      rows: [{
+        start: "",
+        end: ""
+      }],
+      counter: 1,
+    }),
+    methods:{
+      addTableRow: function () { 
+        this.counter++;
+        this.rows.push({start: "", end: ""});
+      },
+      deleteTableRow: function (idx) { 
+        this.counter--;
+        this.rows.splice(idx, 1);
+      }
     }
   }
-};
 </script>
-
-<style lang="scss" scoped>
-.section {
-  padding: 0;
-}
-
-.profile-tabs::v-deep {
-  .md-card-tabs .md-list {
-    justify-content: center;
-  }
-
-  [class*="tab-pane-"] {
-    margin-top: 3.213rem;
-    padding-bottom: 50px;
-
-    img {
-      margin-bottom: 2.142rem;
-    }
-  }
-}
-</style>

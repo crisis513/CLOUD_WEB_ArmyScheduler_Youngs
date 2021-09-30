@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <div id="navigation">
-      <div class="navigation-example" :style="bgImage">
+      <div :style="bgImage">
         <div class="md-layout">
           <div class="md-layout-item">
             <md-toolbar class="md-rose">

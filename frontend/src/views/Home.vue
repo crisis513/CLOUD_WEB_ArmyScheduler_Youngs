@@ -37,63 +37,32 @@
       <div class="title-center">
         <h2>스케줄 로그</h2>
       </div>
-      <div class="md-layout">
-        <div
-          class="md-layout-item md-size-25 md-xsmall-size-100 md-small-size-50 md-medium-size-25"
-        >
-          <md-field>
-            <md-input v-model="initial" placeholder="Regular"></md-input>
-          </md-field>
-        </div>
-        <div
-          class="md-layout-item md-size-25 md-xsmall-size-100 md-small-size-50 md-medium-size-25"
-        >
-          <md-field>
-            <label>With Floating Label</label>
-            <md-input v-model="floatingLabel" type="text"></md-input>
-          </md-field>
-        </div>
-        <div
-          class="md-layout-item md-size-25 md-xsmall-size-100 md-small-size-50 md-medium-size-25"
-        >
-          <md-field class="md-valid">
-            <label>Success Input</label>
-            <md-input v-model="success" type="text"></md-input>
-            <md-icon>done</md-icon>
-          </md-field>
-        </div>
-        <div
-          class="md-layout-item md-size-25 md-xsmall-size-100 md-small-size-50 md-medium-size-25"
-        >
-          <md-field class="md-error">
-            <label>Error Input</label>
-            <md-input v-model="error" type="text"></md-input>
-            <md-icon>clear</md-icon>
-          </md-field>
-        </div>
-        <div
-          class="md-layout-item md-size-25 md-xsmall-size-100 md-small-size-50 md-medium-size-25"
-        >
-          <md-field class="md-form-group">
-            <md-icon>face</md-icon>
-            <md-input
-              v-model="withMIcon"
-              placeholder="With Material Icons"
-            ></md-input>
-          </md-field>
-        </div>
-        <div
-          class="md-layout-item md-size-25 md-xsmall-size-100 md-small-size-50 md-medium-size-25"
-        >
-          <md-field class="md-form-group">
-            <i class="fas fa-users"></i>
-            <md-input
-              v-model="withFaIcon"
-              placeholder="With Font Awesome Icons"
-            ></md-input>
-          </md-field>
-        </div>
-      </div>
+      <v-simple-table
+        fixed-header
+        height="300px"
+      >
+        <template v-slot:default>
+          <thead>
+            <tr>
+              <th class="text-left">
+                Name
+              </th>
+              <th class="text-left">
+                Calories
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="item in desserts"
+              :key="item.name"
+            >
+              <td>{{ item.name }}</td>
+              <td>{{ item.calories }}</td>
+            </tr>
+          </tbody>
+        </template>
+      </v-simple-table>
     </div>
   </div>
 </template>
@@ -157,7 +126,49 @@ export default {
             }
           ]
         }
-      ]
+      ],
+      desserts: [
+        {
+          name: 'Frozen Yogurt',
+          calories: 159,
+        },
+        {
+          name: 'Ice cream sandwich',
+          calories: 237,
+        },
+        {
+          name: 'Eclair',
+          calories: 262,
+        },
+        {
+          name: 'Cupcake',
+          calories: 305,
+        },
+        {
+          name: 'Gingerbread',
+          calories: 356,
+        },
+        {
+          name: 'Jelly bean',
+          calories: 375,
+        },
+        {
+          name: 'Lollipop',
+          calories: 392,
+        },
+        {
+          name: 'Honeycomb',
+          calories: 408,
+        },
+        {
+          name: 'Donut',
+          calories: 452,
+        },
+        {
+          name: 'KitKat',
+          calories: 518,
+        },
+      ],
     };
   },
   methods: {},
