@@ -2,16 +2,18 @@ from pymongo import MongoClient
 import json
 import logging, sys
 class Users(object):
-    def __init__(self, userid, passwd, en_date, de_date, now_class, unit_a, unit_b, unit_c, position, vacation, total_work_time, this_mon_work_time, prev_mon_work_time):
+    def __init__(self, userid, name, password, en_date, de_date, now_class, unit_company, unit_platoon, unit_squad, position, work_list, vacation, total_work_time, this_mon_work_time, prev_mon_work_time):
         self.userid = userid
-        self.passwd = passwd
+        self.name = name
+        self.password = password
         self.en_date = en_date
         self.de_date = de_date
         self.now_class = now_class
-        self.unit_a = unit_a
-        self.unit_b = unit_b
-        self.unit_c = unit_c
+        self.unit_company = unit_company
+        self.unit_platoon = unit_platoon
+        self.unit_squad = unit_squad
         self.position = position
+        self.work_list = work_list
         self.vacation = vacation
         self.total_work_time = total_work_time
         self.this_mon_work_time = this_mon_work_time
@@ -59,12 +61,26 @@ def object_decoder(obj):
         logging.debug(f'ERROR: __type__ not in {obj}')
         return obj
     if obj['__type__'] == 'Users':
-        return Users(obj['userid'], obj['passwd'], obj['en_date'], obj['de_date'], obj['now_class'],
-                     obj['unit_a'], obj['unit_b'], obj['unit_c'], obj['position'], obj['vacation'],
+        return Users(obj['userid'], obj['name'], obj['password'], obj['birth_date'],
+                     obj['en_date'], obj['de_date'], obj['now_class'],
+                     obj['unit_company'], obj['unit_platoon'], obj['unit_squad'],
+                     obj['position'], obj['work_list'], obj['vacation'],
                      obj['total_work_time'], obj['this_mon_work_time'], obj['prev_mon_work_time'])
     elif obj['__type__'] == 'Works':
+        return Works(obj['work_id'], obj['work_name'], obj['work_setting'],
+                     obj['work_option1'], obj['work_option2'], obj['work_option3'], obj['work_period'])
+    elif obj['__type__'] == 'Vacation':
+        return Vacation(obj['start_date'], obj['end_date'], obj['description'])
+    elif obj['__type__'] == 'WorkSetting':
+        return WorkSetting(obj['start_time'], obj['end_time'], obj['num_workers'])
+    elif obj['__type__'] == 'Events':
+        return Events(obj['userid'], obj['event_title'], obj['tags'],
+                      obj['event_date'], obj['event_color'], obj['start_time'], obj['end_time'])
+    elif obj['__type__'] == 'Tags':
+        return Tags(obj['tag_title'], obj['tag_color'])
+    else:
+        logging.debug(f'ERROR: unknown __type__ {obj["__type__"]}')
         return obj
-
 
 def db_init(client):
     db = client['army_scheduler_db']
@@ -157,7 +173,7 @@ def find_work(db, work_id):
     query = { 'work_id': work_id }
     return db.Works.find_one(query)
 
-def main():
+def dbtest():
     clear_databases()
     dbtest1()
     dbtest2()
@@ -197,6 +213,9 @@ def clear_databases():
     client = MongoClient('mongodb://localhost:27017/') # for local test
     client.drop_database('army_scheduler_db')
     print(client.list_database_names())
+
+def main():
+    dbtest()
 
 if __name__ == '__main__':
     main()
