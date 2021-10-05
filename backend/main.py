@@ -70,7 +70,7 @@ def db_init(client):
     db = client['army_scheduler_db']
     return db
 
-def create_user(db, userid, name, password, birth_date, en_date, de_date, now_class, unit_company, unit_platoon, unit_squad, position):
+def create_user(db, userid, name, password, birth_date, en_date, de_date, now_class, unit_company, unit_platoon, unit_squad, position, work_list, vacation):
     user = {
         'userid': userid,               # 아이디
         'name': name,                   # 이름
@@ -83,8 +83,8 @@ def create_user(db, userid, name, password, birth_date, en_date, de_date, now_cl
         'unit_platoon': unit_platoon,   # 소대
         'unit_squad': unit_squad,       # 분대
         'position': position,           # 보직
-        'work_list': [],                # 투입 근무 목록
-        'vacation': [],                 # 휴가
+        'work_list': work_list,         # 투입 근무 목록
+        'vacation': vacation,           # 휴가
         'total_work_time': {            # 총 근무 시간 (분)
             'work_time': 0,
             'sleep_time': 0,
@@ -107,7 +107,7 @@ def find_user(db, uid):
     query = { 'userid': uid }
     return db.Users.find_one(query)
 
-def update_user_on_userpage(db, userid, name, password, birth_date, en_date, de_date, now_class, unit_company, unit_platoon, unit_squad, position, vacation):
+def update_user_on_userpage(db, userid, name, password, birth_date, en_date, de_date, now_class, unit_company, unit_platoon, unit_squad, position, work_list, vacation):
     query = { 'userid': userid }
     values = {
         '$set': {
@@ -121,6 +121,7 @@ def update_user_on_userpage(db, userid, name, password, birth_date, en_date, de_
             'unit_platoon': unit_platoon,
             'unit_squad': unit_squad,
             'position': position,
+            'work_list': work_list,
             'vacation': vacation
         }
     }
@@ -166,14 +167,15 @@ def dbtest1():
     client = MongoClient('mongodb://localhost:27017/') # for local test
     # print(client.list_database_names())
     db = db_init(client)
-    create_user(db, 'test_id', '홍길동', 'test_pw', '2000-01-01', '2021-01-01', '2022-06-30', '상병', '1중대', '2소대', '3분대', '소총수')
-    create_user(db, 'test_id2', '임꺽정', 'test_pw2', '2001-01-01', '2020-10-01', '2022-03-31', '상병', '1중대', '2소대', '3분대', '소총수')
+    # db, userid, name, password, birth_date, en_date, de_date, now_class, unit_company, unit_platoon, unit_squad, position, work_list, vacation
+    create_user(db, 'test_id', '홍길동', 'test_pw', '2000-01-01', '2021-01-01', '2022-06-30', '상병', '1중대', '2소대', '3분대', '소총수', [1], [])
+    create_user(db, 'test_id2', '임꺽정', 'test_pw2', '2001-01-01', '2020-10-01', '2022-03-31', '상병', '1중대', '2소대', '3분대', '소총수', [1], [])
     test_user = find_user(db, 'test_id2')
     print(test_user)
     test_user = find_user(db, 'test_id')
     print(test_user)
 
-    update_user_on_userpage(db, 'test_id', '홍길동', 'test_pw', '2000-01-01', '2021-01-01', '2022-06-30', '병장', '1중대', '2소대', '3분대', '군사과학기술병', [])
+    update_user_on_userpage(db, 'test_id', '홍길동', 'test_pw', '2000-01-01', '2021-01-01', '2022-06-30', '병장', '1중대', '2소대', '3분대', '군사과학기술병', [], [])
     test_user = find_user(db, 'test_id')
     print(test_user)
 
