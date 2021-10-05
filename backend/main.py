@@ -126,7 +126,42 @@ def update_user_on_userpage(db, userid, name, password, birth_date, en_date, de_
     }
     db.Users.update_one(query, values)
 
+def create_work(db, work_id, work_name, work_setting, work_option1, work_option2, work_option3, work_period):
+    work = {
+        'work_id': work_id,             # 일련번호
+        'work_name': work_name,         # 근무명
+        'work_setting': work_setting,   # 근무설정
+        'work_option1': work_option1,   # 근무옵션1
+        'work_option2': work_option2,   # 근무옵션2
+        'work_option3': work_option3,   # 근무옵션3
+        'work_period': work_period      # 근무주기
+    }
+    return db.Works.insert_one(work).inserted_id
+
+def update_work(db, work_id, work_name, work_setting, work_option1, work_option2, work_option3, work_period):
+    query = { 'work_id': work_id }
+    values = {
+        '$set': {
+            'work_name': work_name,         # 근무명
+            'work_setting': work_setting,   # 근무설정
+            'work_option1': work_option1,   # 근무옵션1
+            'work_option2': work_option2,   # 근무옵션2
+            'work_option3': work_option3,   # 근무옵션3
+            'work_period': work_period      # 근무주기
+        }
+    }
+    db.Works.update_one(query, values)
+
+def find_work(db, work_id):
+    query = { 'work_id': work_id }
+    return db.Works.find_one(query)
+
 def main():
+    clear_databases()
+    dbtest1()
+    dbtest2()
+
+def dbtest1():
     # client = MongoClient('mongodb://crlee:myPassword@20.194.38.223:3306/army_scheduler_db') # test on VM
     client = MongoClient('mongodb://localhost:27017/') # for local test
     # print(client.list_database_names())
@@ -141,6 +176,20 @@ def main():
     update_user_on_userpage(db, 'test_id', '홍길동', 'test_pw', '2000-01-01', '2021-01-01', '2022-06-30', '병장', '1중대', '2소대', '3분대', '군사과학기술병', [])
     test_user = find_user(db, 'test_id')
     print(test_user)
+
+def dbtest2():
+    client = MongoClient('mongodb://localhost:27017/')
+    db = db_init(client)
+    create_work(db, 1, '불침번', [{'start_time':'22:00', 'end_time':'24:00', 'num_workers':2}], 1, 1, 1, 1)
+    create_work(db, 2, '당직', [{'start_time':'09:00', 'end_time':'08:59', 'num_workers':1}], 2, 2, 2, 1)
+    test_work = find_work(db, 1)
+    print(test_work)
+    test_work = find_work(db, 2)
+    print(test_work)
+
+    update_work(db, 1, '불침번', [{'start_time':'24:00', 'end_time':'02:00', 'num_workers':2}], 3, 3, 3, 1)
+    test_work = find_work(db, 1)
+    print(test_work)
 
 def clear_databases():
     client = MongoClient('mongodb://localhost:27017/') # for local test
