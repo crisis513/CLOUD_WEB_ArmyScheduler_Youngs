@@ -19,6 +19,12 @@ class Users(object):
         self.this_mon_work_time = this_mon_work_time
         self.prev_mon_work_time = prev_mon_work_time
 
+class WorkTime(object):
+    def __init__(self, day_worktime, night_worktime, free_worktime):
+        self.day_worktime = day_worktime
+        self.night_worktime = night_worktime
+        self.free_worktime = free_worktime
+
 class Vacation(object):
     def __init__(self, start_date, end_date, description):
         self.start_date = start_date
@@ -29,6 +35,7 @@ class Works(object):
     def __init__(self, work_id, work_name, work_setting, work_option1, work_option2, work_option3, work_period):
         self.work_id = work_id
         self.work_name = work_name
+        self.worker_list = list()
         self.work_setting = work_setting
         self.work_option1 = work_option1
         self.work_option2 = work_option2
@@ -66,6 +73,8 @@ def object_decoder(obj):
                      obj['unit_company'], obj['unit_platoon'], obj['unit_squad'],
                      obj['position'], obj['work_list'], obj['vacation'],
                      obj['total_work_time'], obj['this_mon_work_time'], obj['prev_mon_work_time'])
+    elif obj['__type__'] == 'WorkTime':
+        return WorkTime(obj['day_worktime'], obj['night_worktime'], obj['free_worktime'])
     elif obj['__type__'] == 'Works':
         return Works(obj['work_id'], obj['work_name'], obj['work_setting'],
                      obj['work_option1'], obj['work_option2'], obj['work_option3'], obj['work_period'])
