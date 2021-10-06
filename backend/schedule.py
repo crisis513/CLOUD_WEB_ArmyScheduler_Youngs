@@ -21,20 +21,25 @@ def create_schedule(consider_from_date, start_date, end_date):
                 event = Event(date, work_setting)  # 근무 이벤트 생성 (날짜, 시간)
                 event_list.append(event)           # 이벤트 목록에 추가
     
-    schedule(event_list, 0)
+    result_event_list = list()
+    schedule(event_list, result_event_list, 0)
     return
 
 # 백트래킹으로 근무표 작성 시도
-# 모든 이벤트 목록에 적합한 근무자를 채워넣으면 성공
-# 다 채워넣으면 각 근무자의 누적 피로도를 계산하여 근무 불공정도를 산출
+# 모든 이벤트 목록에 적합한 근무자를 채워넣는데 성공했다면...
+    # result_event_list가 빈 리스트라면 이를 갱신
+    # 아니라면 두 근무표의 근무 불공정도를 비교해 작은 쪽을 result_event_list로 설정
 # 근무 불공정도 산출 식: max(누적 피로도) - min(누적 피로도)
 # To-do: 위의 근무 불공정도 산출 식 개선
 # i: i번째 event까지 처리했음을 의미
-def schedule(event_list, i):
+def schedule(event_list, result_event_list, i):
     # 모든 근무자의 누적 피로도가 동일하다면 근무 불공정도 = 0으로 최선
     # 근무 불공정도가 특정 threshold보다 낮다면 탐색을 중단하고 return
     # threshold가 너무 높으면 불공정도가 더 큰 근무표가 채택될 위험 존재
     # threshold가 너무 낮으면 탐색 시간이 너무 오래 걸릴 수 있음
     # To-do: 적절한 threshold 자동으로 산출하는 방법 찾기
-    
-    return
+    if i == LAST_EVENT_IDX:
+        return
+
+def unfairness(event_list):
+    return max(event_list) - min(event_list)
