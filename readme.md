@@ -1,6 +1,6 @@
 # Army Scheduler
 <p align="center">
-    <img src="https://img.shields.io/badge/version-v0.1-orange" alt="version"/>
+    <img src="https://img.shields.io/badge/version-v1.0.0-orange" alt="version"/>
     <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT"></a>
     <a href="https://github.com/osamhack2021/CLOUD_WEB_ArmyScheduler_Youngs/graphs/contributors"><img alt="Github contributors" src="https://img.shields.io/github/contributors/osamhack2021/CLOUD_WEB_ArmyScheduler_Youngs?color=success"></a>
 </p>
