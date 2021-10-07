@@ -172,11 +172,12 @@
               justify="center"
             >
               <v-btn class="between-blank-50">초기화</v-btn>
-              <v-btn class="between-blank-50" color="primary">
+              <v-btn class="between-blank-50" color="primary" @click="fetchDefaults">
                 저장
               </v-btn>
             </v-row>
           </div>
+          {{ work_cycle }}
         </div>
       </div>
     </v-app>
@@ -184,6 +185,8 @@
 </template>
 
 <script>
+  import axios from 'axios';
+
   export default {
     data: () => ({
       selectedItem: 1,
@@ -209,6 +212,16 @@
       counter: 1,
     }),
     methods:{
+      fetchDefaults: function () {
+        const path = 'https://osamhack2021-cloud-web-armyscheduler-youngs-xr4vx9w4fvg7p-3000.githubpreview.dev/api/v1/works/';
+        axios.get(path)
+          .then((res) => {
+            this.work_cycle.push(res.data);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      },
       addTableRow: function () { 
         this.counter++;
         this.rows.push({start: "", end: ""});

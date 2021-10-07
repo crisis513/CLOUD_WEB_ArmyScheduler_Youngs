@@ -1,0 +1,23 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+fastapi = "*"
+python-dotenv = "*"
+uvicorn = "*"
+aiofiles = "*"
+jinja2 = "*"
+pymongo = "*"
+gunicorn = "*"
+uvloop = "*"
+httptools = "*"
+redis = "*"
+
+[dev-packages]
+pytest = "*"
+assertpy = "*"
+
+[requires]
+python_version = "3.8"
