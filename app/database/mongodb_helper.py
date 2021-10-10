@@ -1,4 +1,3 @@
-
 def user_helper(user) -> dict:
     return {
         "name": user['name'],
@@ -16,5 +15,4 @@ def user_helper(user) -> dict:
         "total_work_time": user['total_work_time'],
         "this_mon_work_time": user['this_mon_work_time'],
         "prev_mon_work_time": user['prev_mon_work_time']
-
     }

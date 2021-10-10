@@ -177,7 +177,7 @@
               </v-btn>
             </v-row>
           </div>
-          {{ work_cycle }}
+          {{ work_cycle[0] }}
         </div>
       </div>
     </v-app>
@@ -186,7 +186,6 @@
 
 <script>
   import axios from 'axios';
-
   export default {
     data: () => ({
       selectedItem: 1,
@@ -213,10 +212,10 @@
     }),
     methods:{
       fetchDefaults: function () {
-        const path = 'https://osamhack2021-cloud-web-armyscheduler-youngs-xr4vx9w4fvg7p-3000.githubpreview.dev/api/v1/works/';
+        const path = 'https://osamhack2021-cloud-web-armyscheduler-youngs-xr4vx9w4fvg7p-3000.githubpreview.dev/api/v1/users/';
         axios.get(path)
           .then((res) => {
-            this.work_cycle.push(res.data);
+            this.work_cycle.push(res.data["data"][0]);
           })
           .catch((error) => {
             console.error(error);
