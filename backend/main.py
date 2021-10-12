@@ -57,6 +57,10 @@ class Events(object):
         self.event_color = event_color
         self.start_time = start_time
         self.end_time = end_time
+    
+    @classmethod
+    def from_scheduler(cls, date, work, work_setting):
+        return cls(-1, work['work_name'], Tags('some_tag_title', 'some_tag_color'), date, 'some_color', work_setting['start_time'], work_setting['end_time'])
 
 class Tags(object):
     def __init__(self, tag_title, tag_color):
@@ -182,6 +186,18 @@ def find_work(db, work_id):
     query = { 'work_id': work_id }
     return db.Works.find_one(query)
 
+def create_event(db, userid, event_title, tags, event_date, event_color, start_time, end_time):
+    event = {
+        'userid': userid,
+        'event_title': event_title,
+        'tags': tags,
+        'event_date': event_date,
+        'event_color': event_color,
+        'start_time': start_time,
+        'end_time': end_time
+    }
+    return db.Events.insert_one(event).inserted_id
+
 def dbtest():
     clear_databases()
     dbtest1()
@@ -223,8 +239,31 @@ def clear_databases():
     client.drop_database('army_scheduler_db')
     print(client.list_database_names())
 
+def get_total_work_list():
+    client = MongoClient('mongodb://localhost:27017/') # for local test
+    db = db_init(client)
+    works = db.Works.find()
+    return works
+
+def get_total_event_list():
+    client = MongoClient('mongodb://localhost:27017/') # for local test
+    db = db_init(client)
+    events = db.Events.find()
+    return events
+
+def get_total_user_list():
+    client = MongoClient('mongodb://localhost:27017/') # for local test
+    db = db_init(client)
+    users = db.Users.find()
+    user_dict = {}
+    for u in users:
+        user_dict[u['userid']] = {'day_worktime':0, 'night_worktime':0, 'free_worktime':0}
+    return user_dict
+
 def main():
-    dbtest()
+    works = get_total_work_list()
+    for w in works:
+        print(w)
 
 if __name__ == '__main__':
     main()

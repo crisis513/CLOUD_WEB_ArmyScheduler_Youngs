@@ -1,9 +1,75 @@
+from copy import deepcopy
 import datetime
 import json
 import main
+from pymongo import MongoClient
 
-def get_work_setting(work):
-    return list()
+def parse_time(t) -> int:
+    h, m = map(int, t.split(':'))
+    return h*60 + m
+
+def get_day_worktime(start_time, end_time) -> int:
+    t1 = parse_time(start_time)
+    t2 = parse_time(end_time)
+    t = t2 - t1
+    if t <= 0:
+        t += 60*24
+    return t - get_night_worktime(start_time, end_time) - get_free_worktime(start_time, end_time)
+
+def get_night_worktime(start_time, end_time) -> int:
+    t1 = parse_time(start_time)
+    t2 = parse_time(end_time)
+    night_start = parse_time('22:00')
+    night_end = parse_time('06:30')
+    return 0
+
+def get_free_worktime(start_time, end_time) -> int:
+    t1 = parse_time(start_time)
+    t2 = parse_time(end_time)
+    free_start = parse_time('18:00')
+    free_end = parse_time('21:00')
+    return 0
+
+class Backtrack:
+    """
+    백트래킹 통한 근무표 산출
+    """
+    def __init__(self):
+        self.result_schedule_list = []
+        self.best_schedule = []
+        self.cur_schedule = []
+        self.event_list = []
+        self.user_list = main.get_total_user_list()
+        self.total_events = 0
+        self.best_score = 0
+        self.stop_backtracking = False
+        self.total_work_list = main.get_total_work_list()
+        self.prev_event_list = main.get_total_event_list()
+
+    def get_work_setting(self, work):
+        return work['work_setting']
+    
+    def get_fatigue(self, start_date, end_date):
+        for event in self.prev_event_list:
+            uid = event['userid']
+            start_time = event['start_time']
+            end_time = event['end_time']
+            self.user_list[uid]['day_worktime'] = get_day_worktime(start_time, end_time)
+            self.user_list[uid]['night_worktime'] = get_night_worktime(start_time, end_time)
+            self.user_list[uid]['free_worktime'] = get_free_worktime(start_time, end_time)
+
+    def create_event_list(self, consider_from_date, start_date, end_date):
+        for work in self.total_work_list:
+            work_setting_list = self.get_work_setting(work)
+            for date in range(start_date, end_date + 1): # To-do: make this for loop work somehow
+                for work_setting in work_setting_list:
+                    for _ in range(work_setting['num_workers']):
+                        event = main.Events.from_scheduler(date, work, work_setting)
+                        self.event_list.append(event)
+
+        
+    def schedule(self):
+        return
 
 # 근무표 생성 함수
 # consider_from_date 부터 end_date 까지의 근무를 고려하여
@@ -11,7 +77,7 @@ def get_work_setting(work):
 # consider_from_date ------ start_date ------ end_date
 #      (과거)                 (현재)           (미래)
 def create_schedule(consider_from_date, start_date, end_date):
-    total_work_list = [1, 2, 3, 4, 5, 6, 7, 8] # 모든 근무 목록
+    total_work_list = main.get_total_work_list() # 모든 근무 목록
     event_list = list() # start_date부터 end_date까지의 모든 근무
     
     for work in total_work_list: # 각 근무에 대해
