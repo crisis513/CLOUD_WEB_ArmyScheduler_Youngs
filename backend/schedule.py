@@ -48,6 +48,16 @@ def get_free_worktime(start_time, end_time) -> int:
     free_end = parse_time('21:00')
     return intersect_time(t1, t2, free_start, free_end)
 
+def get_worktime_and_fatigue(start_time, end_time) -> tuple:
+    day_worktime = get_day_worktime(start_time, end_time)
+    night_worktime = get_night_worktime(start_time, end_time)
+    free_worktime = get_free_worktime(start_time, end_time)
+    fatigue = get_fatigue_from_worktime(day_worktime, night_worktime, free_worktime)
+    return (day_worktime, night_worktime, free_worktime, fatigue)
+
+def get_fatigue_from_worktime(day_worktime, night_worktime, free_worktime) -> int:
+    return day_worktime + night_worktime*2 + free_worktime*3
+
 def int_to_date(date) -> str:
     base_date = datetime.datetime.fromisoformat('1970-01-01')
     cur_date = base_date + datetime.timedelta(days=date)
@@ -70,7 +80,7 @@ class Backtrack:
         self.event_list = []
         self.user_list = main.get_total_user_list()
         self.total_events = 0
-        self.best_score = 0
+        self.best_unfairness = 0
         self.stop_backtracking = False
         self.total_work_list = main.get_total_work_list()
         self.prev_event_list = main.get_total_event_list()
@@ -78,48 +88,65 @@ class Backtrack:
     def get_work_setting(self, work):
         return work['work_setting']
     
-    def get_fatigue(self, start_date, end_date):
+    def get_prev_fatigue(self, start_date, end_date):
+        start_day = date_to_int(start_date)
+        end_day = date_to_int(end_date)
         for event in self.prev_event_list:
+            event_day = date_to_int(event['event_date'])
+            if not start_day <= event_day < end_day:
+                continue
+            if event['event_type'] == main.EventType.Custom:
+                continue
             uid = event['userid']
             start_time = event['start_time']
             end_time = event['end_time']
-            self.user_list[uid]['day_worktime'] = get_day_worktime(start_time, end_time)
-            self.user_list[uid]['night_worktime'] = get_night_worktime(start_time, end_time)
-            self.user_list[uid]['free_worktime'] = get_free_worktime(start_time, end_time)
+            day_worktime, night_worktime, free_worktime, fatigue = get_worktime_and_fatigue(start_time, end_time)
+            self.user_list[uid]['day_worktime'] += day_worktime
+            self.user_list[uid]['night_worktime'] += night_worktime
+            self.user_list[uid]['free_worktime'] += free_worktime
+            self.user_list[uid]['fatigue'] += fatigue
+            self.user_list[uid]['work_day_list'].append(event_day)
 
     def create_empty_event_list(self, start_date, end_date):
+        start_day = date_to_int(start_date)
+        end_day = date_to_int(end_date)
         for work in self.total_work_list:
             work_setting_list = self.get_work_setting(work)
-            for date in range(start_date, end_date + 1): # To-do: make this for loop work somehow
+            for date in range(start_day, end_day + 1):
                 for work_setting in work_setting_list:
                     for _ in range(work_setting['num_workers']):
-                        event = main.Events.from_scheduler(date, work, work_setting)
+                        event = main.Events.from_scheduler(int_to_date(date), work, work_setting)
                         self.event_list.append(event)
 
     def schedule(self, consider_from_date, start_date, end_date):
+        """
+        근무표 생성 함수
+        consider_from_date 부터 end_date 까지의 근무 피로도를 고려하여
+        start_date 부터 end_date 까지의 근무표 작성
+        consider_from_date ------ start_date ------ end_date
+            (과거)                 (현재)           (미래)
+        """
         self.create_empty_event_list(start_date, end_date)
-        
-        return
-
-# 근무표 생성 함수
-# consider_from_date 부터 end_date 까지의 근무를 고려하여
-# start_date 부터 end_date 까지의 근무표 작성
-# consider_from_date ------ start_date ------ end_date
-#      (과거)                 (현재)           (미래)
-def create_schedule(consider_from_date, start_date, end_date):
-    total_work_list = main.get_total_work_list() # 모든 근무 목록
-    event_list = list() # start_date부터 end_date까지의 모든 근무
+        self.get_prev_fatigue(consider_from_date, start_date)
+        self.total_events = len(self.event_list)
+        self.unfairness = 0
+        self.backtrack(0)
+        # To-do: now push this results back to DB
     
-    for work in total_work_list: # 각 근무에 대해
-        work_setting_list = get_work_setting(work) # 시간대별 근무 목록
-        for date in range(start_date, end_date+1): # start_date부터 end_date까지
-            for work_setting in work_setting_list: # 각 시간대별로
-                event = Event(date, work_setting)  # 근무 이벤트 생성 (날짜, 시간)
-                event_list.append(event)           # 이벤트 목록에 추가
-    
-    result_event_list = list()
-    schedule(event_list, result_event_list, 0)
-    return
+    def backtrack(self, events_idx):
+        """
+        events_idx: 현재 고려하는 이벤트의 인덱스
+        """
+        if self.stop_backtracking:
+            return
+        if events_idx == self.total_events:
+            return
+            # end backtracking
+        event = self.event_list[events_idx]
+        for uid, values in self.user_list.items():
+            # todo: 근무 옵션을 보고 현재 uid를 거를지 판단
+            # todo: 추가한다면 event에 uid 추가 후 다음 backtrack 호출
+            # todo: backtrack 종료 후 uid 다시 제거
 
 # 백트래킹으로 근무표 작성 시도
 # 모든 이벤트 목록에 적합한 근무자를 채워넣는데 성공했다면...

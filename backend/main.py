@@ -1,6 +1,7 @@
 from pymongo import MongoClient
 import json
 import logging, sys
+from enum import enum
 class Users(object):
     def __init__(self, userid, name, password, en_date, de_date, now_class, unit_company, unit_platoon, unit_squad, position, work_list, vacation, total_work_time, this_mon_work_time, prev_mon_work_time):
         self.userid = userid
@@ -48,10 +49,17 @@ class WorkSetting(object):
         self.end_time = end_time
         self.num_workers = num_workers
 
+class EventType(enum):
+    Work = 0    # 근무
+    Troop = 1   # 부대 일정 (훈련 등)
+    Custom = 2  # 유저 개인 일정
+
 class Events(object):
-    def __init__(self, userid, event_title, tags, event_date, event_color, start_time, end_time):
+    def __init__(self, userid, event_title, event_type, work_id, tags, event_date, event_color, start_time, end_time):
         self.userid = userid
         self.event_title = event_title
+        self.event_type = event_type
+        self.work_id = work_id   # 근무가 아닌 경우 -1
         self.tags = tags
         self.event_date = event_date
         self.event_color = event_color
@@ -60,7 +68,17 @@ class Events(object):
     
     @classmethod
     def from_scheduler(cls, date, work, work_setting):
-        return cls(-1, work['work_name'], Tags('some_tag_title', 'some_tag_color'), date, 'some_color', work_setting['start_time'], work_setting['end_time'])
+        return cls(
+            userid = -1,
+            event_title = work['work_name'],
+            event_type = EventType.Work,
+            work_id = work['work_id'],
+            tags = Tags('some_tag_title', 'some_tag_color'),
+            event_date = date,
+            event_color = 'some_color',
+            start_time = work_setting['start_time'],
+            end_time = work_setting['end_time']
+            )
 
 class Tags(object):
     def __init__(self, tag_title, tag_color):
@@ -257,7 +275,7 @@ def get_total_user_list():
     users = db.Users.find()
     user_dict = {}
     for u in users:
-        user_dict[u['userid']] = {'day_worktime':0, 'night_worktime':0, 'free_worktime':0}
+        user_dict[u['userid']] = {'day_worktime':0, 'night_worktime':0, 'free_worktime':0, 'fatigue':0, 'work_day_list':[]}
     return user_dict
 
 def main():
