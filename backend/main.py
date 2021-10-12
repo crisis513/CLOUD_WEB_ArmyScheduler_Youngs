@@ -67,12 +67,12 @@ class Events(object):
         self.end_time = end_time
     
     @classmethod
-    def from_scheduler(cls, date, work, work_setting):
+    def from_scheduler(cls, date, work_id, work_name, work_setting):
         return cls(
             userid = -1,
-            event_title = work['work_name'],
+            event_title = work_name,
             event_type = EventType.Work,
-            work_id = work['work_id'],
+            work_id = work_id,
             tags = Tags('some_tag_title', 'some_tag_color'),
             event_date = date,
             event_color = 'some_color',
@@ -261,7 +261,17 @@ def get_total_work_list():
     client = MongoClient('mongodb://localhost:27017/') # for local test
     db = db_init(client)
     works = db.Works.find()
-    return works
+    work_dict = {}
+    for w in works:
+        work_dict[w['work_id']] = {
+            'work_name': w['work_name'],
+            'work_setting': w['work_setting'],
+            'work_option1': w['work_option1'],
+            'work_option2': w['work_option2'],
+            'work_option3': w['work_option3'],
+            'work_period': w['work_period']
+        }
+    return work_dict
 
 def get_total_event_list():
     client = MongoClient('mongodb://localhost:27017/') # for local test
