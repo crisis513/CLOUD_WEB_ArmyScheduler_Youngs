@@ -39,7 +39,7 @@ async def delete_user(id: str):
 
 
 async def update_user_data(id: str, data: dict):
-    user = await users_collection.find_one({"userid": ObjectId(id)})
+    user = await users_collection.find_one({"userid": id})
     if user:
-        users_collection.update_one({"userid": ObjectId(id)}, {"$set": data})
+        users_collection.update_one({"userid": id}, {"$set": data})
         return True

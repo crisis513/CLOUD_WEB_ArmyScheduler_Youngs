@@ -1,11 +1,10 @@
 from fastapi import APIRouter, Body
 from fastapi.encoders import jsonable_encoder
 
-from database.mongodb import *
+from database.users_crud import *
 from models.user import *
 
 router = APIRouter()
-
 
 @router.get("/", response_description="users retrieved")
 async def get_users():
@@ -39,7 +38,7 @@ async def delete_user_data(id: str):
         else ErrorResponseModel("An error occured", 404, "user with id {0} doesn't exist".format(id))
 
 
-@router.put("{id}")
+@router.put("/{id}")
 async def update_user(id: str, req: UpdateUserModel = Body(...)):
     updated_user = await update_user_data(id, req.dict())
     return ResponseModel("user with ID: {} name update is successful".format(id),

@@ -16,3 +16,14 @@ def user_helper(user) -> dict:
         "this_mon_work_time": user['this_mon_work_time'],
         "prev_mon_work_time": user['prev_mon_work_time']
     }
+
+def work_helper(work) -> dict:
+    return {
+        "work_id": work['work_id'],
+        "work_name": work['work_name'],
+        "work_setting": work['work_setting'],
+        "work_option1": work['work_option1'],
+        "work_option2": work['work_option2'],
+        "work_option3": work['work_option3'],
+        "work_period": work['work_period'],
+    }

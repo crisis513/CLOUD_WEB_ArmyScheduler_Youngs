@@ -8,7 +8,7 @@
         <div class="child1">
           <v-card
             class="mx-auto"
-            max-width="300"
+            max-width="450"
             elevation="1"
             tile
           >
@@ -83,13 +83,13 @@
                         v-model="row.end"
                         label="종료시간 입력"
                         prepend-icon="access_time"
-                        placeholder="00:00"
+                        placeholder="06:00"
                         class="between-blank-10" ></v-text-field>
                     </td>
                     <td>
                       <v-text-field
                         label="근무인원"
-                        placeholder="0"
+                        placeholder="2"
                       ></v-text-field>
                     </td>
                     <td><v-icon @click='deleteTableRow(index)'>delete</v-icon></td>
@@ -171,13 +171,12 @@
               align="center"
               justify="center"
             >
-              <v-btn class="between-blank-50">초기화</v-btn>
+              <v-btn class="between-blank-50">삭제</v-btn>
               <v-btn class="between-blank-50" color="primary" @click="fetchDefaults">
                 저장
               </v-btn>
             </v-row>
           </div>
-          {{ work_cycle[0] }}
         </div>
       </div>
     </v-app>
@@ -206,7 +205,8 @@
       ],
       rows: [{
         start: "",
-        end: ""
+        end: "",
+        num: 0,
       }],
       counter: 1,
     }),

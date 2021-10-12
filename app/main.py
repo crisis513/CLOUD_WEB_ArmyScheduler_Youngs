@@ -9,11 +9,13 @@ load_dotenv()
 
 import api.sample.urls as service_1
 import api.users.urls as users
+import api.works.urls as works
 
 app = FastAPI()
 
 app.include_router(service_1.router, prefix="/api/v1/service_1")
 app.include_router(users.router, prefix="/api/v1/users")
+app.include_router(works.router, prefix="/api/v1/works")
 
 # Mounting default Vue files after running npm run build 
 app.mount("/dist", StaticFiles(directory="dist/"), name="dist")
