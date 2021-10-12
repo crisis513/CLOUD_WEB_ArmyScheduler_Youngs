@@ -16,20 +16,49 @@ def get_day_worktime(start_time, end_time) -> int:
         t += 60*24
     return t - get_night_worktime(start_time, end_time) - get_free_worktime(start_time, end_time)
 
+def intersect_time(t1_start, t1_end, t2_start, t2_end) -> int:
+    assert(t1_start <= t1_end and t2_start <= t2_end)
+    if t1_end <= t2_start or t2_end <= t1_start:
+        return 0
+    if t1_start <= t2_start <= t1_end <= t2_end:
+        return t1_end - t2_start
+    if t2_start <= t1_start <= t2_end <= t1_end:
+        return t2_end - t1_start
+    if t1_start <= t2_start <= t2_end <= t1_end:
+        return t2_end - t2_start
+    if t2_start <= t1_start <= t1_end <= t2_end:
+        return t1_end - t1_start
+    print('should not reach here')
+
 def get_night_worktime(start_time, end_time) -> int:
     t1 = parse_time(start_time)
     t2 = parse_time(end_time)
+    if t2 <= t1:
+        t2 += 60*24
     night_start = parse_time('22:00')
-    night_end = parse_time('06:30')
-    return 0
+    night_end = parse_time('06:30') + 60*24
+    return intersect_time(t1, t2, night_start, night_end)
 
 def get_free_worktime(start_time, end_time) -> int:
     t1 = parse_time(start_time)
     t2 = parse_time(end_time)
+    if t2 <= t1:
+        t2 += 60*24
     free_start = parse_time('18:00')
     free_end = parse_time('21:00')
-    return 0
+    return intersect_time(t1, t2, free_start, free_end)
 
+def int_to_date(date) -> str:
+    base_date = datetime.datetime.fromisoformat('1970-01-01')
+    cur_date = base_date + datetime.timedelta(days=date)
+    return datetime.datetime.strftime(cur_date, '%Y-%m-%d')
+
+def date_to_int(date) -> int:
+    base_date = datetime.datetime.fromisoformat('1970-01-01')
+    cur_date = datetime.datetime.fromisoformat(date)
+    diff = cur_date - base_date
+    return diff.days
+    
 class Backtrack:
     """
     백트래킹 통한 근무표 산출
@@ -58,7 +87,7 @@ class Backtrack:
             self.user_list[uid]['night_worktime'] = get_night_worktime(start_time, end_time)
             self.user_list[uid]['free_worktime'] = get_free_worktime(start_time, end_time)
 
-    def create_event_list(self, consider_from_date, start_date, end_date):
+    def create_empty_event_list(self, start_date, end_date):
         for work in self.total_work_list:
             work_setting_list = self.get_work_setting(work)
             for date in range(start_date, end_date + 1): # To-do: make this for loop work somehow
@@ -67,8 +96,9 @@ class Backtrack:
                         event = main.Events.from_scheduler(date, work, work_setting)
                         self.event_list.append(event)
 
+    def schedule(self, consider_from_date, start_date, end_date):
+        self.create_empty_event_list(start_date, end_date)
         
-    def schedule(self):
         return
 
 # 근무표 생성 함수
