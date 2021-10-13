@@ -206,8 +206,9 @@ def find_work(db, work_id):
     query = { 'work_id': work_id }
     return db.Works.find_one(query)
 
-def create_event(db, userid, event_title, tags, event_date, event_color, start_time, end_time):
+def create_event(db, event_id, userid, event_title, tags, event_date, event_color, start_time, end_time):
     event = {
+        'event_id': event_id,
         'userid': userid,
         'event_title': event_title,
         'tags': tags,
@@ -260,6 +261,7 @@ def dbtest3():
     colors = ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1']
     create_event(
         db = db,
+        event_id = 1,
         userid = 1,
         event_title = '위병소 근무',
         tags = [{'tag_title': '위병소', 'tag_color': colors[0]}, {'tag_title': '주간', 'tag_color': colors[1]}],
@@ -270,6 +272,7 @@ def dbtest3():
     )
     create_event(
         db = db,
+        event_id = 2,
         userid = 2,
         event_title = '불침번 근무',
         tags = [{'tag_title': '불침번', 'tag_color': colors[3]}, {'tag_title': '야간', 'tag_color': colors[4]}],

@@ -186,7 +186,7 @@ class Backtrack:
             # work_option2: 하루 쉬고 근무 여부 (e.g. 퐁당퐁당)
             # work_option3: 하루 2회 이상 근무 여부
             work_day_list = self.user_list[uid]['work_day_list']
-            if work['work_option1'] == main.WorkOptionType.Never and len(work_day_list) > 0 and work_day_list[-1] == event_day - 1:
+            if work['work_option1'] == main.WorkOptionType.Never and len(work_day_list) > 0 and work_day_list[-1] >= event_day - 1:
                 continue
             if work['work_option2'] == main.WorkOptionType.Never and len(work_day_list) > 0 and work_day_list[-1] >= event_day - 2:
                 continue
@@ -196,7 +196,7 @@ class Backtrack:
             # 근무 옵션에 의해 선호되지 않는 근무의 경우 fatigue 추가
             # To-do: avoid hard-coded number
             additional_fatigue = 0
-            if work['work_option1'] == main.WorkOptionType.NotPreferred and len(work_day_list) > 0 and work_day_list[-1] == event_day - 1:
+            if work['work_option1'] == main.WorkOptionType.NotPreferred and len(work_day_list) > 0 and work_day_list[-1] >= event_day - 1:
                 additional_fatigue += 5
             if work['work_option2'] == main.WorkOptionType.NotPreferred and len(work_day_list) > 0 and work_day_list[-1] >= event_day - 2:
                 additional_fatigue += 5
