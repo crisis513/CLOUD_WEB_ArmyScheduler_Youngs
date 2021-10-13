@@ -219,7 +219,7 @@ class Backtrack:
             self.user_list[uid]['fatigue'] -= (fatigue + additional_fatigue)
             self.user_list[uid]['work_day_list'].pop()
 
-def main():
+def main2():
     sch = Backtrack()
     consider_from_date = '2021-10-01'
     start_date = '2021-10-13'
@@ -227,4 +227,4 @@ def main():
     sch.schedule(consider_from_date, start_date, end_date)
 
 if __name__ == '__main__':
-    main()
+    main2()

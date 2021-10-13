@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 import json
 import logging, sys
-from enum import Enum
+from enum import IntEnum
 class Users(object):
     def __init__(self, userid, name, password, en_date, de_date, now_class, unit_company, unit_platoon, unit_squad, position, work_list, vacation, total_work_time, this_mon_work_time, prev_mon_work_time):
         self.userid = userid
@@ -32,7 +32,7 @@ class Vacation(object):
         self.end_date = end_date
         self.description = description
 
-class WorkOptionType(Enum):
+class WorkOptionType(IntEnum):
     Never = 0
     NotPreferred = 1
     Allowed = 2
@@ -53,7 +53,7 @@ class WorkSetting(object):
         self.end_time = end_time
         self.num_workers = num_workers
 
-class EventType(Enum):
+class EventType(IntEnum):
     Work = 0    # 근무
     Troop = 1   # 부대 일정 (훈련 등)
     Custom = 2  # 유저 개인 일정
@@ -206,11 +206,13 @@ def find_work(db, work_id):
     query = { 'work_id': work_id }
     return db.Works.find_one(query)
 
-def create_event(db, event_id, userid, event_title, tags, event_date, event_color, start_time, end_time):
+def create_event(db, event_id, userid, event_title, event_type, work_id, tags, event_date, event_color, start_time, end_time):
     event = {
         'event_id': event_id,
         'userid': userid,
         'event_title': event_title,
+        'event_type': int(event_type),
+        'work_id': work_id,
         'tags': tags,
         'event_date': event_date,
         'event_color': event_color,
@@ -264,6 +266,8 @@ def dbtest3():
         event_id = 1,
         userid = 1,
         event_title = '위병소 근무',
+        event_type = EventType.Work,
+        work_id = 1,
         tags = [{'tag_title': '위병소', 'tag_color': colors[0]}, {'tag_title': '주간', 'tag_color': colors[1]}],
         event_date = '2021-10-13',
         event_color = colors[2],
@@ -275,6 +279,8 @@ def dbtest3():
         event_id = 2,
         userid = 2,
         event_title = '불침번 근무',
+        event_type = EventType.Work,
+        work_id = 2,
         tags = [{'tag_title': '불침번', 'tag_color': colors[3]}, {'tag_title': '야간', 'tag_color': colors[4]}],
         event_date = '2021-10-15',
         event_color = colors[5],
