@@ -83,6 +83,7 @@ class Backtrack:
         self.total_events = 0
         self.best_unfairness = self.INF
         self.stop_backtracking = False
+        self.unfairness_threshold = 0
         self.total_work_list = main.get_total_work_list()
         self.prev_event_list = main.get_total_event_list()
         self.init_event_id()
@@ -175,11 +176,10 @@ class Backtrack:
             self.get_unfairness()
             if self.unfairness < self.best_unfairness:
                 self.best_unfairness = self.unfairness
-                self.best_schedule = self.cur_schedule
-            self.threshold = 0
+                self.best_schedule = deepcopy(self.cur_schedule)
             # 근무 불공정도가 특정 threshold보다 낮다면 탐색을 중단하고 return
             # To-do: how to set threshold?
-            if self.best_unfairness < self.threshold:
+            if self.best_unfairness < self.unfairness_threshold:
                 self.stop_backtracking = True
                 return
             # todo: end backtracking
@@ -203,6 +203,8 @@ class Backtrack:
                 continue
             if work['work_option3'] == main.WorkOptionType.Never and len(work_day_list) > 0 and work_day_list[-1] == event_day:
                 continue
+
+            # To-do: 휴가, 부대 일정, 전역 등에 의해 근무 불가능한 경우 배제
 
             # 근무 옵션에 의해 선호되지 않는 근무의 경우 fatigue 추가
             # To-do: avoid hard-coded number
