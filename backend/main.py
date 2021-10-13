@@ -59,7 +59,8 @@ class EventType(IntEnum):
     Custom = 2  # 유저 개인 일정
 
 class Events(object):
-    def __init__(self, userid, event_title, event_type, work_id, tags, event_date, event_color, start_time, end_time):
+    def __init__(self, event_id, userid, event_title, event_type, work_id, tags, event_date, event_color, start_time, end_time):
+        self.event_id = event_id,
         self.userid = userid
         self.event_title = event_title
         self.event_type = event_type
@@ -71,8 +72,9 @@ class Events(object):
         self.end_time = end_time
     
     @classmethod
-    def from_scheduler(cls, date, work_id, work_name, work_setting):
+    def from_scheduler(cls, event_id, date, work_id, work_name, work_setting):
         return cls(
+            event_id = event_id,
             userid = -1,
             event_title = work_name,
             event_type = EventType.Work,

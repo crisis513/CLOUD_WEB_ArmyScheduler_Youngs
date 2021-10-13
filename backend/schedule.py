@@ -85,6 +85,15 @@ class Backtrack:
         self.stop_backtracking = False
         self.total_work_list = main.get_total_work_list()
         self.prev_event_list = main.get_total_event_list()
+        self.init_event_id()
+    
+    def init_event_id(self):
+        self.magic = 100000
+        max_event_id = 0
+        for e in self.prev_event_list:
+            max_event_id = max(max_event_id, e['event_id'])
+        self.event_id_prefix = (max_event_id % self.magic) + 1
+        self.event_id_postfix = 0
 
     def get_work_setting(self, work):
         return self.total_work_list[work]['work_setting']
@@ -116,7 +125,9 @@ class Backtrack:
             for date in range(start_day, end_day + 1):
                 for work_setting in work_setting_list:
                     for _ in range(work_setting['num_workers']):
-                        event = main.Events.from_scheduler(int_to_date(date), work_id, self.total_work_list[work_id]['work_name'], work_setting)
+                        event_id = self.event_id_prefix * self.magic + self.event_id_postfix
+                        event = main.Events.from_scheduler(event_id, int_to_date(date), work_id, self.total_work_list[work_id]['work_name'], work_setting)
+                        self.event_id_postfix += 1
                         self.event_list.append(event)
     
     def set_event_list(self):
