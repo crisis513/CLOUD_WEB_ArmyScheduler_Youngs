@@ -35,11 +35,6 @@
               <p>일정</p>
             </md-list-item>
 
-            <md-list-item href="/#/board">
-              <md-icon>note</md-icon>
-              <p>게시판</p>
-            </md-list-item>
-
             <md-list-item href="/#/munit">
               <md-icon>person</md-icon>
               <p>부대관리</p>
@@ -114,7 +109,6 @@ export default {
       const excludedRoutes = [
         "home",
         "schedule",
-        "board",
         "manage-unit",
         "manage-work",
         "login",

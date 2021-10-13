@@ -25,5 +25,18 @@ def work_helper(work) -> dict:
         "work_option1": work['work_option1'],
         "work_option2": work['work_option2'],
         "work_option3": work['work_option3'],
-        "work_period": work['work_period'],
+    }
+
+def event_helper(event) -> dict:
+    return {
+        "event_id": event['event_id'],
+        "userid": event['userid'],
+        "event_title": event['event_title'],
+        "event_type": event['event_type'],
+        "work_id": event['work_id'],
+        "tags": event['tags'],
+        "event_date": event['event_date'],
+        "event_color": event['event_color'],
+        "start_time": event['start_time'],
+        "end_time": event['end_time'],
     }

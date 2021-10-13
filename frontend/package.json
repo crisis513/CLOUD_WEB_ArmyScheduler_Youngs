@@ -1,6 +1,6 @@
 {
   "name": "army-scheduler",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "private": true,
   "description": "Army Scheduler",
   "author": "Youngs Team, Developers: Han-gi Son, Changrim Lee",
@@ -23,6 +23,7 @@
     "vue-ganttastic": "^0.9.32",
     "vue-lazyload": "1.3.3",
     "vue-material": "1.0.0-beta-11",
+    "vue-moment": "^4.1.0",
     "vue-router": "3.1.3",
     "vuetify": "^2.4.0",
     "vuex": "^3.6.2",

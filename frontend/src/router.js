@@ -4,7 +4,6 @@ import Index from "./views/Index.vue";
 import Landing from "./views/Landing.vue";
 import Home from "./views/Home.vue";
 import Schedule from "./views/Schedule.vue";
-import Board from "./views/Board.vue";
 import Munit from "./views/Munit.vue";
 import Mwork from "./views/Mwork.vue";
 import Login from "./views/Login.vue";
@@ -38,15 +37,6 @@ export default new Router({
       path: "/schedule",
       name: "schedule",
       components: { default: Schedule, header: MainNavbar, footer: MainFooter },
-      props: {
-        header: { colorOnScroll: 400 },
-        footer: { backgroundColor: "black" }
-      }
-    },
-    {
-      path: "/board",
-      name: "board",
-      components: { default: Board, header: MainNavbar, footer: MainFooter },
       props: {
         header: { colorOnScroll: 400 },
         footer: { backgroundColor: "black" }

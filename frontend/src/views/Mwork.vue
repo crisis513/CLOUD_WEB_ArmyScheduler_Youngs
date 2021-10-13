@@ -42,17 +42,9 @@
                 </v-subheader>
               </v-col>
               <v-col cols="6">
-                <v-select
-                  v-model="select"
-                  :hint="`${select.state}, ${select.abbr}`"
-                  :items="works"
-                  item-text="state"
-                  item-value="abbr"
-                  label="근무지 선택"
-                  persistent-hint
-                  return-object
-                  single-line
-                ></v-select>
+                <v-text-field
+                  label="근무명 입력"
+                ></v-text-field>
               </v-col>
             </v-row>
           </v-container>
@@ -110,58 +102,72 @@
               <v-col cols="9">
                 <table>
                   <tr>
-                    <td>1. 이것은 테스트입니다.</td>
+                    <td>1. 2일 연속 근무 여부</td>
                     <td>
                       <v-radio-group
                         v-model="row"
                         row
                       >
                         <v-radio
-                          label="Option 1"
-                          value="radio-1"
+                          label="불가능"
+                          value=0
                         ></v-radio>
                         <v-radio
-                          label="Option 2"
-                          value="radio-2"
+                          label="가능"
+                          value=1
+                        ></v-radio>
+                        <v-radio
+                          label="무시"
+                          value=2
                         ></v-radio>
                       </v-radio-group>
                     </td>
                   </tr>
                   <tr>
-                    <td>2. 이것은 테스트</td>
+                    <td>2. 퐁당퐁당 근무 여부
                     <td>
                       <v-radio-group
                         v-model="row"
                         row
                       >
                         <v-radio
-                          label="Option 1"
-                          value="radio-1"
+                          label="불가능"
+                          value=0
                         ></v-radio>
                         <v-radio
-                          label="Option 2"
-                          value="radio-2"
+                          label="가능"
+                          value=1
+                        ></v-radio>
+                        <v-radio
+                          label="무시"
+                          value=2
+                        ></v-radio>
+                      </v-radio-group>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>3. 1일 2탕 여부</td>
+                    <td>
+                      <v-radio-group
+                        v-model="row"
+                        row
+                      >
+                        <v-radio
+                          label="불가능"
+                          value=0
+                        ></v-radio>
+                        <v-radio
+                          label="가능"
+                          value=1
+                        ></v-radio>
+                        <v-radio
+                          label="무시"
+                          value=2
                         ></v-radio>
                       </v-radio-group>
                     </td>
                   </tr>
                 </table>
-              </v-col>
-            </v-row>
-          </v-container>
-
-          <v-container fluid>
-            <v-row align="center">
-              <v-col cols="3">
-                <v-subheader>
-                  근무주기
-                </v-subheader>
-              </v-col>
-              <v-col cols="6">
-                <v-text-field
-                  label="최소 근무주기 입력"
-                  placeholder="2"
-                ></v-text-field>
               </v-col>
             </v-row>
           </v-container>

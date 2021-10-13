@@ -267,16 +267,16 @@
                           <v-btn
                             color="blue darken-1"
                             text
-                            @click="vacation_dialog=false"
+                            @click="vacation_dialog = false"
                           >
-                            Close
+                            종료
                           </v-btn>
                           <v-btn
                             color="blue darken-1"
                             text
                             @click="addTableRow()"
                           >
-                            Save
+                            저장
                           </v-btn>
                         </v-card-actions>
                       </v-card>
@@ -313,7 +313,7 @@
 
 <script>
   import axios from 'axios';
-  const baseUrl = 'https://osamhack2021-cloud-web-armyscheduler-youngs-xr4vx9w4fvg7p-3000.githubpreview.dev';
+  const baseUrl = 'https://osamhack2021-cloud-web-armyscheduler-youngs-xr4vx9w4fvg7p-3000.githubpreview.dev'
 
   export default {
     data: () => ({
@@ -350,8 +350,8 @@
       counter: 2,
     }),
 
-    created: function() {
-      const usersPath = baseUrl + '/api/v1/users/';      
+    created () {
+      const usersPath = baseUrl + '/api/v1/users/';     
       axios.get(usersPath)
         .then((res) => {
           let usersData = res.data["data"][0];
@@ -361,7 +361,7 @@
           console.error(error);
         });
       
-      const worksPath = baseUrl + '/api/v1/works/';
+      const worksPath = baseUrl + '/api/v1/works/'
       axios.get(worksPath)
         .then((res) => {
           let worksData = res.data["data"][0];
@@ -375,42 +375,30 @@
     methods: {
       updateForm: function (item) {
         if(item.length > 0)
-          this.currentData = item;
+          this.currentData = item
 
-          this.name = item[0].name;
-          this.userid = item[0].userid;
-          this.password = item[0].password;
-          this.en_date = item[0].en_date;
-          this.de_date = item[0].de_date;
-          this.birth_date = item[0].birth_date;
-          this.now_class = item[0].now_class;
+          this.name = item[0].name
+          this.userid = item[0].userid
+          this.password = item[0].password
+          this.en_date = item[0].en_date
+          this.de_date = item[0].de_date
+          this.birth_date = item[0].birth_date
+          this.now_class = item[0].now_class
           this.unit = item[0].unit_company 
               + " " + item[0].unit_platoon 
               + " " + item[0].unit_squad;
-          this.unit_company = item[0].unit_company;
-          this.unit_platoon = item[0].unit_platoon;
-          this.unit_squad = item[0].unit_squad;
-          this.position = item[0].position;
-          this.work_list = item[0].work_list;
-          this.vacation = [
-            {
-              "start_date": "2021-05-01",
-              "end_date": "2021-05-04",
-              "description": "신병위로휴가",
-            },
-            {
-              "start_date": "2021-08-04",
-              "end_date": "2021-08-10",
-              "description": "청원휴가",
-            }
-          ];
-          //this.vacation.push(item[0].vacation[0])
-          this.total_work_time = {"work_time": 0, "sleep_time": 0, "personal_time": 0};
-          this.this_mon_work_time = {"work_time": 0, "sleep_time": 0, "personal_time": 0};
-          this.prev_mon_work_time = {"work_time": 0, "sleep_time": 0, "personal_time": 0};
+          this.unit_company = item[0].unit_company
+          this.unit_platoon = item[0].unit_platoon
+          this.unit_squad = item[0].unit_squad
+          this.position = item[0].position
+          this.work_list = item[0].work_list
+          this.vacation = item[0].vacation
+          this.total_work_time = item[0].total_work_time
+          this.this_mon_work_time = item[0].this_mon_work_time
+          this.prev_mon_work_time = item[0].prev_mon_work_time
       },
       saveForm: function () {
-        const usersPath = baseUrl + '/api/v1/users/';
+        const usersPath = baseUrl + '/api/v1/users/'
         this.result = {
           "name": this.name, 
           "userid": this.userid, 
@@ -455,16 +443,16 @@
         })
       },
       addTableRow: function () { 
-        this.counter++;
-        this.vacation.push({start_date: this.start_date, end_date: this.end_date, description: this.description});
-        this.start_date = null;
-        this.end_date = null;
-        this.description = null;
-        this.vacation_dialog = false;
+        this.counter++
+        this.vacation.push({start_date: this.start_date, end_date: this.end_date, description: this.description})
+        this.start_date = null
+        this.end_date = null
+        this.description = null
+        this.vacation_dialog = false
       },
       deleteTableRow: function (idx) { 
-        this.counter--;
-        this.vacation.splice(idx, 1);
+        this.counter--
+        this.vacation.splice(idx, 1)
       }
     },
   }

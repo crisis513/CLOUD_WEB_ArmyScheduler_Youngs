@@ -38,14 +38,31 @@ class UserModel(BaseModel):
                 "work_list": [ 1, 2 ],
                 "vacation": [
                     {
-                        "start_date":"20210211", 
-                        "end_date": "20210215", 
-                        "description": "신병위로휴가"
+                        "start_date": "2021-05-01",
+                        "end_date": "2021-05-04",
+                        "description": "신병위로휴가",
+                    },
+                    {
+                        "start_date": "2021-08-04",
+                        "end_date": "2021-08-10",
+                        "description": "청원휴가",
                     }
                 ],
-                "total_work_time": "600",
-                "this_mon_work_time": "35",
-                "prev_mon_work_time": "60"
+                "total_work_time": {
+                    "work_time": 0,
+                    "sleep_time": 0,
+                    "personal_time": 0
+                },
+                "this_mon_work_time": {
+                    "work_time": 0,
+                    "sleep_time": 0,
+                    "personal_time": 0
+                },
+                "prev_mon_work_time": {
+                    "work_time": 0,
+                    "sleep_time": 0,
+                    "personal_time": 0
+                },
             }
         }
 
@@ -85,14 +102,31 @@ class UpdateUserModel(BaseModel):
                 "work_list": [ 1, 2 ],
                 "vacation": [
                     {
-                        "start_date":"20210211", 
-                        "end_date": "20210215", 
-                        "description": "신병위로휴가"
+                        "start_date": "2021-05-01",
+                        "end_date": "2021-05-04",
+                        "description": "신병위로휴가",
+                    },
+                    {
+                        "start_date": "2021-08-04",
+                        "end_date": "2021-08-10",
+                        "description": "청원휴가",
                     }
                 ],
-                "total_work_time": "600",
-                "this_mon_work_time": "35",
-                "prev_mon_work_time": "60"
+                "total_work_time": {
+                    "work_time": 0, 
+                    "sleep_time": 0, 
+                    "personal_time": 0
+                },
+                "this_mon_work_time": {
+                    "work_time": 0, 
+                    "sleep_time": 0, 
+                    "personal_time": 0
+                },
+                "prev_mon_work_time": {
+                    "work_time": 0, 
+                    "sleep_time": 0, 
+                    "personal_time": 0
+                },
             }
         }
 

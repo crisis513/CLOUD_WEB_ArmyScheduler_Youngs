@@ -10,7 +10,6 @@ class WorkModel(BaseModel):
     work_option1: str = Field(...)
     work_option2: str = Field(...)
     work_option3: str = Field(...)
-    work_period: str = Field(...)
 
     class Config:
         schema_extra = {
@@ -25,7 +24,6 @@ class WorkModel(BaseModel):
                 "work_option1": "work_option1",
                 "work_option2": "work_option2",
                 "work_option3": "work_option3",
-                "work_period": "work_period"
             }
         }
 
@@ -37,7 +35,6 @@ class UpdateWorkModel(BaseModel):
     work_option1: Optional[str]
     work_option2: Optional[str]
     work_option3: Optional[str]
-    work_period: Optional[str]
 
     class Config:
         schema_extra = {
@@ -52,7 +49,6 @@ class UpdateWorkModel(BaseModel):
                 "work_option1": "work_option1",
                 "work_option2": "work_option2",
                 "work_option3": "work_option3",
-                "work_period": "work_period"
             }
         }
 
