@@ -146,11 +146,13 @@ class Backtrack:
         # Question: 근무 불공정도에 대한 더 좋은 척도가 있을까?
         min_fatigue = self.INF
         max_fatigue = -1
+        sum_fatigue = 0
         for user in self.user_list.values():
             fatigue = user['fatigue']
             min_fatigue = min(fatigue, min_fatigue)
             max_fatigue = max(fatigue, max_fatigue)
-        return max_fatigue - min_fatigue
+            sum_fatigue += fatigue
+        return sum_fatigue / len(self.user_list) + max_fatigue - min_fatigue
 
     def backtrack(self, events_idx):
         """
@@ -176,15 +178,36 @@ class Backtrack:
         start_time = event['start_time']
         end_time = event['end_time']
         event_day = date_to_int(event['event_date'])
+        work = self.total_work_list[event['work_id']]
         day_worktime, night_worktime, free_worktime, fatigue = get_worktime_and_fatigue(start_time, end_time)
         for uid, values in self.user_list.items():
-            # todo: 현재 uid를 거를지 판단
-            
+            # 근무 옵션에 의해 근무 불가능한 uid는 배제
+            # work_option1: 2일 연속 근무 여부
+            # work_option2: 하루 쉬고 근무 여부 (e.g. 퐁당퐁당)
+            # work_option3: 하루 2회 이상 근무 여부
+            work_day_list = self.user_list[uid]['work_day_list']
+            if work['work_option1'] == main.WorkOptionType.Never and len(work_day_list) > 0 and work_day_list[-1] == event_day - 1:
+                continue
+            if work['work_option2'] == main.WorkOptionType.Never and len(work_day_list) > 0 and work_day_list[-1] >= event_day - 2:
+                continue
+            if work['work_option3'] == main.WorkOptionType.Never and len(work_day_list) > 0 and work_day_list[-1] == event_day:
+                continue
+
+            # 근무 옵션에 의해 선호되지 않는 근무의 경우 fatigue 추가
+            # To-do: avoid hard-coded number
+            additional_fatigue = 0
+            if work['work_option1'] == main.WorkOptionType.NotPreferred and len(work_day_list) > 0 and work_day_list[-1] == event_day - 1:
+                additional_fatigue += 5
+            if work['work_option2'] == main.WorkOptionType.NotPreferred and len(work_day_list) > 0 and work_day_list[-1] >= event_day - 2:
+                additional_fatigue += 5
+            if work['work_option3'] == main.WorkOptionType.NotPreferred and len(work_day_list) > 0 and work_day_list[-1] == event_day:
+                additional_fatigue += 5
+
             self.cur_schedule.append(uid)
             self.user_list[uid]['day_worktime'] += day_worktime
             self.user_list[uid]['night_worktime'] += night_worktime
             self.user_list[uid]['free_worktime'] += free_worktime
-            self.user_list[uid]['fatigue'] += fatigue
+            self.user_list[uid]['fatigue'] += (fatigue + additional_fatigue)
             self.user_list[uid]['work_day_list'].append(event_day)
 
             self.backtrack(events_idx + 1)
@@ -193,7 +216,7 @@ class Backtrack:
             self.user_list[uid]['day_worktime'] -= day_worktime
             self.user_list[uid]['night_worktime'] -= night_worktime
             self.user_list[uid]['free_worktime'] -= free_worktime
-            self.user_list[uid]['fatigue'] -= fatigue
+            self.user_list[uid]['fatigue'] -= (fatigue + additional_fatigue)
             self.user_list[uid]['work_day_list'].pop()
 
 def main():

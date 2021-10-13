@@ -32,8 +32,13 @@ class Vacation(object):
         self.end_date = end_date
         self.description = description
 
+class WorkOptionType(enum):
+    Never = 0
+    NotPreferred = 1
+    Allowed = 2
+
 class Works(object):
-    def __init__(self, work_id, work_name, work_setting, work_option1, work_option2, work_option3, work_period):
+    def __init__(self, work_id, work_name, work_setting, work_option1, work_option2, work_option3):
         self.work_id = work_id
         self.work_name = work_name
         self.worker_list = list()
@@ -41,7 +46,6 @@ class Works(object):
         self.work_option1 = work_option1
         self.work_option2 = work_option2
         self.work_option3 = work_option3
-        self.work_period = work_period
 
 class WorkSetting(object):
     def __init__(self, start_time, end_time, num_workers):
@@ -73,7 +77,7 @@ class Events(object):
             event_title = work_name,
             event_type = EventType.Work,
             work_id = work_id,
-            tags = Tags('some_tag_title', 'some_tag_color'),
+            tags = Tags('some_tag_title', 'some_tag_color'), # todo: fix to list
             event_date = date,
             event_color = 'some_color',
             start_time = work_setting['start_time'],
@@ -99,7 +103,7 @@ def object_decoder(obj):
         return WorkTime(obj['day_worktime'], obj['night_worktime'], obj['free_worktime'])
     elif obj['__type__'] == 'Works':
         return Works(obj['work_id'], obj['work_name'], obj['work_setting'],
-                     obj['work_option1'], obj['work_option2'], obj['work_option3'], obj['work_period'])
+                     obj['work_option1'], obj['work_option2'], obj['work_option3'])
     elif obj['__type__'] == 'Vacation':
         return Vacation(obj['start_date'], obj['end_date'], obj['description'])
     elif obj['__type__'] == 'WorkSetting':
@@ -174,7 +178,7 @@ def update_user_on_userpage(db, userid, name, password, birth_date, en_date, de_
     }
     db.Users.update_one(query, values)
 
-def create_work(db, work_id, work_name, work_setting, work_option1, work_option2, work_option3, work_period):
+def create_work(db, work_id, work_name, work_setting, work_option1, work_option2, work_option3):
     work = {
         'work_id': work_id,             # 일련번호
         'work_name': work_name,         # 근무명
@@ -182,11 +186,10 @@ def create_work(db, work_id, work_name, work_setting, work_option1, work_option2
         'work_option1': work_option1,   # 근무옵션1
         'work_option2': work_option2,   # 근무옵션2
         'work_option3': work_option3,   # 근무옵션3
-        'work_period': work_period      # 근무주기
     }
     return db.Works.insert_one(work).inserted_id
 
-def update_work(db, work_id, work_name, work_setting, work_option1, work_option2, work_option3, work_period):
+def update_work(db, work_id, work_name, work_setting, work_option1, work_option2, work_option3):
     query = { 'work_id': work_id }
     values = {
         '$set': {
@@ -195,7 +198,6 @@ def update_work(db, work_id, work_name, work_setting, work_option1, work_option2
             'work_option1': work_option1,   # 근무옵션1
             'work_option2': work_option2,   # 근무옵션2
             'work_option3': work_option3,   # 근무옵션3
-            'work_period': work_period      # 근무주기
         }
     }
     db.Works.update_one(query, values)
@@ -241,14 +243,14 @@ def dbtest1():
 def dbtest2():
     client = MongoClient('mongodb://localhost:27017/')
     db = db_init(client)
-    create_work(db, 1, '불침번', [{'start_time':'22:00', 'end_time':'24:00', 'num_workers':2}], 1, 1, 1, 1)
-    create_work(db, 2, '당직', [{'start_time':'09:00', 'end_time':'08:59', 'num_workers':1}], 2, 2, 2, 1)
+    create_work(db, 1, '불침번', [{'start_time':'22:00', 'end_time':'24:00', 'num_workers':2}], 1, 1, 1)
+    create_work(db, 2, '당직', [{'start_time':'09:00', 'end_time':'08:59', 'num_workers':1}], 2, 2, 2)
     test_work = find_work(db, 1)
     print(test_work)
     test_work = find_work(db, 2)
     print(test_work)
 
-    update_work(db, 1, '불침번', [{'start_time':'24:00', 'end_time':'02:00', 'num_workers':2}], 3, 3, 3, 1)
+    update_work(db, 1, '불침번', [{'start_time':'24:00', 'end_time':'02:00', 'num_workers':2}], 3, 3, 3)
     test_work = find_work(db, 1)
     print(test_work)
 
@@ -269,7 +271,6 @@ def get_total_work_list():
             'work_option1': w['work_option1'],
             'work_option2': w['work_option2'],
             'work_option3': w['work_option3'],
-            'work_period': w['work_period']
         }
     return work_dict
 
