@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 import json
 import logging, sys
-from enum import enum
+from enum import Enum
 class Users(object):
     def __init__(self, userid, name, password, en_date, de_date, now_class, unit_company, unit_platoon, unit_squad, position, work_list, vacation, total_work_time, this_mon_work_time, prev_mon_work_time):
         self.userid = userid
@@ -32,7 +32,7 @@ class Vacation(object):
         self.end_date = end_date
         self.description = description
 
-class WorkOptionType(enum):
+class WorkOptionType(Enum):
     Never = 0
     NotPreferred = 1
     Allowed = 2
@@ -53,7 +53,7 @@ class WorkSetting(object):
         self.end_time = end_time
         self.num_workers = num_workers
 
-class EventType(enum):
+class EventType(Enum):
     Work = 0    # 근무
     Troop = 1   # 부대 일정 (훈련 등)
     Custom = 2  # 유저 개인 일정
@@ -254,6 +254,31 @@ def dbtest2():
     test_work = find_work(db, 1)
     print(test_work)
 
+def dbtest3():
+    client = MongoClient('mongodb://localhost:27017/')
+    db = db_init(client)
+    colors = ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1']
+    create_event(
+        db = db,
+        userid = 1,
+        event_title = '위병소 근무',
+        tags = [{'tag_title': '위병소', 'tag_color': colors[0]}, {'tag_title': '주간', 'tag_color': colors[1]}],
+        event_date = '2021-10-13',
+        event_color = colors[2],
+        start_time = '10:00',
+        end_time = '12:00'
+    )
+    create_event(
+        db = db,
+        userid = 2,
+        event_title = '불침번 근무',
+        tags = [{'tag_title': '불침번', 'tag_color': colors[3]}, {'tag_title': '야간', 'tag_color': colors[4]}],
+        event_date = '2021-10-15',
+        event_color = colors[5],
+        start_time = '22:00',
+        end_time = '24:00'
+    )
+
 def clear_databases():
     client = MongoClient('mongodb://localhost:27017/') # for local test
     client.drop_database('army_scheduler_db')
@@ -290,9 +315,8 @@ def get_total_user_list():
     return user_dict
 
 def main():
-    works = get_total_work_list()
-    for w in works:
-        print(w)
+    clear_databases()
+    dbtest3()
 
 if __name__ == '__main__':
     main()
