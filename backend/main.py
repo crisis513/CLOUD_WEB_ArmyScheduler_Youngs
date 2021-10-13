@@ -1,6 +1,8 @@
 from pymongo import MongoClient
 import json
 import logging, sys
+import random
+import datetime
 from enum import IntEnum
 class Users(object):
     def __init__(self, userid, name, password, en_date, de_date, now_class, unit_company, unit_platoon, unit_squad, position, work_list, vacation, total_work_time, this_mon_work_time, prev_mon_work_time):
@@ -79,17 +81,37 @@ class Events(object):
             event_title = work_name,
             event_type = EventType.Work,
             work_id = work_id,
-            tags = Tags('some_tag_title', 'some_tag_color'), # todo: fix to list
+            tags = [Tags('some_tag_title', 'some_tag_color')], # todo: fix to list
             event_date = date,
             event_color = 'some_color',
             start_time = work_setting['start_time'],
             end_time = work_setting['end_time']
-            )
+        )
+    
+    def asdict(self):
+        return {
+            'event_id': self.event_id,
+            'userid': self.userid,
+            'event_title': self.event_title,
+            'event_type': int(self.event_type),
+            'work_id': self.work_id,
+            'tags': [tag.asdict() for tag in self.tags],
+            'event_date': self.event_date,
+            'event_color': self.event_color,
+            'start_time': self.start_time,
+            'end_time': self.end_time
+        }
 
 class Tags(object):
     def __init__(self, tag_title, tag_color):
         self.tag_title = tag_title
         self.tag_color = tag_color
+    
+    def asdict(self):
+        return {
+            'tag_title': self.tag_title,
+            'tag_color': self.tag_color
+        }
 
 def object_decoder(obj):
     if '__type__' not in obj:
@@ -118,6 +140,17 @@ def object_decoder(obj):
     else:
         logging.debug(f'ERROR: unknown __type__ {obj["__type__"]}')
         return obj
+
+def int_to_date(date) -> str:
+    base_date = datetime.datetime.fromisoformat('1970-01-01')
+    cur_date = base_date + datetime.timedelta(days=date)
+    return datetime.datetime.strftime(cur_date, '%Y-%m-%d')
+
+def date_to_int(date) -> int:
+    base_date = datetime.datetime.fromisoformat('1970-01-01')
+    cur_date = datetime.datetime.fromisoformat(date)
+    diff = cur_date - base_date
+    return diff.days
 
 def db_init(client):
     db = client['army_scheduler_db']
@@ -223,6 +256,9 @@ def create_event(db, event_id, userid, event_title, event_type, work_id, tags, e
     }
     return db.Events.insert_one(event).inserted_id
 
+def insert_many_events(db, event_list):
+    db.Events.insert_many(event_list)
+
 def dbtest():
     clear_databases()
     dbtest1()
@@ -290,6 +326,119 @@ def dbtest3():
         end_time = '24:00'
     )
 
+def create_custom_db():
+    clear_databases()
+    client = MongoClient('mongodb://localhost:27017/') # for local test
+    db = db_init(client)
+    # insert Works
+    create_work(
+        db = db,
+        work_id = 1,
+        work_name = '불침번',
+        work_setting = [
+            {'start_time': '22:00', 'end_time': '24:00', 'num_workers': 2},
+            {'start_time': '00:00', 'end_time': '02:00', 'num_workers': 2},
+            {'start_time': '02:00', 'end_time': '03:30', 'num_workers': 2},
+            {'start_time': '03:30', 'end_time': '05:00', 'num_workers': 2},
+            {'start_time': '05:00', 'end_time': '06:30', 'num_workers': 2}
+        ],
+        work_option1 = int(WorkOptionType.Allowed),
+        work_option2 = int(WorkOptionType.Allowed),
+        work_option3 = int(WorkOptionType.Never)
+    )
+    create_work(
+        db = db,
+        work_id = 2,
+        work_name = '당직',
+        work_setting = [
+            {'start_time': '09:00', 'end_time': '09:00', 'num_workers': 1}
+        ],
+        work_option1 = int(WorkOptionType.Never),
+        work_option2 = int(WorkOptionType.NotPreferred),
+        work_option3 = int(WorkOptionType.Never)
+    )
+    create_work(
+        db = db,
+        work_id = 3,
+        work_name = '경계',
+        work_setting = [
+            {'start_time': '06:00', 'end_time': '08:00', 'num_workers': 2},
+            {'start_time': '08:00', 'end_time': '10:00', 'num_workers': 2},
+            {'start_time': '10:00', 'end_time': '12:00', 'num_workers': 2},
+            {'start_time': '12:00', 'end_time': '14:00', 'num_workers': 2},
+            {'start_time': '14:00', 'end_time': '16:00', 'num_workers': 2},
+            {'start_time': '16:00', 'end_time': '18:00', 'num_workers': 2},
+            {'start_time': '18:00', 'end_time': '20:00', 'num_workers': 2},
+            {'start_time': '20:00', 'end_time': '22:00', 'num_workers': 2}
+        ],
+        work_option1 = int(WorkOptionType.Allowed),
+        work_option2 = int(WorkOptionType.Allowed),
+        work_option3 = int(WorkOptionType.NotPreferred)
+    )
+    # insert Users
+    name_list = [
+        '도한수', '임본창', '한혜환', '최성우', '이대헌',
+        '전도현', '정태현', '박현빈', '전남준', '탁승욱',
+        '장영철', '봉영재', '오영근', '백우주', '김창환',
+        '노지혁', '고진우', '하동석', '윤정환', '이대웅',
+        '허광준', '유희준', '윤우일', '임유성', '안정훈',
+        '서경수', '백종철', '임재성', '박준영', '남혜훈',
+        '오성환', '허용태', '하승식', '서도환', '배병곤',
+        '손명우', '안영원', '장승남', '조경호', '권진욱',
+        '류정철', '손규영', '손상민', '안동현', '오동준',
+        '장경민', '유시욱', '정민훈', '고진철', '정한길'
+    ] # created by random generator
+    position_list = [
+        '소총수', '통신병', '의무병', '취사병', '운전병',
+        '행정병', 'D.P', '정훈병'
+    ]
+    for i in range(50):
+        # userid = 'uid' + str(f'{i:04d}')
+        userid = str(i)
+        name = name_list[i]
+        password = 'pwd' + str(f'{i:04d}')
+        birth_date = int_to_date(random.randint(date_to_int('1992-01-01'), date_to_int('2001-12-31')))
+        en_date = int_to_date(random.randint(date_to_int('2020-05-01'), date_to_int('2021-10-01')))
+        en_date_int = date_to_int(en_date)
+        today_int = date_to_int('2021-10-13')
+        diff = today_int - en_date_int
+        de_date = int_to_date(en_date_int + 546)
+        now_class = ''
+        if diff < 60:
+            now_class = '이병'
+        elif diff < 240:
+            now_class = '일병'
+        elif diff < 420:
+            now_class = '상병'
+        else:
+            now_class = '병장'
+        unit_company = str(random.randint(1, 2)) + '중대'
+        unit_platoon = str(random.randint(1, 3)) + '소대'
+        unit_squad = str(random.randint(1, 3)) + '분대'
+        position = random.choice(position_list)
+        if i < 18:
+            work = 1
+        elif i < 26:
+            work = 2
+        else:
+            work = 3
+        create_user(
+            db = db,
+            userid = userid,
+            name = name,
+            password = password,
+            birth_date = birth_date,
+            en_date = en_date,
+            de_date = de_date,
+            now_class = now_class,
+            unit_company = unit_company,
+            unit_platoon = unit_platoon,
+            unit_squad = unit_squad,
+            position = position,
+            work_list = [work],
+            vacation = []
+        )
+
 def clear_databases():
     client = MongoClient('mongodb://localhost:27017/') # for local test
     client.drop_database('army_scheduler_db')
@@ -322,12 +471,11 @@ def get_total_user_list():
     users = db.Users.find()
     user_dict = {}
     for u in users:
-        user_dict[u['userid']] = {'day_worktime':0, 'night_worktime':0, 'free_worktime':0, 'fatigue':0, 'work_day_list':[]}
+        user_dict[u['userid']] = {'day_worktime':0, 'night_worktime':0, 'free_worktime':0, 'fatigue':0, 'work':u['work_list'], 'work_day_list':[]}
     return user_dict
 
 def main():
-    clear_databases()
-    dbtest3()
+    create_custom_db()
 
 if __name__ == '__main__':
     main()

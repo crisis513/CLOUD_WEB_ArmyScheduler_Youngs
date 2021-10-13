@@ -78,16 +78,28 @@ class Backtrack:
         self.result_schedule_list = []
         self.best_schedule = []
         self.cur_schedule = []
-        self.event_list = []
-        self.user_list = main.get_total_user_list()
-        self.total_events = 0
+        self.event_list = {}
+        self.total_user_list = main.get_total_user_list()
+        self.total_events = {}
         self.best_unfairness = self.INF
         self.stop_backtracking = False
+        self.base_fatigue = {}
+        self.backtracking_limit = 100000
         self.unfairness_threshold = 0
+        self.cnt = 0
         self.total_work_list = main.get_total_work_list()
         self.prev_event_list = main.get_total_event_list()
         self.init_event_id()
+        self.init_user_list()
     
+    def init_user_list(self):
+        self.user_list = {}
+        for work_id in self.total_work_list:
+            self.user_list[work_id] = {}
+            for uid, user in self.total_user_list.items():
+                if user['work'][0] == work_id:
+                    self.user_list[work_id][uid] = user
+
     def init_event_id(self):
         self.magic = 100000
         max_event_id = 0
@@ -106,34 +118,49 @@ class Backtrack:
             event_day = date_to_int(event['event_date'])
             if not start_day <= event_day < end_day:
                 continue
-            if event['event_type'] == main.EventType.Custom:
+            if event['event_type'] != main.EventType.Work:
                 continue
             uid = event['userid']
             start_time = event['start_time']
             end_time = event['end_time']
+            work_id = event['work_id']
             day_worktime, night_worktime, free_worktime, fatigue = get_worktime_and_fatigue(start_time, end_time)
-            self.user_list[uid]['day_worktime'] += day_worktime
-            self.user_list[uid]['night_worktime'] += night_worktime
-            self.user_list[uid]['free_worktime'] += free_worktime
-            self.user_list[uid]['fatigue'] += fatigue
-            self.user_list[uid]['work_day_list'].append(event_day)
+            self.user_list[work_id][uid]['day_worktime'] += day_worktime
+            self.user_list[work_id][uid]['night_worktime'] += night_worktime
+            self.user_list[work_id][uid]['free_worktime'] += free_worktime
+            self.user_list[work_id][uid]['fatigue'] += fatigue
+            self.base_fatigue[work_id] += fatigue
+            self.user_list[work_id][uid]['work_day_list'].append(event_day)
 
     def create_empty_event_list(self, start_date, end_date):
         start_day = date_to_int(start_date)
         end_day = date_to_int(end_date)
         for work_id in self.total_work_list:
+            self.event_list[work_id] = []
+            self.base_fatigue[work_id] = 0
             work_setting_list = self.get_work_setting(work_id)
             for date in range(start_day, end_day + 1):
                 for work_setting in work_setting_list:
+                    start_time = work_setting['start_time']
+                    end_time = work_setting['end_time']
+                    _, _, _, fatigue = get_worktime_and_fatigue(start_time, end_time)
+                    self.base_fatigue[work_id] += fatigue * work_setting['num_workers']
                     for _ in range(work_setting['num_workers']):
                         event_id = self.event_id_prefix * self.magic + self.event_id_postfix
                         event = main.Events.from_scheduler(event_id, int_to_date(date), work_id, self.total_work_list[work_id]['work_name'], work_setting)
                         self.event_id_postfix += 1
-                        self.event_list.append(event)
+                        self.event_list[work_id].append(event)
     
     def set_event_list(self):
         # To-do: push self.event_list to DB
-        return
+        event_list = []
+        for work_id in self.event_list:
+            for event in self.event_list[work_id]:
+                event_list.append(event.asdict())
+        print(event_list)
+        client = MongoClient('mongodb://localhost:27017/') # for local test
+        db = main.db_init(client)
+        main.insert_many_events(db, event_list)
 
     def schedule(self, consider_from_date, start_date, end_date):
         """
@@ -145,58 +172,62 @@ class Backtrack:
         """
         self.create_empty_event_list(start_date, end_date)
         self.get_prev_fatigue(consider_from_date, start_date)
-        self.total_events = len(self.event_list)
-        self.unfairness = 0
-
-        self.backtrack(0)
-
-        for i in range(self.total_events):
-            self.event_list[i]['userid'] = self.best_schedule[i]
+        for work_id in self.total_work_list:
+            self.total_events[work_id] = len(self.event_list[work_id])
+            self.best_unfairness = self.INF
+            self.stop_backtracking = False
+            self.unfairness_threshold = 0 # To-do: any good heuristics?
+            self.cnt = 0
+            self.backtrack(work_id, 0)
+            for i in range(self.total_events[work_id]):
+                self.event_list[work_id][i].userid = self.best_schedule[i]
         self.set_event_list()
 
-    def get_unfairness(self):
+    def get_unfairness(self, work_id):
         # Question: 근무 불공정도에 대한 더 좋은 척도가 있을까?
         min_fatigue = self.INF
         max_fatigue = -1
         sum_fatigue = 0
-        for user in self.user_list.values():
+        for user in self.user_list[work_id].values():
             fatigue = user['fatigue']
             min_fatigue = min(fatigue, min_fatigue)
             max_fatigue = max(fatigue, max_fatigue)
             sum_fatigue += fatigue
-        return sum_fatigue / len(self.user_list) + max_fatigue - min_fatigue
+        # return (sum_fatigue - self.base_fatigue[work_id]) / len(self.user_list[work_id]) + max_fatigue - min_fatigue
+        return max_fatigue - min_fatigue
 
-    def backtrack(self, events_idx):
+    def backtrack(self, work_id, events_idx):
         """
+        work_id: 현재 고려하는 근무
         events_idx: 현재 고려하는 이벤트의 인덱스
         """
         if self.stop_backtracking:
             return
-        if events_idx == self.total_events:
-            self.get_unfairness()
-            if self.unfairness < self.best_unfairness:
+        if events_idx == self.total_events[work_id]:
+            self.unfairness = self.get_unfairness(work_id)
+            self.cnt += 1
+            if self.unfairness <= self.best_unfairness:
                 self.best_unfairness = self.unfairness
                 self.best_schedule = deepcopy(self.cur_schedule)
-            # 근무 불공정도가 특정 threshold보다 낮다면 탐색을 중단하고 return
-            # To-do: how to set threshold?
-            if self.best_unfairness < self.unfairness_threshold:
+            # 근무 불공정도가 특정 threshold보다 낮거나 탐색을 충분히 많이 했으면 중단하고 return
+            if self.best_unfairness <= self.unfairness_threshold or self.cnt >= self.backtracking_limit:
                 self.stop_backtracking = True
-                return
-            # todo: end backtracking
             return
 
-        event = self.event_list[events_idx]
-        start_time = event['start_time']
-        end_time = event['end_time']
-        event_day = date_to_int(event['event_date'])
-        work = self.total_work_list[event['work_id']]
+        event = self.event_list[work_id][events_idx]
+        start_time = event.start_time
+        end_time = event.end_time
+        event_day = date_to_int(event.event_date)
+        work = self.total_work_list[work_id] # from here
         day_worktime, night_worktime, free_worktime, fatigue = get_worktime_and_fatigue(start_time, end_time)
-        for uid, values in self.user_list.items():
+        for uid in sorted(self.user_list[work_id], key=lambda x: self.user_list[work_id][x]['fatigue']):
+            user = self.user_list[work_id][uid]
+
             # 근무 옵션에 의해 근무 불가능한 uid는 배제
             # work_option1: 2일 연속 근무 여부
             # work_option2: 하루 쉬고 근무 여부 (e.g. 퐁당퐁당)
             # work_option3: 하루 2회 이상 근무 여부
-            work_day_list = self.user_list[uid]['work_day_list']
+            work_day_list = user['work_day_list']
             if work['work_option1'] == main.WorkOptionType.Never and len(work_day_list) > 0 and work_day_list[-1] >= event_day - 1:
                 continue
             if work['work_option2'] == main.WorkOptionType.Never and len(work_day_list) > 0 and work_day_list[-1] >= event_day - 2:
@@ -217,27 +248,28 @@ class Backtrack:
                 additional_fatigue += 5
 
             self.cur_schedule.append(uid)
-            self.user_list[uid]['day_worktime'] += day_worktime
-            self.user_list[uid]['night_worktime'] += night_worktime
-            self.user_list[uid]['free_worktime'] += free_worktime
-            self.user_list[uid]['fatigue'] += (fatigue + additional_fatigue)
-            self.user_list[uid]['work_day_list'].append(event_day)
+            user['day_worktime'] += day_worktime
+            user['night_worktime'] += night_worktime
+            user['free_worktime'] += free_worktime
+            user['fatigue'] += (fatigue + additional_fatigue)
+            user['work_day_list'].append(event_day)
 
-            self.backtrack(events_idx + 1)
+            self.backtrack(work_id, events_idx + 1)
 
             self.cur_schedule.pop()
-            self.user_list[uid]['day_worktime'] -= day_worktime
-            self.user_list[uid]['night_worktime'] -= night_worktime
-            self.user_list[uid]['free_worktime'] -= free_worktime
-            self.user_list[uid]['fatigue'] -= (fatigue + additional_fatigue)
-            self.user_list[uid]['work_day_list'].pop()
+            user['day_worktime'] -= day_worktime
+            user['night_worktime'] -= night_worktime
+            user['free_worktime'] -= free_worktime
+            user['fatigue'] -= (fatigue + additional_fatigue)
+            user['work_day_list'].pop()
 
 def main2():
     sch = Backtrack()
     consider_from_date = '2021-10-01'
     start_date = '2021-10-13'
-    end_date = '2021-10-31'
+    end_date = '2021-11-12'
     sch.schedule(consider_from_date, start_date, end_date)
+    # print(sch.best_schedule)
 
 if __name__ == '__main__':
     main2()
