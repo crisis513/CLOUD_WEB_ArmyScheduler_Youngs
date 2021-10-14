@@ -143,10 +143,23 @@ class Backtrack:
                 for work_setting in work_setting_list:
                     start_time = work_setting['start_time']
                     end_time = work_setting['end_time']
-                    _, _, _, fatigue = get_worktime_and_fatigue(start_time, end_time)
+                    day_worktime, night_worktime, free_worktime, fatigue = get_worktime_and_fatigue(start_time, end_time)
+                    # TODO: tag 정보 추가
+                    # app/models/event.py line 18 부터 참조하여 리스트 형태로 집어넣을 것
+                    # 고민거리: 마지막 태그는 인원 수? 근무 인원 명단?
+                    tags = []
+                    tags.append(main.Tags(self.total_work_list[work_id]['work_name'], 'green'))
+                    if day_worktime > 0:
+                        tags.append(main.Tags('주간근무', 'orange'))
+                    if night_worktime > 0:
+                        tags.append(main.Tags('야간근무', 'orange'))
+                    if free_worktime > 0:
+                        tags.append(main.Tags('개인정비시간근무', 'orange'))
+                    # tags.append(근무 인원 정보)
                     self.base_fatigue[work_id] += fatigue * work_setting['num_workers']
                     for _ in range(work_setting['num_workers']):
                         event_id = self.event_id_prefix * self.magic + self.event_id_postfix
+                        # TODO: Events.from_scheduler에 tag 넣게 수정
                         event = main.Events.from_scheduler(event_id, int_to_date(date), work_id, self.total_work_list[work_id]['work_name'], work_setting)
                         self.event_id_postfix += 1
                         self.event_list[work_id].append(event)
@@ -218,7 +231,7 @@ class Backtrack:
         start_time = event.start_time
         end_time = event.end_time
         event_day = date_to_int(event.event_date)
-        work = self.total_work_list[work_id] # from here
+        work = self.total_work_list[work_id]
         day_worktime, night_worktime, free_worktime, fatigue = get_worktime_and_fatigue(start_time, end_time)
         for uid in sorted(self.user_list[work_id], key=lambda x: self.user_list[work_id][x]['fatigue']):
             user = self.user_list[work_id][uid]
@@ -238,7 +251,7 @@ class Backtrack:
             # To-do: 휴가, 부대 일정, 전역 등에 의해 근무 불가능한 경우 배제
 
             # 근무 옵션에 의해 선호되지 않는 근무의 경우 fatigue 추가
-            # To-do: avoid hard-coded number
+            # To-do: avoid hard-coded number?
             additional_fatigue = 0
             if work['work_option1'] == main.WorkOptionType.NotPreferred and len(work_day_list) > 0 and work_day_list[-1] >= event_day - 1:
                 additional_fatigue += 5
