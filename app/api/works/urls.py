@@ -31,7 +31,7 @@ async def add_work_data(work: WorkModel = Body(...)):
 
 
 @router.delete("/{id}", response_description="work data deleted from the database")
-async def delete_work_data(id: str):
+async def delete_work_data(id: int):
     deleted_work = await delete_work(id)
     return ResponseModel("work with ID: {} removed".format(id), "work deleted successfully") \
         if deleted_work \
