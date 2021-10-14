@@ -4,10 +4,12 @@ import json
 import main
 from pymongo import MongoClient
 
+# 00:00부터 지난 시간 (분)
 def parse_time(t) -> int:
     h, m = map(int, t.split(':'))
     return h*60 + m
 
+# start_time부터 end_time까지 근무했을 때 주간 근무 시간 (분)
 def get_day_worktime(start_time, end_time) -> int:
     t1 = parse_time(start_time)
     t2 = parse_time(end_time)
@@ -16,6 +18,7 @@ def get_day_worktime(start_time, end_time) -> int:
         t += 60*24
     return t - get_night_worktime(start_time, end_time) - get_free_worktime(start_time, end_time)
 
+# t1_start ~ t1_end 구간과 t2_start ~ t2_end 구간이 겹치는 시간 (분)
 def intersect_time(t1_start, t1_end, t2_start, t2_end) -> int:
     assert(t1_start <= t1_end and t2_start <= t2_end)
     if t1_end <= t2_start or t2_end <= t1_start:
@@ -30,6 +33,7 @@ def intersect_time(t1_start, t1_end, t2_start, t2_end) -> int:
         return t1_end - t1_start
     print('should not reach here')
 
+# start_time부터 end_time까지 근무했을 때 야간 근무 시간 (분)
 def get_night_worktime(start_time, end_time) -> int:
     t1 = parse_time(start_time)
     t2 = parse_time(end_time)
@@ -39,6 +43,7 @@ def get_night_worktime(start_time, end_time) -> int:
     night_end = parse_time('06:30') + 60*24
     return intersect_time(t1, t2, night_start, night_end)
 
+# start_time부터 end_time까지 근무했을 때 개인정비시간에 근무한 시간 (분)
 def get_free_worktime(start_time, end_time) -> int:
     t1 = parse_time(start_time)
     t2 = parse_time(end_time)
@@ -144,28 +149,23 @@ class Backtrack:
                     start_time = work_setting['start_time']
                     end_time = work_setting['end_time']
                     day_worktime, night_worktime, free_worktime, fatigue = get_worktime_and_fatigue(start_time, end_time)
-                    # TODO: tag 정보 추가
-                    # app/models/event.py line 18 부터 참조하여 리스트 형태로 집어넣을 것
-                    # 고민거리: 마지막 태그는 인원 수? 근무 인원 명단?
                     tags = []
-                    tags.append(main.Tags(self.total_work_list[work_id]['work_name'], 'green'))
+                    tags.append(main.Tags(self.total_work_list[work_id]['work_name'], '#00FF00'))
                     if day_worktime > 0:
-                        tags.append(main.Tags('주간근무', 'orange'))
+                        tags.append(main.Tags('주간근무', '#FFA500'))
                     if night_worktime > 0:
-                        tags.append(main.Tags('야간근무', 'orange'))
+                        tags.append(main.Tags('야간근무', '#FFA500'))
                     if free_worktime > 0:
-                        tags.append(main.Tags('개인정비시간근무', 'orange'))
-                    # tags.append(근무 인원 정보)
+                        tags.append(main.Tags('개인정비시간근무', '#FFA500'))
+                    tags.append(main.Tags(f'{work_setting["num_workers"]}명', "#0000FF"))
                     self.base_fatigue[work_id] += fatigue * work_setting['num_workers']
                     for _ in range(work_setting['num_workers']):
                         event_id = self.event_id_prefix * self.magic + self.event_id_postfix
-                        # TODO: Events.from_scheduler에 tag 넣게 수정
-                        event = main.Events.from_scheduler(event_id, int_to_date(date), work_id, self.total_work_list[work_id]['work_name'], work_setting)
+                        event = main.Events.from_scheduler(event_id, int_to_date(date), tags, work_id, self.total_work_list[work_id]['work_name'], work_setting)
                         self.event_id_postfix += 1
                         self.event_list[work_id].append(event)
     
     def set_event_list(self):
-        # To-do: push self.event_list to DB
         event_list = []
         for work_id in self.event_list:
             for event in self.event_list[work_id]:
@@ -200,12 +200,12 @@ class Backtrack:
         # Question: 근무 불공정도에 대한 더 좋은 척도가 있을까?
         min_fatigue = self.INF
         max_fatigue = -1
-        sum_fatigue = 0
+        # sum_fatigue = 0
         for user in self.user_list[work_id].values():
             fatigue = user['fatigue']
             min_fatigue = min(fatigue, min_fatigue)
             max_fatigue = max(fatigue, max_fatigue)
-            sum_fatigue += fatigue
+            # sum_fatigue += fatigue
         # return (sum_fatigue - self.base_fatigue[work_id]) / len(self.user_list[work_id]) + max_fatigue - min_fatigue
         return max_fatigue - min_fatigue
 
@@ -254,11 +254,11 @@ class Backtrack:
             # To-do: avoid hard-coded number?
             additional_fatigue = 0
             if work['work_option1'] == main.WorkOptionType.NotPreferred and len(work_day_list) > 0 and work_day_list[-1] >= event_day - 1:
-                additional_fatigue += 5
+                additional_fatigue += 50
             if work['work_option2'] == main.WorkOptionType.NotPreferred and len(work_day_list) > 0 and work_day_list[-1] >= event_day - 2:
-                additional_fatigue += 5
+                additional_fatigue += 50
             if work['work_option3'] == main.WorkOptionType.NotPreferred and len(work_day_list) > 0 and work_day_list[-1] == event_day:
-                additional_fatigue += 5
+                additional_fatigue += 50
 
             self.cur_schedule.append(uid)
             user['day_worktime'] += day_worktime

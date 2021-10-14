@@ -74,14 +74,14 @@ class Events(object):
         self.end_time = end_time
     
     @classmethod
-    def from_scheduler(cls, event_id, date, work_id, work_name, work_setting):
+    def from_scheduler(cls, event_id, date, tags, work_id, work_name, work_setting):
         return cls(
             event_id = event_id,
             userid = -1,
             event_title = work_name,
             event_type = EventType.Work,
             work_id = work_id,
-            tags = [Tags('some_tag_title', 'some_tag_color')], # todo: fix to list
+            tags = tags,
             event_date = date,
             event_color = 'some_color',
             start_time = work_setting['start_time'],
