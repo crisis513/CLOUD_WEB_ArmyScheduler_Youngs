@@ -62,7 +62,7 @@ class EventType(IntEnum):
 
 class Events(object):
     def __init__(self, event_id, userid, event_title, event_type, work_id, tags, event_color, event_start_date, event_start_time, event_end_date, event_end_time):
-        self.event_id = event_id,
+        self.event_id = event_id
         self.userid = userid
         self.event_title = event_title
         self.event_type = event_type
@@ -115,34 +115,6 @@ class Tags(object):
             'tag_title': self.tag_title,
             'tag_color': self.tag_color
         }
-
-def object_decoder(obj):
-    if '__type__' not in obj:
-        logging.debug(f'ERROR: __type__ not in {obj}')
-        return obj
-    if obj['__type__'] == 'Users':
-        return Users(obj['userid'], obj['name'], obj['password'], obj['birth_date'],
-                     obj['en_date'], obj['de_date'], obj['now_class'],
-                     obj['unit_company'], obj['unit_platoon'], obj['unit_squad'],
-                     obj['position'], obj['work_list'], obj['vacation'],
-                     obj['total_work_time'], obj['this_mon_work_time'], obj['prev_mon_work_time'])
-    elif obj['__type__'] == 'WorkTime':
-        return WorkTime(obj['day_worktime'], obj['night_worktime'], obj['free_worktime'])
-    elif obj['__type__'] == 'Works':
-        return Works(obj['work_id'], obj['work_name'], obj['work_setting'],
-                     obj['work_option1'], obj['work_option2'], obj['work_option3'])
-    elif obj['__type__'] == 'Vacation':
-        return Vacation(obj['start_date'], obj['end_date'], obj['description'])
-    elif obj['__type__'] == 'WorkSetting':
-        return WorkSetting(obj['start_time'], obj['end_time'], obj['num_workers'])
-    elif obj['__type__'] == 'Events':
-        return Events(obj['userid'], obj['event_title'], obj['tags'],
-                      obj['event_date'], obj['event_color'], obj['start_time'], obj['end_time'])
-    elif obj['__type__'] == 'Tags':
-        return Tags(obj['tag_title'], obj['tag_color'])
-    else:
-        logging.debug(f'ERROR: unknown __type__ {obj["__type__"]}')
-        return obj
 
 def int_to_date(date) -> str:
     base_date = datetime.datetime.fromisoformat('1970-01-01')

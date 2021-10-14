@@ -190,7 +190,6 @@ class Backtrack:
                     result_event_list[idx]['userid'].append(e1.userid[0])
                 else:
                     result_event_list.append(e1.asdict())
-        print(result_event_list)
         client = MongoClient('mongodb://localhost:27017/') # for local test
         db = main.db_init(client)
         main.insert_many_events(db, result_event_list)
