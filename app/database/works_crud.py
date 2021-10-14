@@ -21,7 +21,7 @@ async def retrieve_works():
 
 async def add_work(work_data: dict) -> dict:
     work = await works_collection.insert_one(work_data)
-    new_work = await works_collection.find_one({"work_id": work.inserted_id})
+    new_work = await works_collection.find_one({"_id": work.inserted_id})
     return work_helper(new_work)
 
 

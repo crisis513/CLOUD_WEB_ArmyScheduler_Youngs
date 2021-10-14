@@ -110,12 +110,20 @@
                 >
                   <v-toolbar-title>일정 확인</v-toolbar-title>
                   <v-spacer></v-spacer>
-                  <v-btn icon @click="calendarEdit">
+                  <v-btn icon @click="calendarEdit()">
                     <v-icon>mdi-pencil</v-icon>
                   </v-btn>
-                  <v-btn icon>
+                  <v-btn icon @click="result_alert = true">
                     <v-icon>mdi-minus-circle</v-icon>
                   </v-btn>
+                  <md-dialog-confirm
+                    :md-active.sync="result_alert"
+                    md-title="일정 삭제"
+                    md-content="해당 일정을 정말 삭제하시겠습니까?"
+                    md-confirm-text="삭제"
+                    md-cancel-text="취소"
+                    @md-cancel="onCancel"
+                    @md-confirm="calendarDelete(selectedEvent.event_id)" />
                 </v-toolbar>
 
                 <v-container fluid>
@@ -304,74 +312,237 @@
         </v-card>
       </v-dialog>
       
-      <v-dialog
-        v-model="autoScheduleDialog"
-        persistent
-        max-width="500px"
-      >
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            v-bind="attrs"
-            v-on="on"
-            max-width="150px"
+      <div class="title-center">
+        <v-row
+          align="center"
+          justify="center"
+        >
+          <v-dialog
+            v-model="autoScheduleDialog"
+            persistent
+            max-width="500px"
+            class="between-blank-10"
           >
-            근무표 생성
-          </v-btn>
-        </template>
-        <v-card>
-          <v-card-title>
-            <span class="text-h5">근무표 설정</span>
-          </v-card-title>
-          <v-card-text>
-            <v-container>
-              <v-row>
-                <v-col
-                  cols="12"
-                  sm="6"
-                  md="4"
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                v-bind="attrs"
+                v-on="on"
+                max-width="150px"
+              >
+                근무표 자동 생성
+              </v-btn>
+            </template>
+            <v-card>
+              <v-card-title>
+                <span class="text-h5">근무표 설정</span>
+              </v-card-title>
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col
+                      cols="12"
+                      sm="6"
+                      md="4"
+                    >
+                      <v-text-field
+                        label="시작일*"
+                        required
+                        hint="2021-10-01"
+                        v-model="start_date"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col
+                      cols="12"
+                      sm="6"
+                      md="4"
+                    >
+                      <v-text-field
+                        label="종료일*"
+                        required
+                        hint="2021-10-31"
+                        v-model="end_date"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-container>
+                <small>*indicates required field</small>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="blue darken-1"
+                  text
+                  @click="autoScheduleDialog = false"
                 >
-                  <v-text-field
-                    label="시작일*"
-                    required
-                    hint="2021-10-01"
-                    v-model="start_date"
-                  ></v-text-field>
-                </v-col>
-                <v-col
-                  cols="12"
-                  sm="6"
-                  md="4"
+                  종료
+                </v-btn>
+                <v-btn
+                  color="blue darken-1"
+                  text
+                  @click="createWorkSchedule()"
                 >
-                  <v-text-field
-                    label="종료일*"
-                    required
-                    hint="2021-10-31"
-                    v-model="end_date"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-            </v-container>
-            <small>*indicates required field</small>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn
-              color="blue darken-1"
-              text
-              @click="autoScheduleDialog = false"
-            >
-              종료
-            </v-btn>
-            <v-btn
-              color="blue darken-1"
-              text
-              @click="createWorkSchedule()"
-            >
-              생성
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+                  생성
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+          
+          <v-dialog
+            v-model="addScheduleDialog"
+            persistent
+            max-width="600px"
+            class="between-blank-10"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                v-bind="attrs"
+                v-on="on"
+                max-width="150px"
+              >
+                일정 생성
+              </v-btn>
+            </template>
+            <v-card>
+              <v-card-title>
+                <span class="text-h5">일정 작성</span>
+              </v-card-title>
+              <v-card-text>
+
+                <v-container fluid>
+                  <v-row align="center">
+                    <v-col cols="3">
+                      <v-subheader>
+                        제목
+                      </v-subheader>
+                    </v-col>
+                    <v-col cols="6">
+                      <v-text-field
+                        v-model="addEvent.event_title"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-container>
+
+                <v-container fluid>
+                  <v-row align="center">
+                    <v-col cols="3">
+                      <v-subheader>
+                        제목색깔
+                      </v-subheader>
+                    </v-col>
+                    <v-col cols="6">
+                      <v-text-field
+                        v-model="addEvent.event_color"
+                        placeholder="red, green, blue ..."
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-container>
+                
+                <v-container fluid>
+                  <v-row align="center">
+                    <v-col cols="3">
+                      <v-subheader>
+                        일자
+                      </v-subheader>
+                    </v-col>
+                    <v-col cols="9">
+                      <v-text-field
+                        label="일자 입력"
+                        placeholder="2021-10-01"
+                        v-model="addEvent.event_date"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-container>
+
+                <v-container fluid>
+                  <v-row align="center">
+                    <v-col cols="3">
+                      <v-subheader>
+                        시간
+                      </v-subheader>
+                    </v-col>
+                    <v-col cols="9">
+                      <table>
+                      <tr>
+                        <td>
+                          <v-text-field
+                            label="시작시간"
+                            placeholder="00:00"
+                            prepend-icon="access_time"
+                            v-model="addEvent.start_time"
+                          ></v-text-field>
+                        </td>
+                        <td>
+                          <v-text-field
+                            label="종료시간"
+                            placeholder="00:00"
+                            prepend-icon="access_time"
+                            v-model="addEvent.end_time"
+                          ></v-text-field>
+                        </td>
+                      </tr>
+                      </table>
+                    </v-col>
+                  </v-row>
+                </v-container>
+                
+                <v-container fluid>
+                  <v-row align="center">
+                    <v-col cols="3">
+                      <v-subheader>
+                        태그
+                      </v-subheader>
+                    </v-col>
+                    <v-col cols="9">
+                      <table>
+                        <tr v-for="(tag, index) in addEvent.tags" :key="index">
+                          <td>
+                            <v-text-field
+                              slot="activator"
+                              v-model="tag.tag_title"
+                              label="태그명 입력"
+                              class="between-blank-10" ></v-text-field>
+                          </td>
+                          &nbsp;&nbsp;
+                          <td>
+                            <v-text-field
+                              slot="activator"
+                              v-model="tag.tag_color"
+                              label="태그색깔 입력"
+                              placeholder="red, green, blue ..."
+                              class="between-blank-10" ></v-text-field>
+                          </td>
+                          <td><v-icon @click='deleteTableRow(index)'>delete</v-icon></td>
+                        </tr>
+                      </table>
+                      <v-btn @click='addTableRow()' >태그 추가</v-btn>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="blue darken-1"
+                  text
+                  @click="addScheduleDialog = false"
+                >
+                  종료
+                </v-btn>
+                <v-btn
+                  color="blue darken-1"
+                  text
+                  @click="addSchedule()"
+                >
+                  생성
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+      </div>
 
       {{ events }}
     </v-app>
@@ -396,17 +567,35 @@
       selectedElement: null,
       selectedOpen: false,
       events: [],
-      
+      addEvent: {
+        "event_id": null,
+        "userid": -1,
+        "event_title": null,
+        "event_type": 1,
+        "work_id": -1,
+        "tags": [{
+          "tag_title": null,
+          "tag_color": null,
+        }],
+        "event_date": null,
+        "event_color": null,
+        "start_time": null,
+        "end_time": null
+      },
+
       validated: 1,
       isStatusOn: false,
       showClose: false,
       chipClose: true,
       addTagDialog: false,
       autoScheduleDialog: false,
+      addScheduleDialog: false,
+      result_alert: false,
       start_date: null,
       end_date: null,
       start_time: null,
       end_time: null,
+      counter: 1,
     }),
 
     created () {
@@ -479,6 +668,20 @@
       createWorkSchedule () {
         this.autoScheduleDialog = false
       },
+      addSchedule () {
+        this.addEvent["event_id"] = parseInt(this.events[this.events.length - 1]["event_id"] + 1)
+        const eventsPath = baseUrl + '/api/v1/events/'
+        
+        axios.post(eventsPath, this.addEvent)
+          .then((res) => {
+            console.log(res.data)
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+
+        this.addScheduleDialog = false
+      },
       calendarEdit () {
         if (this.validated == 0) {
           this.isStatusOn = false
@@ -490,13 +693,38 @@
           this.showClose = true
         }
       },
+      calendarDelete (event_id) {
+        const eventsPath = baseUrl + '/api/v1/events/'
+        
+        axios.delete(eventsPath + String(event_id), event_id)
+          .then((res) => {
+            console.log(res.data)
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      },
+      oncancel () {
+        this.result_alert = false
+      },
+      addTableRow: function () { 
+        this.counter++;
+        this.addEvent["tags"].push({tag_title: "", tag_color: ""});
+      },
+      deleteTableRow: function (idx) { 
+        this.counter--;
+        this.addEvent["tags"].splice(idx, 1);
+      }
       
     },
   }
 </script>
 
 <style scoped>
-.v-text-field{
-      width: 150px;
+.v-text-field {
+  width: 150px;
+}
+.v-btn {
+  padding-right: 20px;
 }
 </style>

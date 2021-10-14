@@ -31,7 +31,7 @@ async def add_event_data(event: EventModel = Body(...)):
 
 
 @router.delete("/{id}", response_description="event data deleted from the database")
-async def delete_event_data(id: str):
+async def delete_event_data(id: int):
     deleted_event = await delete_event(id)
     return ResponseModel("event with ID: {} removed".format(id), "event deleted successfully") \
         if deleted_event \
@@ -39,7 +39,7 @@ async def delete_event_data(id: str):
 
 
 @router.put("/{id}")
-async def update_event(id: str, req: UpdateEventModel = Body(...)):
+async def update_event(id: int, req: UpdateEventModel = Body(...)):
     updated_event = await update_event_data(id, req.dict())
     return ResponseModel("event with ID: {} name update is successful".format(id),
                          "event name updated successfully") \

@@ -21,24 +21,24 @@ async def retrieve_users():
 
 async def add_user(user_data: dict) -> dict:
     user = await users_collection.insert_one(user_data)
-    new_user = await users_collection.find_one({"userid": user.inserted_id})
+    new_user = await users_collection.find_one({"_id": user.inserted_id})
     return user_helper(new_user)
 
 
-async def retrieve_user(id: str) -> dict:
-    user = await users_collection.find_one({"userid": ObjectId(id)})
+async def retrieve_user(id: int) -> dict:
+    user = await users_collection.find_one({"userid": id})
     if user:
         return user_helper(user)
 
 
-async def delete_user(id: str):
-    user = await users_collection.find_one({"userid": ObjectId(id)})
+async def delete_user(id: int):
+    user = await users_collection.find_one({"userid": id})
     if user:
-        await users_collection.delete_one({"userid": ObjectId(id)})
+        await users_collection.delete_one({"userid": id})
         return True
 
 
-async def update_user_data(id: str, data: dict):
+async def update_user_data(id: int, data: dict):
     user = await users_collection.find_one({"userid": id})
     if user:
         users_collection.update_one({"userid": id}, {"$set": data})
