@@ -101,7 +101,7 @@
             >
               <v-card
                 color="grey lighten-4"
-                min-width="450px"
+                min-width="600px"
                 flat
               >
                 <v-toolbar
@@ -146,7 +146,7 @@
                   <v-row align="center">
                     <v-col cols="3">
                       <v-subheader>
-                        시간
+                        일시
                       </v-subheader>
                     </v-col>
                     <v-col cols="9">
@@ -154,10 +154,30 @@
                       <tr>
                         <td>
                           <v-text-field
+                            label="시작일자"
+                            placeholder="2021-01-01"
+                            prepend-icon="mdi-calendar"
+                            :value="selectedEvent.str_start_date"
+                            :disabled="validated == 1"
+                          ></v-text-field>
+                        </td>
+                        <td>
+                          <v-text-field
                             label="시작시간"
                             placeholder="00:00"
                             prepend-icon="access_time"
-                            :value="selectedEvent.str_start"
+                            :value="selectedEvent.str_start_time"
+                            :disabled="validated == 1"
+                          ></v-text-field>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <v-text-field
+                            label="종료일자"
+                            placeholder="2021-01-01"
+                            prepend-icon="mdi-calendar"
+                            :value="selectedEvent.str_end_date"
                             :disabled="validated == 1"
                           ></v-text-field>
                         </td>
@@ -166,7 +186,7 @@
                             label="종료시간"
                             placeholder="00:00"
                             prepend-icon="access_time"
-                            :value="selectedEvent.str_end"
+                            :value="selectedEvent.str_end_time"
                             :disabled="validated == 1"
                           ></v-text-field>
                         </td>
@@ -284,7 +304,7 @@
                   <v-text-field
                     label="태그색깔*"
                     required
-                    hint="red, green, blue ..."
+                    hint="#RRGGBB"
                     v-model="tag_color"
                   ></v-text-field>
                 </v-col>
@@ -328,6 +348,7 @@
                 v-bind="attrs"
                 v-on="on"
                 max-width="150px"
+                color="warning"
               >
                 근무표 자동 생성
               </v-btn>
@@ -379,11 +400,34 @@
                 <v-btn
                   color="blue darken-1"
                   text
+                  :disabled="loadingDialog"
+                  :loading="loadingDialog"
                   @click="createWorkSchedule()"
                 >
                   생성
                 </v-btn>
               </v-card-actions>
+            </v-card>
+          </v-dialog>
+
+          <v-dialog
+            v-model="loadingDialog"
+            hide-overlay
+            persistent
+            width="300"
+          >
+            <v-card
+              color="primary"
+              dark
+            >
+              <v-card-text>
+                근무표 생성 중 ...
+                <v-progress-linear
+                  indeterminate
+                  color="white"
+                  class="mb-0"
+                ></v-progress-linear>
+              </v-card-text>
             </v-card>
           </v-dialog>
           
@@ -398,6 +442,7 @@
                 v-bind="attrs"
                 v-on="on"
                 max-width="150px"
+                color="primary"
               >
                 일정 생성
               </v-btn>
@@ -433,24 +478,7 @@
                     <v-col cols="6">
                       <v-text-field
                         v-model="addEvent.event_color"
-                        placeholder="red, green, blue ..."
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-container>
-                
-                <v-container fluid>
-                  <v-row align="center">
-                    <v-col cols="3">
-                      <v-subheader>
-                        일자
-                      </v-subheader>
-                    </v-col>
-                    <v-col cols="9">
-                      <v-text-field
-                        label="일자 입력"
-                        placeholder="2021-10-01"
-                        v-model="addEvent.event_date"
+                        placeholder="#RRGGBB"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -460,7 +488,7 @@
                   <v-row align="center">
                     <v-col cols="3">
                       <v-subheader>
-                        시간
+                        일시
                       </v-subheader>
                     </v-col>
                     <v-col cols="9">
@@ -468,10 +496,28 @@
                       <tr>
                         <td>
                           <v-text-field
+                            label="시작일자"
+                            placeholder="2021-01-01"
+                            prepend-icon="mdi-calendar"
+                            v-model="addEvent.start_date"
+                          ></v-text-field>
+                        </td>
+                        <td>
+                          <v-text-field
                             label="시작시간"
                             placeholder="00:00"
                             prepend-icon="access_time"
                             v-model="addEvent.start_time"
+                          ></v-text-field>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <v-text-field
+                            label="종료일자"
+                            placeholder="2021-01-01"
+                            prepend-icon="mdi-calendar"
+                            v-model="addEvent.end_date"
                           ></v-text-field>
                         </td>
                         <td>
@@ -482,7 +528,7 @@
                             v-model="addEvent.end_time"
                           ></v-text-field>
                         </td>
-                      </tr>
+                      </tr>               
                       </table>
                     </v-col>
                   </v-row>
@@ -511,7 +557,7 @@
                               slot="activator"
                               v-model="tag.tag_color"
                               label="태그색깔 입력"
-                              placeholder="red, green, blue ..."
+                              placeholder="#RRGGBB"
                               class="between-blank-10" ></v-text-field>
                           </td>
                           <td><v-icon @click='deleteTableRow(index)'>delete</v-icon></td>
@@ -525,6 +571,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
+                  class="between-blank-50"
                   color="blue darken-1"
                   text
                   @click="addScheduleDialog = false"
@@ -532,6 +579,7 @@
                   종료
                 </v-btn>
                 <v-btn
+                  class="between-blank-50"
                   color="blue darken-1"
                   text
                   @click="addSchedule()"
@@ -577,8 +625,9 @@
           "tag_title": null,
           "tag_color": null,
         }],
-        "event_date": null,
         "event_color": null,
+        "start_date": null,
+        "end_date": null,
         "start_time": null,
         "end_time": null
       },
@@ -590,6 +639,7 @@
       addTagDialog: false,
       autoScheduleDialog: false,
       addScheduleDialog: false,
+      loadingDialog: false,
       result_alert: false,
       start_date: null,
       end_date: null,
@@ -614,10 +664,12 @@
               "work_id": eventsData[i].work_id, 
               "tags": eventsData[i].tags, 
               "event_color": eventsData[i].event_color, 
-              "start": new Date(eventsData[i].event_date + "T" + eventsData[i].start_time), 
-              "end": new Date(eventsData[i].event_date + "T" + eventsData[i].end_time),
-              "str_start": eventsData[i].start_time,
-              "str_end": eventsData[i].end_time,
+              "start": new Date(eventsData[i].event_start_date + "T" + eventsData[i].event_start_time), 
+              "end": new Date(eventsData[i].event_end_date + "T" + eventsData[i].event_end_time),
+              "str_start_date": eventsData[i].event_start_date,
+              "str_end_date": eventsData[i].event_end_date,
+              "str_start_time": eventsData[i].event_start_time,
+              "str_end_time": eventsData[i].event_end_time,
               "timed": true 
             })
             console.log(event_list)
@@ -627,6 +679,14 @@
         .catch((error) => {
           console.error(error);
         });
+    },
+
+    watch: {
+      loadingDialog (val) {
+        if (!val) return
+
+        setTimeout(() => (this.loadingDialog = false), 3000)
+      },
     },
 
     methods: {
@@ -666,7 +726,8 @@
         this.addTagDialog = false
       },
       createWorkSchedule () {
-        this.autoScheduleDialog = false
+        this.loadingDialog = true
+        //this.autoScheduleDialog = false
       },
       addSchedule () {
         this.addEvent["event_id"] = parseInt(this.events[this.events.length - 1]["event_id"] + 1)

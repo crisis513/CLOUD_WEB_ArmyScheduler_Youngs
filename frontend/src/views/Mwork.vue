@@ -19,11 +19,14 @@
                 color="primary"
               >
                 <v-list-item
-                  v-for="(item, i) in items"
-                  :key="i"
+                  v-for="(work, index) in works"
+                  :key="index"
+                  @click="updateForm(work)"
                 >
                   <v-list-item-content>
-                    <v-list-item-title v-text="item.text"></v-list-item-title>
+                    <v-list-item-title 
+                      v-text="work.work_name"
+                    ></v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
               </v-list-item-group>
@@ -44,6 +47,8 @@
               <v-col cols="6">
                 <v-text-field
                   label="근무명 입력"
+                  v-model="work.work_name"
+                  :value="work.work_name"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -58,11 +63,12 @@
               </v-col>
               <v-col cols="9">
                 <table>
-                  <tr v-for="(row, index) in rows" :key="index">
+                  <tr v-for="(work_set, index) in work.work_setting" :key="index">
                     <td>
                       <v-text-field
                         slot="activator"
-                        v-model="row.start"
+                        v-model="work_set.start_time"
+                        :value="work_set.start_time"
                         label="시작시간 입력"
                         prepend-icon="access_time"
                         placeholder="00:00"
@@ -72,7 +78,8 @@
                     <td>
                       <v-text-field
                         slot="activator"
-                        v-model="row.end"
+                        v-model="work_set.end_time"
+                        :value="work_set.end_time"
                         label="종료시간 입력"
                         prepend-icon="access_time"
                         placeholder="06:00"
@@ -80,6 +87,8 @@
                     </td>
                     <td>
                       <v-text-field
+                        v-model="work_set.num_workers"
+                        :value="work_set.num_workers"
                         label="근무인원"
                         placeholder="2"
                       ></v-text-field>
@@ -87,7 +96,7 @@
                     <td><v-icon @click='deleteTableRow(index)'>delete</v-icon></td>
                   </tr>
                 </table>
-                <v-btn @click='addTableRow()' >근무 추가</v-btn>
+                <v-btn @click='addTableRow()'>근무 추가</v-btn>
               </v-col>
             </v-row>
           </v-container>
@@ -105,7 +114,8 @@
                     <td>1. 2일 연속 근무 여부</td>
                     <td>
                       <v-radio-group
-                        v-model="row"
+                        v-model="work.work_option1"
+                        :value="work.work_option1"
                         row
                       >
                         <v-radio
@@ -127,7 +137,8 @@
                     <td>2. 퐁당퐁당 근무 여부
                     <td>
                       <v-radio-group
-                        v-model="row"
+                        v-model="work.work_option2"
+                        :value="work.work_option2"
                         row
                       >
                         <v-radio
@@ -149,7 +160,8 @@
                     <td>3. 1일 2탕 여부</td>
                     <td>
                       <v-radio-group
-                        v-model="row"
+                        v-model="work.work_option3"
+                        :value="work.work_option3"
                         row
                       >
                         <v-radio
@@ -178,62 +190,84 @@
               justify="center"
             >
               <v-btn class="between-blank-50">삭제</v-btn>
-              <v-btn class="between-blank-50" color="primary" @click="fetchDefaults">
+              <v-btn class="between-blank-50" color="primary">
                 저장
               </v-btn>
             </v-row>
           </div>
         </div>
       </div>
+      {{ works }}
+      <br><br>
+      {{ work }}
+      <br><br>
+      {{ counter }}
     </v-app>
   </v-app>
 </template>
 
 <script>
   import axios from 'axios';
+  const baseUrl = 'https://osamhack2021-cloud-web-armyscheduler-youngs-xr4vx9w4fvg7p-3000.githubpreview.dev'
+
   export default {
     data: () => ({
-      selectedItem: 1,
-      items: [
-        { text: '위병소' },
-        { text: 'CCTV' },
-        { text: '순찰' },
-      ],
-      select: { state: '위병소', abbr: 'WB' },
-      works: [
-        { state: '위병소', abbr: 'WB' },
-        { state: 'CCTV', abbr: 'CC' },
-        { state: '순찰', abbr: 'SC' },
-        { state: '창당직', abbr: 'CD' },
-      ],
-      work_cycle: [
-        
-      ],
-      rows: [{
-        start: "",
-        end: "",
-        num: 0,
-      }],
-      counter: 1,
-    }),
-    methods:{
-      fetchDefaults: function () {
-        const path = 'https://osamhack2021-cloud-web-armyscheduler-youngs-xr4vx9w4fvg7p-3000.githubpreview.dev/api/v1/users/';
-        axios.get(path)
-          .then((res) => {
-            this.work_cycle.push(res.data["data"][0]);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+      selectedItem: 0,
+      works: [],
+      work: {
+        "work_id": 0,
+        "work_name": null,
+        "work_setting": [],
+        "work_option1": 0,
+        "work_option2": 0,
+        "work_option3": 0,
       },
-      addTableRow: function () { 
+      counter: 0,
+    }),
+
+    created () {      
+      const worksPath = baseUrl + '/api/v1/works/'
+      axios.get(worksPath)
+        .then((res) => {
+          let worksData = res.data["data"][0];
+          this.works = worksData;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+
+    methods:{
+      updateForm: function (work) {
+        var workForm = {
+          "work_id": work.work_id,
+          "work_name": work.work_name,
+          "work_setting": work.work_setting,
+          "work_option1": work.work_option1,
+          "work_option2":work.work_option2,
+          "work_option3": work.work_option3,  
+        }
+        this.work = workForm
+        this.counter = 0
+        var count = work.work_setting.length
+        for(let i = 0; i < count; i++) {
+          addTableRow(work.work_setting)
+        }
+      },
+      saveForm: function () {
+        
+      },
+      addTableRow: function (work_setting) { 
         this.counter++;
-        this.rows.push({start: "", end: ""});
+        this.work.work_setting.push({
+          "start_time": work_setting.start_time, 
+          "end_time": work_setting.end_time, 
+          "num_workers": work_setting.num_workers
+        });
       },
       deleteTableRow: function (idx) { 
         this.counter--;
-        this.rows.splice(idx, 1);
+        this.works.work_setting.splice(idx, 1);
       }
     }
   }
