@@ -125,17 +125,17 @@ class Backtrack:
                 continue
             if event['event_type'] != main.EventType.Work:
                 continue
-            uid = event['userid']
             start_time = event['start_time']
             end_time = event['end_time']
             work_id = event['work_id']
             day_worktime, night_worktime, free_worktime, fatigue = get_worktime_and_fatigue(start_time, end_time)
-            self.user_list[work_id][uid]['day_worktime'] += day_worktime
-            self.user_list[work_id][uid]['night_worktime'] += night_worktime
-            self.user_list[work_id][uid]['free_worktime'] += free_worktime
-            self.user_list[work_id][uid]['fatigue'] += fatigue
-            self.base_fatigue[work_id] += fatigue
-            self.user_list[work_id][uid]['work_day_list'].append(event_day)
+            for uid in event['userid']:
+                self.user_list[work_id][uid]['day_worktime'] += day_worktime
+                self.user_list[work_id][uid]['night_worktime'] += night_worktime
+                self.user_list[work_id][uid]['free_worktime'] += free_worktime
+                self.user_list[work_id][uid]['fatigue'] += fatigue
+                self.base_fatigue[work_id] += fatigue
+                self.user_list[work_id][uid]['work_day_list'].append(event_day)
 
     def create_empty_event_list(self, start_date, end_date):
         start_day = date_to_int(start_date)
@@ -148,6 +148,10 @@ class Backtrack:
                 for work_setting in work_setting_list:
                     start_time = work_setting['start_time']
                     end_time = work_setting['end_time']
+                    if parse_time(end_time) <= parse_time(start_time):
+                        event_end_date = date + 1
+                    else:
+                        event_end_date = date
                     day_worktime, night_worktime, free_worktime, fatigue = get_worktime_and_fatigue(start_time, end_time)
                     tags = []
                     tags.append(main.Tags(self.total_work_list[work_id]['work_name'], '#00FF00'))
@@ -161,19 +165,35 @@ class Backtrack:
                     self.base_fatigue[work_id] += fatigue * work_setting['num_workers']
                     for _ in range(work_setting['num_workers']):
                         event_id = self.event_id_prefix * self.magic + self.event_id_postfix
-                        event = main.Events.from_scheduler(event_id, int_to_date(date), tags, work_id, self.total_work_list[work_id]['work_name'], work_setting)
+                        event = main.Events.from_scheduler(
+                            event_id = event_id,
+                            start_date = int_to_date(date),
+                            end_date = int_to_date(event_end_date),
+                            tags = tags,
+                            work_id = work_id,
+                            work_name = self.total_work_list[work_id]['work_name'],
+                            work_setting = work_setting
+                        )
                         self.event_id_postfix += 1
                         self.event_list[work_id].append(event)
     
     def set_event_list(self):
-        event_list = []
+        result_event_list = []
         for work_id in self.event_list:
-            for event in self.event_list[work_id]:
-                event_list.append(event.asdict())
-        print(event_list)
+            for e1 in self.event_list[work_id]:
+                exist = False
+                for idx, e2 in enumerate(result_event_list):
+                    if e1.event_start_date == e2['event_start_date'] and e1.event_start_time == e2['event_start_time']:
+                        exist = True
+                        break
+                if exist:
+                    result_event_list[idx]['userid'].append(e1.userid[0])
+                else:
+                    result_event_list.append(e1.asdict())
+        print(result_event_list)
         client = MongoClient('mongodb://localhost:27017/') # for local test
         db = main.db_init(client)
-        main.insert_many_events(db, event_list)
+        main.insert_many_events(db, result_event_list)
 
     def schedule(self, consider_from_date, start_date, end_date):
         """
@@ -193,7 +213,7 @@ class Backtrack:
             self.cnt = 0
             self.backtrack(work_id, 0)
             for i in range(self.total_events[work_id]):
-                self.event_list[work_id][i].userid = self.best_schedule[i]
+                self.event_list[work_id][i].userid.append(self.best_schedule[i])
         self.set_event_list()
 
     def get_unfairness(self, work_id):
@@ -228,9 +248,9 @@ class Backtrack:
             return
 
         event = self.event_list[work_id][events_idx]
-        start_time = event.start_time
-        end_time = event.end_time
-        event_day = date_to_int(event.event_date)
+        start_time = event.event_start_time
+        end_time = event.event_end_time
+        event_day = date_to_int(event.event_start_date)
         work = self.total_work_list[work_id]
         day_worktime, night_worktime, free_worktime, fatigue = get_worktime_and_fatigue(start_time, end_time)
         for uid in sorted(self.user_list[work_id], key=lambda x: self.user_list[work_id][x]['fatigue']):

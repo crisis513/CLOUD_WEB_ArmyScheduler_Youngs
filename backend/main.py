@@ -61,31 +61,33 @@ class EventType(IntEnum):
     Custom = 2  # 유저 개인 일정
 
 class Events(object):
-    def __init__(self, event_id, userid, event_title, event_type, work_id, tags, event_date, event_color, start_time, end_time):
+    def __init__(self, event_id, userid, event_title, event_type, work_id, tags, event_color, event_start_date, event_start_time, event_end_date, event_end_time):
         self.event_id = event_id,
         self.userid = userid
         self.event_title = event_title
         self.event_type = event_type
         self.work_id = work_id   # 근무가 아닌 경우 -1
         self.tags = tags
-        self.event_date = event_date
         self.event_color = event_color
-        self.start_time = start_time
-        self.end_time = end_time
+        self.event_start_date = event_start_date
+        self.event_start_time = event_start_time
+        self.event_end_date = event_end_date
+        self.event_end_time = event_end_time
     
     @classmethod
-    def from_scheduler(cls, event_id, date, tags, work_id, work_name, work_setting):
+    def from_scheduler(cls, event_id, start_date, end_date, tags, work_id, work_name, work_setting):
         return cls(
             event_id = event_id,
-            userid = -1,
+            userid = [],
             event_title = work_name,
             event_type = EventType.Work,
             work_id = work_id,
             tags = tags,
-            event_date = date,
-            event_color = 'some_color',
-            start_time = work_setting['start_time'],
-            end_time = work_setting['end_time']
+            event_color = 'blue',
+            event_start_date = start_date,
+            event_start_time = work_setting['start_time'],
+            event_end_date = end_date,
+            event_end_time = work_setting['end_time']
         )
     
     def asdict(self):
@@ -96,10 +98,11 @@ class Events(object):
             'event_type': int(self.event_type),
             'work_id': self.work_id,
             'tags': [tag.asdict() for tag in self.tags],
-            'event_date': self.event_date,
             'event_color': self.event_color,
-            'start_time': self.start_time,
-            'end_time': self.end_time
+            'event_start_date': self.event_start_date,
+            'event_start_time': self.event_start_time,
+            'event_end_date': self.event_end_date,
+            'event_end_time': self.event_end_time
         }
 
 class Tags(object):
