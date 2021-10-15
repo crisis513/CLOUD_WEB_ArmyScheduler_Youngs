@@ -7,6 +7,7 @@ from enum import IntEnum
 class Date(object):
     def __init__(self, date: int, isHoliday: bool):
         self.date = date
+        self.date_string = int_to_date(date)
         self.isHoliday = isHoliday
     
     @classmethod
@@ -19,6 +20,7 @@ class Date(object):
     def asdict(self):
         return {
             'date': self.date,
+            'date_string': self.date_string,
             'isHoliday': self.isHoliday
         }
 
