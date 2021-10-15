@@ -23,9 +23,10 @@ class Statistics:
 
     def get_user(self) -> main.Users:
         user = main.Users.from_dict(self.db.Users.find_one({'user_id': self.user_id}))
-        user.prev_mon_work_time = main.WorkTime(0, 0, 0)
-        user.this_mon_work_time = main.WorkTime(0, 0, 0)
-        user.total_work_time = main.WorkTime(0, 0, 0)
+        user.prev_month_worked_time = main.WorkTime(0, 0, 0)
+        user.this_month_worked_time = main.WorkTime(0, 0, 0)
+        user.this_month_work_time_left = main.WorkTime(0, 0, 0)
+        user.total_worked_time = main.WorkTime(0, 0, 0)
         return user
 
     def get_event_list(self) -> List[main.Events]:
@@ -41,25 +42,36 @@ class Statistics:
                 event.event_end_date,
                 event.event_end_time
             )
-            year, month, day = get_ymd(event.event_start_date.date_string)
-            if year == self.now.year and month == self.now.month:
-                self.user.this_mon_work_time.day_worktime += day_worktime
-                self.user.this_mon_work_time.night_worktime += night_worktime
-                self.user.this_mon_work_time.free_worktime += free_worktime
+            year, month, _ = get_ymd(event.event_start_date.date_string)
+            _, _, day = get_ymd(event.event_end_date.date_string)
+            event_end = datetime.datetime.strptime(
+                event.event_end_date.date_string + ' ' + event.event_end_time,
+                '%Y-%m-%d %H:%M'
+            ).astimezone(timezone('Asia/Seoul'))
+            if year == self.now.year and month == self.now.month and event_end < self.now:
+                self.user.this_month_worked_time.day_worktime += day_worktime
+                self.user.this_month_worked_time.night_worktime += night_worktime
+                self.user.this_month_worked_time.free_worktime += free_worktime
+            if year == self.now.year and month == self.now.month and event_end >= self.now:
+                self.user.this_month_work_time_left.day_worktime += day_worktime
+                self.user.this_month_work_time_left.night_worktime += night_worktime
+                self.user.this_month_work_time_left.free_worktime += free_worktime
             if year == self.last_month.year and month == self.last_month.month:
                 self.user.prev_mon_work_time.day_worktime += day_worktime
                 self.user.prev_mon_work_time.night_worktime += night_worktime
                 self.user.prev_mon_work_time.free_worktime += free_worktime
-            self.user.total_work_time.day_worktime += day_worktime
-            self.user.total_work_time.night_worktime += night_worktime
-            self.user.total_work_time.free_worktime += free_worktime
+            if event_end < self.now:
+                self.user.total_worked_time.day_worktime += day_worktime
+                self.user.total_worked_time.night_worktime += night_worktime
+                self.user.total_worked_time.free_worktime += free_worktime
         self.db.Users.update_one(
             { 'user_id': self.user.user_id },
             {
                 '$set': {
-                    'prev_mon_work_time': self.user.prev_mon_work_time.asdict(),
-                    'this_mon_work_time': self.user.this_mon_work_time.asdict(),
-                    'total_work_time': self.user.total_work_time.asdict()
+                    'prev_month_worked_time': self.user.prev_month_worked_time.asdict(),
+                    'this_month_worked_time': self.user.this_month_worked_time.asdict(),
+                    'this_month_work_time_left': self.user.this_month_work_time_left.asdict(),
+                    'total_worked_time': self.user.total_worked_time.asdict()
                 }
             }
         )

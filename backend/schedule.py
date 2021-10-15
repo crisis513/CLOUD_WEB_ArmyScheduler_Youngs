@@ -112,6 +112,7 @@ class Scheduler:
         self.INF: Final[int] = 987654321987654321 # arbitrary large number
         # self.result_schedule_list: List = []
         self.best_schedule: List[int] = [] # idx: event_idx, value: user_id
+        self.best_worktime: Dict[str, main.WorkTime] = {} # key: user_id
         self.cur_schedule: List[int] = [] # idx: event_idx, value: user_id
 
         self.date_list = main.get_date_list(self.start_date, self.end_date + 1)
@@ -144,9 +145,6 @@ class Scheduler:
             for uid, user in self.total_user_list.items():
                 if user.work_list[0] == work_id:
                     self.user_list[work_id][uid] = user
-
-    def get_work_setting(self, work):
-        return self.total_work_list[work].work_setting
     
     def get_prev_fatigue(self):
         for event in self.prev_event_list:
@@ -161,9 +159,9 @@ class Scheduler:
                 end_time = event.event_end_time
             )
             for uid in event.user_id:
-                self.user_list[work_id][uid].day_worktime += day_worktime
-                self.user_list[work_id][uid].night_worktime += night_worktime
-                self.user_list[work_id][uid].free_worktime += free_worktime
+                self.user_list[work_id][uid].prev_day_worktime += day_worktime
+                self.user_list[work_id][uid].prev_night_worktime += night_worktime
+                self.user_list[work_id][uid].prev_free_worktime += free_worktime
                 self.user_list[work_id][uid].fatigue += fatigue
                 # self.base_fatigue[work_id] += fatigue
                 self.user_list[work_id][uid].work_day_list.append(event.event_start_date.date)
@@ -221,6 +219,24 @@ class Scheduler:
         client = MongoClient('mongodb://localhost:27017/') # for local test
         db = main.db_init(client)
         main.insert_many_events(db, result_event_list)
+    
+    def update_user_worktime(self):
+        client = MongoClient('mongodb://localhost:27017/') # for local test
+        db = main.db_init(client)
+        for user in self.total_user_list.values():
+            db.Users.update_one(
+                { 'user_id': user.user_id },
+                {
+                    '$set': {
+                        'prev_day_worktime': user.prev_day_worktime,
+                        'prev_night_worktime': user.prev_night_worktime,
+                        'prev_free_worktime': user.prev_free_worktime,
+                        'new_day_worktime': user.new_day_worktime,
+                        'new_night_worktime': user.new_night_worktime,
+                        'new_free_worktime': user.new_free_worktime
+                    }
+                }
+            )
 
     def schedule(self):
         """
@@ -241,6 +257,11 @@ class Scheduler:
             self.backtrack(work_id, 0)
             for i in range(self.num_events[work_id]):
                 self.new_event_list[work_id][i].user_id.append(self.best_schedule[i])
+        for user_id, worktime in self.best_worktime.items():
+            self.total_user_list[user_id].new_day_worktime = worktime.day_worktime
+            self.total_user_list[user_id].new_night_worktime = worktime.night_worktime
+            self.total_user_list[user_id].new_free_worktime = worktime.free_worktime
+        self.update_user_worktime()
         self.set_event_list()
 
     def get_unfairness(self, work_id):
@@ -266,9 +287,15 @@ class Scheduler:
         if events_idx == self.num_events[work_id]:
             self.unfairness = self.get_unfairness(work_id)
             self.cnt += 1
-            if self.unfairness <= self.best_unfairness:
+            if self.unfairness < self.best_unfairness:
                 self.best_unfairness = self.unfairness
                 self.best_schedule = deepcopy(self.cur_schedule)
+                for user in self.user_list[work_id].values():
+                    self.best_worktime[user.user_id] = main.WorkTime(
+                        day_worktime = user.new_day_worktime,
+                        night_worktime = user.new_night_worktime,
+                        free_worktime = user.new_free_worktime
+                    )
             # 근무 불공정도가 특정 threshold보다 낮거나 탐색을 충분히 많이 했으면 중단하고 return
             if self.best_unfairness <= self.unfairness_threshold or self.cnt >= self.backtracking_limit:
                 self.stop_backtracking = True
@@ -284,7 +311,7 @@ class Scheduler:
         for uid in sorted(self.user_list[work_id], key=lambda x: self.user_list[work_id][x].fatigue):
             user = self.user_list[work_id][uid]
 
-            # 근무 옵션에 의해 근무 불가능한 uid는 배제
+            # 근무 옵션에 의해 근무 불가능한 경우 배제
             # work_option1: 2일 연속 근무 여부
             # work_option2: 하루 쉬고 근무 여부 (e.g. 퐁당퐁당)
             # work_option3: 하루 2회 이상 근무 여부
@@ -295,7 +322,7 @@ class Scheduler:
             if work.work_option3 == main.WorkOptionType.Never and user.last_work_day == event_start_date.date:
                 continue
 
-            # To-do: 휴가, 부대 일정, 전역 등에 의해 근무 불가능한 경우 배제
+            # 휴가에 의해 근무 불가능한 경우 배제
             skip = False
             for vacation in user.vacation:
                 vacation_start = date_to_int(vacation.start_date)
@@ -305,6 +332,8 @@ class Scheduler:
                     break
             if skip:
                 continue
+
+            # 전역에 의해 근무 불가능한 경우 배제
             if date_to_int(user.de_date) <= event_start_date.date:
                 continue
             
@@ -319,9 +348,9 @@ class Scheduler:
                 additional_fatigue += 50
 
             self.cur_schedule.append(uid)
-            user.day_worktime += day_worktime
-            user.night_worktime += night_worktime
-            user.free_worktime += free_worktime
+            user.new_day_worktime += day_worktime
+            user.new_night_worktime += night_worktime
+            user.new_free_worktime += free_worktime
             user.fatigue += (fatigue + additional_fatigue)
             tmp = user.last_work_day
             user.last_work_day = event_start_date.date
@@ -329,9 +358,9 @@ class Scheduler:
             self.backtrack(work_id, events_idx + 1)
 
             self.cur_schedule.pop()
-            user.day_worktime -= day_worktime
-            user.night_worktime -= night_worktime
-            user.free_worktime -= free_worktime
+            user.new_day_worktime -= day_worktime
+            user.new_night_worktime -= night_worktime
+            user.new_free_worktime -= free_worktime
             user.fatigue -= (fatigue + additional_fatigue)
             user.last_work_day = tmp
 
