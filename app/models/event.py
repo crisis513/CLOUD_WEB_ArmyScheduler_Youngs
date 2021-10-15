@@ -10,10 +10,12 @@ class EventModel(BaseModel):
     event_type: int = Field(...)
     work_id: int = Field(...)
     tags: dict = Field(...)
-    event_date: str = Field(...)
     event_color: str = Field(...)
-    start_time: str = Field(...)
-    end_time: str = Field(...)
+    event_start_date: str = Field(...)
+    event_start_time: str = Field(...)
+    event_end_date: str = Field(...)
+    event_end_time: str = Field(...)
+
 
     class Config:
         schema_extra = {
@@ -36,10 +38,11 @@ class EventModel(BaseModel):
                     "tag_title": "3명",         # 근무인원
                     "tag_color": "blue",        # blue
                 }],
-                "event_date": "2021-05-02",
                 "event_color": "deep-purple",
-                "start_time": "04:00",
-                "end_time": "10:00"
+                "event_start_date" : "2021-10-13",
+                "event_start_time" : "22:00",
+                "event_end_date" : "2021-10-13",
+                "event_end_time" : "24:00"
             }
         }
 
@@ -51,10 +54,11 @@ class UpdateEventModel(BaseModel):
     event_type: Optional[int]
     work_id: Optional[int]
     tags: Optional[dict]
-    event_date: Optional[str]
     event_color: Optional[str]
-    start_time: Optional[str]
-    end_time: Optional[str]
+    event_start_date: Optional[str]
+    event_start_time: Optional[str]
+    event_end_date: Optional[str]
+    event_end_time: Optional[str]
 
     class Config:
         schema_extra = {
@@ -77,10 +81,11 @@ class UpdateEventModel(BaseModel):
                     "tag_title": "3명",         # 근무인원
                     "tag_color": "blue",        # blue
                 }],
-                "event_date": "2021-05-02",
                 "event_color": "deep-purple",
-                "start_time": "04:00",
-                "end_time": "10:00"
+                "event_start_date" : "2021-10-13",
+                "event_start_time" : "22:00",
+                "event_end_date" : "2021-10-13",
+                "event_end_time" : "24:00"
             }
         }
 

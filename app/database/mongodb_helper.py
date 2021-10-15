@@ -35,8 +35,9 @@ def event_helper(event) -> dict:
         "event_type": event['event_type'],
         "work_id": event['work_id'],
         "tags": event['tags'],
-        "event_date": event['event_date'],
         "event_color": event['event_color'],
-        "start_time": event['start_time'],
-        "end_time": event['end_time'],
+        "event_start_date": event['event_start_date'],
+        "event_start_time": event['event_start_time'],
+        "event_end_date": event['event_end_date'],
+        "event_end_time": event['event_end_time'],
     }
