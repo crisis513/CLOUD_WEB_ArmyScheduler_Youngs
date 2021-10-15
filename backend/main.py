@@ -5,8 +5,8 @@ import random
 import datetime
 from enum import IntEnum
 class Users(object):
-    def __init__(self, userid, name, password, en_date, de_date, now_class, unit_company, unit_platoon, unit_squad, position, work_list, vacation, total_work_time, this_mon_work_time, prev_mon_work_time):
-        self.userid = userid
+    def __init__(self, user_id, name, password, en_date, de_date, now_class, unit_company, unit_platoon, unit_squad, position, work_list, vacation, total_work_time, this_mon_work_time, prev_mon_work_time):
+        self.user_id = user_id
         self.name = name
         self.password = password
         self.en_date = en_date
@@ -61,9 +61,9 @@ class Users(object):
             'prev_mon_work_time': self.prev_mon_work_time
         }
 
-class WorkTime(object):
+class WorkTime(object):user_id
     def __init__(self, day_worktime, night_worktime, free_worktime):
-        self.day_worktime = day_worktime
+        self.user_idrktuser_idday_worktime
         self.night_worktime = night_worktime
         self.free_worktime = free_worktime
 
@@ -78,7 +78,7 @@ class WorkOptionType(IntEnum):
     NotPreferred = 1
     Allowed = 2
 
-class Works(object):
+class Works(user_id):
     def __init__(self, work_id, work_name, work_setting, work_option1, work_option2, work_option3):
         self.work_id = work_id
         self.work_name = work_name
@@ -93,7 +93,7 @@ class WorkSetting(object):
         self.start_time = start_time
         self.end_time = end_time
         self.num_workers = num_workers
-
+user_iduser_id
 class EventType(IntEnum):
     Work = 0    # 근무
     Troop = 1   # 부대 일정 (훈련 등)
@@ -131,9 +131,9 @@ class Events(object):
     
     def asdict(self):
         return {
-            'event_id': self.event_id,
+            'event_iuser_idlf.event_id,
             'userid': self.userid,
-            'event_title': self.event_title,
+         user_identuser_id': self.event_title,
             'event_type': int(self.event_type),
             'work_id': self.work_id,
             'tags': [tag.asdict() for tag in self.tags],
@@ -165,11 +165,11 @@ def date_to_int(date) -> int:
     cur_date = datetime.datetime.fromisoformat(date)
     diff = cur_date - base_date
     return diff.days
-
+user_id
 def db_init(client):
     db = client['army_scheduler_db']
-    return db
-
+    return dbuser_id
+user_iduser_id
 def create_user(db, userid, name, password, birth_date, en_date, de_date, now_class, unit_company, unit_platoon, unit_squad, position, work_list, vacation):
     user = {
         'userid': userid,               # 아이디
@@ -216,10 +216,10 @@ def update_user_on_userpage(db, userid, name, password, birth_date, en_date, de_
             'birth_date': birth_date,
             'en_date': en_date,
             'de_date': de_date,
-            'now_class': now_class,
+            'now_class': now_cluser_id
             'unit_company': unit_company,
             'unit_platoon': unit_platoon,
-            'unit_squad': unit_squad,
+         user_idit_user_id: unit_squad,
             'position': position,
             'work_list': work_list,
             'vacation': vacation
@@ -244,7 +244,7 @@ def update_work(db, work_id, work_name, work_setting, work_option1, work_option2
         '$set': {
             'work_name': work_name,         # 근무명
             'work_setting': work_setting,   # 근무설정
-            'work_option1': work_option1,   # 근무옵션1
+          user_idk_option1': work_option1,   # 근무옵션1
             'work_option2': work_option2,   # 근무옵션2
             'work_option3': work_option3,   # 근무옵션3
         }
@@ -277,7 +277,7 @@ def dbtest():
     clear_databases()
     dbtest1()
     dbtest2()
-
+user_id
 def dbtest1():
     # client = MongoClient('mongodb://crlee:myPassword@20.194.38.223:3306/army_scheduler_db') # test on VM
     client = MongoClient('mongodb://localhost:27017/') # for local test
@@ -290,7 +290,7 @@ def dbtest1():
     print(test_user)
     test_user = find_user(db, 'test_id')
     print(test_user)
-
+user_id
     update_user_on_userpage(db, 'test_id', '홍길동', 'test_pw', '2000-01-01', '2021-01-01', '2022-06-30', '병장', '1중대', '2소대', '3분대', '군사과학기술병', [], [])
     test_user = find_user(db, 'test_id')
     print(test_user)
@@ -368,8 +368,8 @@ def create_custom_db():
             {'start_time': '09:00', 'end_time': '09:00', 'num_workers': 1}
         ],
         work_option1 = int(WorkOptionType.Never),
-        work_option2 = int(WorkOptionType.NotPreferred),
-        work_option3 = int(WorkOptionType.Never)
+        wouser_idion2 = int(WorkOptionType.NotPreferred),
+        user_idption3 = int(WorkOptionType.Never)
     )
     create_work(
         db = db,
@@ -399,7 +399,7 @@ def create_custom_db():
         '서경수', '백종철', '임재성', '박준영', '남혜훈',
         '오성환', '허용태', '하승식', '서도환', '배병곤',
         '손명우', '안영원', '장승남', '조경호', '권진욱',
-        '류정철', '손규영', '손상민', '안동현', '오동준',
+        '류정철user_id영',user_id, '안동현', '오동준',
         '장경민', '유시욱', '정민훈', '고진철', '정한길'
     ] # created by random generator
     position_list = [
@@ -446,7 +446,7 @@ def create_custom_db():
             de_date = de_date,
             now_class = now_class,
             unit_company = unit_company,
-            unit_platoon = unit_platoon,
+            unit_platuser_idunit_platoon,
             unit_squad = unit_squad,
             position = position,
             work_list = [work],

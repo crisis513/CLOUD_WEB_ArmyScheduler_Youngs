@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field
 
 class EventModel(BaseModel):
     event_id: int = Field(...)
-    userid: int = Field(...)
+    user_id: int = Field(...)
     event_title: str = Field(...)
     event_type: int = Field(...)
     work_id: int = Field(...)
@@ -21,7 +21,7 @@ class EventModel(BaseModel):
         schema_extra = {
             "example": {
                 "event_id": 1,
-                "userid": -1,
+                "user_id": -1,
                 "event_title": "CCTV",
                 "event_type": 0,
                 "work_id": 2,
@@ -49,7 +49,7 @@ class EventModel(BaseModel):
 
 class UpdateEventModel(BaseModel):
     event_id: Optional[int]
-    userid: Optional[int]
+    user_id: Optional[int]
     event_title: Optional[str]
     event_type: Optional[int]
     work_id: Optional[int]
@@ -64,7 +64,7 @@ class UpdateEventModel(BaseModel):
         schema_extra = {
             "example": {
                 "event_id": 1,
-                "userid": -1,
+                "user_id": -1,
                 "event_title": "CCTV",
                 "event_type": 0,
                 "work_id": 2,

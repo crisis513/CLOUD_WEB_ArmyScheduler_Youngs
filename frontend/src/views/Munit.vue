@@ -27,7 +27,7 @@
             <v-card-text>
               <v-treeview 
                 return-object 
-                item-key="userid" 
+                item-key="user_id" 
                 hoverable 
                 activatable 
                 selected-color="blue"
@@ -321,7 +321,7 @@
       treeData: null,
 
       name: null,
-      userid: null,
+      user_id: null,
       password: null,
       en_date: null,
       de_date: null,
@@ -378,7 +378,7 @@
           this.currentData = item
 
           this.name = item[0].name
-          this.userid = item[0].userid
+          this.user_id = item[0].user_id
           this.password = item[0].password
           this.en_date = item[0].en_date
           this.de_date = item[0].de_date
@@ -401,7 +401,7 @@
         const usersPath = baseUrl + '/api/v1/users/'
         this.result = {
           "name": this.name, 
-          "userid": this.userid, 
+          "user_id": this.user_id, 
           "password": this.password,
           "en_date": this.en_date,
           "birth_date": this.birth_date,
@@ -417,9 +417,9 @@
           "this_mon_work_time": this.this_mon_work_time, 
           "prev_mon_work_time": this.prev_mon_work_time,
         }
-        axios.put(usersPath + this.userid, {
+        axios.put(usersPath + this.user_id, {
             "name": this.name, 
-            "userid": this.userid, 
+            "user_id": this.user_id, 
             "password": this.password,
             "en_date": this.en_date,
             "birth_date": this.birth_date,

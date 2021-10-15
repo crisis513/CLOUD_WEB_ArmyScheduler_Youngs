@@ -13,7 +13,69 @@
             tile
           >
             <v-list dense>
-              <v-subheader>근무지</v-subheader>
+              <v-subheader>
+                <labeel>근무지</labeel>
+                <v-btn
+                  style="position: absolute; right: 0px;"
+                  class="mx-2"
+                  fab
+                  dark
+                  small
+                  color="indigo"
+                  @click="addWorkDialog = true"
+                >
+                  <v-icon dark>
+                    mdi-plus
+                  </v-icon>
+                </v-btn>
+
+                <v-dialog
+                  v-model="addWorkDialog"
+                  persistent
+                  max-width="500px"
+                >
+                  <v-card>
+                    <v-card-title>
+                      <span class="text-h5">근무 생성</span>
+                    </v-card-title>
+                    <v-card-text>
+                      <v-container>
+                        <v-row>
+                          <v-col
+                            cols="12"
+                            sm="6"
+                            md="4"
+                          >
+                            <v-text-field
+                              label="근무명"
+                              required
+                              id="work_name"
+                            ></v-text-field>
+                          </v-col>
+                        </v-row>
+                      </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn
+                        color="blue darken-1"
+                        text
+                        @click="addWorkDialog = false"
+                      >
+                        종료
+                      </v-btn>
+                      <v-btn
+                        color="blue darken-1"
+                        text
+                        @click="addWorkButton()"
+                      >
+                        생성
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+                
+              </v-subheader>
               <v-list-item-group
                 v-model="selectedItem"
                 color="primary"
@@ -115,7 +177,6 @@
                     <td>
                       <v-radio-group
                         v-model="work.work_option1"
-                        :value="work.work_option1"
                         row
                       >
                         <v-radio
@@ -138,7 +199,6 @@
                     <td>
                       <v-radio-group
                         v-model="work.work_option2"
-                        :value="work.work_option2"
                         row
                       >
                         <v-radio
@@ -161,7 +221,6 @@
                     <td>
                       <v-radio-group
                         v-model="work.work_option3"
-                        :value="work.work_option3"
                         row
                       >
                         <v-radio
@@ -223,6 +282,7 @@
         "work_option3": 0,
       },
       counter: 0,
+      addWorkDialog: false,
     }),
 
     created () {      
@@ -244,7 +304,7 @@
           "work_name": work.work_name,
           "work_setting": work.work_setting,
           "work_option1": work.work_option1,
-          "work_option2":work.work_option2,
+          "work_option2": work.work_option2,
           "work_option3": work.work_option3,  
         }
         this.work = workForm
@@ -256,6 +316,26 @@
       },
       saveForm: function () {
         
+      },
+      addWorkButton: function () {
+        console.log(Math.max[this.works.work_id] + 1)
+        var workForm = {
+          "work_id": Math.max[this.works.work_id] + 1,
+          "work_name": document.getElementById('work_name').value,
+          "work_setting": [{
+            "start_time": "00:00", 
+            "end_time": "00:00", 
+            "num_workers": 0
+          }],
+          "work_option1": 0,
+          "work_option2": 0,
+          "work_option3": 0, 
+        }
+        this.work = workForm
+        this.counter = 0
+        addTableRow(workForm.work_setting)
+
+        this.addWorkDialog = false
       },
       addTableRow: function (work_setting) { 
         this.counter++;

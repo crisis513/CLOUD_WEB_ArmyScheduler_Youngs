@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field
 
 class UserModel(BaseModel):
     name: str = Field(...)
-    userid: str = Field(...)
+    user_id: str = Field(...)
     password: str = Field(...)
     en_date: str = Field(...)
     de_date: str = Field(...)
@@ -25,7 +25,7 @@ class UserModel(BaseModel):
         schema_extra = {
             "example": {
                 "name": "홍길동",
-                "userid": "gildong21",
+                "user_id": "gildong21",
                 "password": "gildongpasswd21",
                 "en_date": "2020-11-09",
                 "de_date": "2022-05-08",
@@ -69,7 +69,7 @@ class UserModel(BaseModel):
 
 class UpdateUserModel(BaseModel):
     name: Optional[str]
-    userid: Optional[str]
+    user_id: Optional[str]
     password: Optional[str]
     en_date: Optional[str]
     de_date: Optional[str]
@@ -89,7 +89,7 @@ class UpdateUserModel(BaseModel):
         schema_extra = {
             "example": {
                 "name": "홍길동",
-                "userid": "gildong21",
+                "user_id": "gildong21",
                 "password": "gildongpasswd21",
                 "en_date": "2020-11-09",
                 "de_date": "2022-05-08",

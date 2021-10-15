@@ -193,9 +193,9 @@ export default {
               if(this.events[j].event_title == eventsData[i].event_title) {
                 var user_list = []
                 
-                for(let k = 0; k < eventsData[i].userid.length; k++) {
+                for(let k = 0; k < eventsData[i].user_id.length; k++) {
                   for(let l = 0; l < this.users.length; l++) {
-                    if(eventsData[i].userid[k] == this.users[l].userid) {
+                    if(eventsData[i].user_id[k] == this.users[l].user_id) {
                       user_list.push(this.users[l].name)
                       break
                     }
@@ -203,7 +203,7 @@ export default {
                 }
                 this.events[j].bars.push({
                   "event_id": eventsData[i].event_id, 
-                  "userid": eventsData[i].user_id,
+                  "user_id": eventsData[i].user_id,
                   "event_title": eventsData[i].event_title, 
                   "event_type": eventsData[i].event_type, 
                   "work_id": eventsData[i].work_id, 
