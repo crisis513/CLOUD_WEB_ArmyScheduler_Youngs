@@ -25,20 +25,20 @@ async def add_work(work_data: dict) -> dict:
     return work_helper(new_work)
 
 
-async def retrieve_work(id: str) -> dict:
-    work = await works_collection.find_one({"work_id": ObjectId(id)})
+async def retrieve_work(id: int) -> dict:
+    work = await works_collection.find_one({"work_id": id})
     if work:
         return work_helper(work)
 
 
-async def delete_work(id: str):
-    work = await works_collection.find_one({"work_id": ObjectId(id)})
+async def delete_work(id: int):
+    work = await works_collection.find_one({"work_id": id})
     if work:
-        await works_collection.delete_one({"work_id": ObjectId(id)})
+        await works_collection.delete_one({"work_id": id})
         return True
 
 
-async def update_work_data(id: str, data: dict):
+async def update_work_data(id: int, data: dict):
     work = await works_collection.find_one({"work_id": id})
     if work:
         works_collection.update_one({"work_id": id}, {"$set": data})

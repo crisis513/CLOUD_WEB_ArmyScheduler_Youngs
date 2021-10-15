@@ -8,7 +8,7 @@
       <nav>
         <ul>
           <li>
-            <a href="/#/landing">
+            <a href="https://github.com/osamhack2021/CLOUD_WEB_ArmyScheduler_Youngs">
               About Us
             </a>
           </li>

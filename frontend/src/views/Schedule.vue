@@ -6,6 +6,8 @@
         <h2>스케줄</h2>
       </div>
 
+      <br>
+
       <v-row class="fill-height">
         <v-col>
           <v-sheet height="64">
@@ -101,7 +103,7 @@
             >
               <v-card
                 color="grey lighten-4"
-                min-width="600px"
+                min-width="700px"
                 flat
               >
                 <v-toolbar
@@ -110,7 +112,7 @@
                 >
                   <v-toolbar-title>일정 확인</v-toolbar-title>
                   <v-spacer></v-spacer>
-                  <v-btn icon @click="calendarEdit()">
+                  <v-btn icon @click="editCalendar()">
                     <v-icon>mdi-pencil</v-icon>
                   </v-btn>
                   <v-btn icon @click="result_alert = true">
@@ -123,7 +125,7 @@
                     md-confirm-text="삭제"
                     md-cancel-text="취소"
                     @md-cancel="onCancel"
-                    @md-confirm="calendarDelete(selectedEvent.event_id)" />
+                    @md-confirm="deleteCalendar(selectedEvent.event_id)" />
                 </v-toolbar>
 
                 <v-container fluid>
@@ -136,6 +138,7 @@
                     <v-col cols="9">
                       <v-text-field
                         :value="selectedEvent.name"
+                        v-model="selectedEvent.name"
                         :disabled="validated == 1"
                       ></v-text-field>
                     </v-col>
@@ -158,6 +161,7 @@
                             placeholder="2021-01-01"
                             prepend-icon="mdi-calendar"
                             :value="selectedEvent.str_start_date"
+                            v-model="selectedEvent.str_start_date"
                             :disabled="validated == 1"
                           ></v-text-field>
                         </td>
@@ -167,6 +171,7 @@
                             placeholder="00:00"
                             prepend-icon="access_time"
                             :value="selectedEvent.str_start_time"
+                            v-model="selectedEvent.str_start_time"
                             :disabled="validated == 1"
                           ></v-text-field>
                         </td>
@@ -178,6 +183,7 @@
                             placeholder="2021-01-01"
                             prepend-icon="mdi-calendar"
                             :value="selectedEvent.str_end_date"
+                            v-model="selectedEvent.str_end_date"
                             :disabled="validated == 1"
                           ></v-text-field>
                         </td>
@@ -187,6 +193,7 @@
                             placeholder="00:00"
                             prepend-icon="access_time"
                             :value="selectedEvent.str_end_time"
+                            v-model="selectedEvent.str_end_time"
                             :disabled="validated == 1"
                           ></v-text-field>
                         </td>
@@ -206,15 +213,15 @@
                     <v-col cols="9">
                       <table>
                       <tr>
-                        <td v-for="(tag, index) in selectedEvent.tags" :key="index">
+                        <td v-for="(tag, index) in selectedEvent.tags" :key="index" >
                           <v-chip
                             class="ma-2"
                             :color="tag.tag_color"
                             text-color="white"
-                            v-if="chipClose"
-                            v-model="tag.tag_title"
+                            v-model="selectedEvent.tags"
+                            :value="selectedEvent.tags"
                             :close="showClose"
-                            @click:close="chipClose = false"
+                            @click:close="selectedEvent.tags.splice(index, 1);"
                           >
                             {{ tag.tag_title }}
                           </v-chip>
@@ -258,7 +265,7 @@
                       <v-btn
                         text
                         color="primary"
-                        @click="selectedOpen = false"
+                        @click="editCalendarComplete(selectedEvent)"
                         v-if="isStatusOn"
                       >
                         확인
@@ -369,7 +376,7 @@
                         label="시작일*"
                         required
                         hint="2021-10-01"
-                        v-model="start_date"
+                        v-model="event_start_date"
                       ></v-text-field>
                     </v-col>
                     <v-col
@@ -381,7 +388,7 @@
                         label="종료일*"
                         required
                         hint="2021-10-31"
-                        v-model="end_date"
+                        v-model="event_end_date"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -499,7 +506,7 @@
                             label="시작일자"
                             placeholder="2021-01-01"
                             prepend-icon="mdi-calendar"
-                            v-model="addEvent.start_date"
+                            v-model="addEvent.event_start_date"
                           ></v-text-field>
                         </td>
                         <td>
@@ -507,7 +514,7 @@
                             label="시작시간"
                             placeholder="00:00"
                             prepend-icon="access_time"
-                            v-model="addEvent.start_time"
+                            v-model="addEvent.event_start_time"
                           ></v-text-field>
                         </td>
                       </tr>
@@ -517,7 +524,7 @@
                             label="종료일자"
                             placeholder="2021-01-01"
                             prepend-icon="mdi-calendar"
-                            v-model="addEvent.end_date"
+                            v-model="addEvent.event_end_date"
                           ></v-text-field>
                         </td>
                         <td>
@@ -525,7 +532,7 @@
                             label="종료시간"
                             placeholder="00:00"
                             prepend-icon="access_time"
-                            v-model="addEvent.end_time"
+                            v-model="addEvent.event_end_time"
                           ></v-text-field>
                         </td>
                       </tr>               
@@ -591,7 +598,6 @@
           </v-dialog>
         </v-row>
       </div>
-
       {{ events }}
     </v-app>
   </v-app>
@@ -626,13 +632,14 @@
           "tag_color": null,
         }],
         "event_color": null,
-        "start_date": null,
-        "end_date": null,
-        "start_time": null,
-        "end_time": null
+        "event_start_date": null,
+        "event_start_time": null,
+        "event_end_date": null,
+        "event_end_time": null
       },
 
       validated: 1,
+      event_type: 1,
       isStatusOn: false,
       showClose: false,
       chipClose: true,
@@ -641,10 +648,10 @@
       addScheduleDialog: false,
       loadingDialog: false,
       result_alert: false,
-      start_date: null,
-      end_date: null,
-      start_time: null,
-      end_time: null,
+      event_start_date: null,
+      event_start_time: null,
+      event_end_date: null,
+      event_end_time: null,
       counter: 1,
     }),
 
@@ -672,7 +679,6 @@
               "str_end_time": eventsData[i].event_end_time,
               "timed": true 
             })
-            console.log(event_list)
           }
           this.events = event_list
         })
@@ -730,9 +736,8 @@
         //this.autoScheduleDialog = false
       },
       addSchedule () {
-        this.addEvent["event_id"] = parseInt(this.events[this.events.length - 1]["event_id"] + 1)
+        this.addEvent.event_id = this.events.length + 1
         const eventsPath = baseUrl + '/api/v1/events/'
-        
         axios.post(eventsPath, this.addEvent)
           .then((res) => {
             console.log(res.data)
@@ -742,8 +747,9 @@
           });
 
         this.addScheduleDialog = false
+        location.reload()
       },
-      calendarEdit () {
+      editCalendar () {
         if (this.validated == 0) {
           this.isStatusOn = false
           this.validated = 1
@@ -754,9 +760,30 @@
           this.showClose = true
         }
       },
-      calendarDelete (event_id) {
+      editCalendarComplete (event) {
         const eventsPath = baseUrl + '/api/v1/events/'
-        
+        axios.put(eventsPath + event.event_id, {
+          "event_id": event.event_id,
+          "user_id": event.user_id,
+          "event_title": event.name,
+          "event_type": event.event_type,
+          "work_id": event.work_id,
+          "tags": event.tags,
+          "event_color": event.event_color,
+          "event_start_date": event.str_start_date,
+          "event_start_time": event.str_start_time,
+          "event_end_date": event.str_end_date,
+          "event_end_time": event.str_end_time
+        })
+        .then(res => {
+          console.log(res)
+        }).catch((ex) => {
+          console.warn("Error: ", ex)
+        })
+        location.reload()
+      },
+      deleteCalendar (event_id) {
+        const eventsPath = baseUrl + '/api/v1/events/'
         axios.delete(eventsPath + String(event_id), event_id)
           .then((res) => {
             console.log(res.data)
@@ -764,6 +791,7 @@
           .catch((error) => {
             console.error(error);
           });
+        location.reload()
       },
       oncancel () {
         this.result_alert = false
@@ -775,7 +803,7 @@
       deleteTableRow: function (idx) { 
         this.counter--;
         this.addEvent["tags"].splice(idx, 1);
-      }
+      },
       
     },
   }
