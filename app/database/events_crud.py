@@ -25,10 +25,16 @@ async def add_event(event_data: dict) -> dict:
     return event_helper(new_event)
 
 
-async def retrieve_event(id: int) -> dict:
-    event = await events_collection.find_one({"event_id": id})
-    if event:
-        return event_helper(event)
+# async def retrieve_event(id: str) -> dict:
+#     event = await events_collection.find_one({"user_id": id})
+#     if event:
+#         return event_helper(event)
+
+async def retrieve_event(id: str) -> list:
+    events = []
+    async for event in events_collection.find({"user_id": id}):
+        events.append(event_helper(event))
+    return events
 
 
 async def delete_event(id: int):

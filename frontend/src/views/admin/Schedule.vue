@@ -466,6 +466,7 @@
           >
             <template v-slot:activator="{ on, attrs }">
               <v-btn
+                id="addCalendarBtn"
                 v-bind="attrs"
                 v-on="on"
                 max-width="150px"
@@ -855,7 +856,8 @@
 .v-text-field {
   width: 150px;
 }
-.v-btn {
-  padding-right: 20px;
+#addCalendarBtn {
+  margin-left: 50px;
+  margin-right: 50px;
 }
 </style>

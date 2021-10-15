@@ -5,9 +5,7 @@
       <div class="title-center">
         <h2>스케줄</h2>
       </div>
-
       <br>
-
       <v-row class="fill-height">
         <v-col>
           <v-sheet height="64">
@@ -345,100 +343,6 @@
           justify="center"
         >
           <v-dialog
-            v-model="autoScheduleDialog"
-            persistent
-            max-width="500px"
-            class="between-blank-10"
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                v-bind="attrs"
-                v-on="on"
-                max-width="150px"
-                color="warning"
-              >
-                근무표 자동 생성
-              </v-btn>
-            </template>
-            <v-card>
-              <v-card-title>
-                <span class="text-h5">근무표 설정</span>
-              </v-card-title>
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col
-                      cols="12"
-                      sm="6"
-                      md="4"
-                    >
-                      <v-text-field
-                        label="시작일*"
-                        required
-                        hint="2021-10-01"
-                        v-model="event_start_date"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col
-                      cols="12"
-                      sm="6"
-                      md="4"
-                    >
-                      <v-text-field
-                        label="종료일*"
-                        required
-                        hint="2021-10-31"
-                        v-model="event_end_date"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-container>
-                <small>*indicates required field</small>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn
-                  color="blue darken-1"
-                  text
-                  @click="autoScheduleDialog = false"
-                >
-                  종료
-                </v-btn>
-                <v-btn
-                  color="blue darken-1"
-                  text
-                  :disabled="loadingDialog"
-                  :loading="loadingDialog"
-                  @click="createWorkSchedule()"
-                >
-                  생성
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-
-          <v-dialog
-            v-model="loadingDialog"
-            hide-overlay
-            persistent
-            width="300"
-          >
-            <v-card
-              color="primary"
-              dark
-            >
-              <v-card-text>
-                근무표 생성 중 ...
-                <v-progress-linear
-                  indeterminate
-                  color="white"
-                  class="mb-0"
-                ></v-progress-linear>
-              </v-card-text>
-            </v-card>
-          </v-dialog>
-          
-          <v-dialog
             v-model="addScheduleDialog"
             persistent
             max-width="600px"
@@ -656,7 +560,8 @@
 
     created () {
       const eventsPath = baseUrl + '/api/v1/events/'    
-      axios.get(eventsPath)
+      let user_id = "10"
+      axios.get(eventsPath + user_id, user_id)
         .then((res) => {
           let eventsData = res.data["data"][0]
           let event_list = []
