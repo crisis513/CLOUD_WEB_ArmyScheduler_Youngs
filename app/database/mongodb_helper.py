@@ -1,7 +1,7 @@
 def user_helper(user) -> dict:
     return {
         "name": user['name'],
-        "userid": user['userid'],
+        "user_id": user['user_id'],
         "password": user['password'],
         "en_date": user['en_date'],
         "de_date": user['de_date'],
@@ -30,7 +30,7 @@ def work_helper(work) -> dict:
 def event_helper(event) -> dict:
     return {
         "event_id": event['event_id'],
-        "userid": event['userid'],
+        "user_id": event['user_id'],
         "event_title": event['event_title'],
         "event_type": event['event_type'],
         "work_id": event['work_id'],

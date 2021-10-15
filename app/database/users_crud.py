@@ -26,20 +26,20 @@ async def add_user(user_data: dict) -> dict:
 
 
 async def retrieve_user(id: int) -> dict:
-    user = await users_collection.find_one({"userid": id})
+    user = await users_collection.find_one({"user_id": id})
     if user:
         return user_helper(user)
 
 
 async def delete_user(id: int):
-    user = await users_collection.find_one({"userid": id})
+    user = await users_collection.find_one({"user_id": id})
     if user:
-        await users_collection.delete_one({"userid": id})
+        await users_collection.delete_one({"user_id": id})
         return True
 
 
 async def update_user_data(id: int, data: dict):
-    user = await users_collection.find_one({"userid": id})
+    user = await users_collection.find_one({"user_id": id})
     if user:
-        users_collection.update_one({"userid": id}, {"$set": data})
+        users_collection.update_one({"user_id": id}, {"$set": data})
         return True

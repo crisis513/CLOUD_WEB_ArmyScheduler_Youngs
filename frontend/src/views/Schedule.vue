@@ -617,7 +617,7 @@
       events: [],
       addEvent: {
         "event_id": null,
-        "userid": -1,
+        "user_id": -1,
         "event_title": null,
         "event_type": 1,
         "work_id": -1,
@@ -658,7 +658,7 @@
           for (let i = 0; i < eventsData.length; i++) {
             event_list.push({
               "event_id": eventsData[i].event_id, 
-              "userid": eventsData[i].userid, 
+              "user_id": eventsData[i].user_id, 
               "name": eventsData[i].event_title, 
               "event_type": eventsData[i].event_type, 
               "work_id": eventsData[i].work_id, 

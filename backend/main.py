@@ -5,8 +5,8 @@ import random
 import datetime
 from enum import IntEnum
 class Users(object):
-    def __init__(self, userid, name, password, en_date, de_date, now_class, unit_company, unit_platoon, unit_squad, position, work_list, vacation, total_work_time, this_mon_work_time, prev_mon_work_time):
-        self.userid = userid
+    def __init__(self, user_id, name, password, en_date, de_date, now_class, unit_company, unit_platoon, unit_squad, position, work_list, vacation, total_work_time, this_mon_work_time, prev_mon_work_time):
+        self.user_id = user_id
         self.name = name
         self.password = password
         self.en_date = en_date
@@ -25,7 +25,7 @@ class Users(object):
     @classmethod
     def from_dict(cls, dict_item):
         return cls(
-            userid = dict_item['userid'],
+            user_id = dict_item['user_id'],
             name = dict_item['name'],
             password = dict_item['password'],
             en_date = dict_item['en_date'],
@@ -44,7 +44,7 @@ class Users(object):
     
     def asdict(self):
         return {
-            'userid': self.userid,
+            'user_id': self.user_id,
             'name': self.name,
             'password': self.password,
             'en_date': self.en_date,
@@ -100,9 +100,9 @@ class EventType(IntEnum):
     Custom = 2  # 유저 개인 일정
 
 class Events(object):
-    def __init__(self, event_id, userid, event_title, event_type, work_id, tags, event_color, event_start_date, event_start_time, event_end_date, event_end_time):
+    def __init__(self, event_id, user_id, event_title, event_type, work_id, tags, event_color, event_start_date, event_start_time, event_end_date, event_end_time):
         self.event_id = event_id
-        self.userid = userid
+        self.user_id = user_id
         self.event_title = event_title
         self.event_type = event_type
         self.work_id = work_id   # 근무가 아닌 경우 -1
@@ -117,7 +117,7 @@ class Events(object):
     def from_scheduler(cls, event_id, start_date, end_date, tags, work_id, work_name, work_setting):
         return cls(
             event_id = event_id,
-            userid = [],
+            user_id = [],
             event_title = work_name,
             event_type = EventType.Work,
             work_id = work_id,
@@ -132,7 +132,7 @@ class Events(object):
     def asdict(self):
         return {
             'event_id': self.event_id,
-            'userid': self.userid,
+            'user_id': self.user_id,
             'event_title': self.event_title,
             'event_type': int(self.event_type),
             'work_id': self.work_id,
@@ -170,9 +170,9 @@ def db_init(client):
     db = client['army_scheduler_db']
     return db
 
-def create_user(db, userid, name, password, birth_date, en_date, de_date, now_class, unit_company, unit_platoon, unit_squad, position, work_list, vacation):
+def create_user(db, user_id, name, password, birth_date, en_date, de_date, now_class, unit_company, unit_platoon, unit_squad, position, work_list, vacation):
     user = {
-        'userid': userid,               # 아이디
+        'user_id': user_id,               # 아이디
         'name': name,                   # 이름
         'password': password,           # 패스워드
         'birth_date' : birth_date,      # 생년월일
@@ -204,11 +204,11 @@ def create_user(db, userid, name, password, birth_date, en_date, de_date, now_cl
     return db.Users.insert_one(user).inserted_id
 
 def find_user(db, uid):
-    query = { 'userid': uid }
+    query = { 'user_id': uid }
     return db.Users.find_one(query)
 
-def update_user_on_userpage(db, userid, name, password, birth_date, en_date, de_date, now_class, unit_company, unit_platoon, unit_squad, position, work_list, vacation):
-    query = { 'userid': userid }
+def update_user_on_userpage(db, user_id, name, password, birth_date, en_date, de_date, now_class, unit_company, unit_platoon, unit_squad, position, work_list, vacation):
+    query = { 'user_id': user_id }
     values = {
         '$set': {
             'name': name,
@@ -255,10 +255,10 @@ def find_work(db, work_id):
     query = { 'work_id': work_id }
     return db.Works.find_one(query)
 
-def create_event(db, event_id, userid, event_title, event_type, work_id, tags, event_date, event_color, start_time, end_time):
+def create_event(db, event_id, user_id, event_title, event_type, work_id, tags, event_date, event_color, start_time, end_time):
     event = {
         'event_id': event_id,
-        'userid': userid,
+        'user_id': user_id,
         'event_title': event_title,
         'event_type': int(event_type),
         'work_id': work_id,
@@ -283,7 +283,7 @@ def dbtest1():
     client = MongoClient('mongodb://localhost:27017/') # for local test
     # print(client.list_database_names())
     db = db_init(client)
-    # db, userid, name, password, birth_date, en_date, de_date, now_class, unit_company, unit_platoon, unit_squad, position, work_list, vacation
+    # db, user_id, name, password, birth_date, en_date, de_date, now_class, unit_company, unit_platoon, unit_squad, position, work_list, vacation
     create_user(db, 'test_id', '홍길동', 'test_pw', '2000-01-01', '2021-01-01', '2022-06-30', '상병', '1중대', '2소대', '3분대', '소총수', [1], [])
     create_user(db, 'test_id2', '임꺽정', 'test_pw2', '2001-01-01', '2020-10-01', '2022-03-31', '상병', '1중대', '2소대', '3분대', '소총수', [1], [])
     test_user = find_user(db, 'test_id2')
@@ -316,7 +316,7 @@ def dbtest3():
     create_event(
         db = db,
         event_id = 1,
-        userid = 1,
+        user_id = 1,
         event_title = '위병소 근무',
         event_type = EventType.Work,
         work_id = 1,
@@ -329,7 +329,7 @@ def dbtest3():
     create_event(
         db = db,
         event_id = 2,
-        userid = 2,
+        user_id = 2,
         event_title = '불침번 근무',
         event_type = EventType.Work,
         work_id = 2,
@@ -407,8 +407,8 @@ def create_custom_db():
         '행정병', 'D.P', '정훈병'
     ]
     for i in range(50):
-        # userid = 'uid' + str(f'{i:04d}')
-        userid = str(i)
+        # user_id = 'uid' + str(f'{i:04d}')
+        user_id = str(i)
         name = name_list[i]
         password = 'pwd' + str(f'{i:04d}')
         birth_date = int_to_date(random.randint(date_to_int('1992-01-01'), date_to_int('2001-12-31')))
@@ -438,7 +438,7 @@ def create_custom_db():
             work = 3
         create_user(
             db = db,
-            userid = userid,
+            user_id = user_id,
             name = name,
             password = password,
             birth_date = birth_date,
@@ -485,7 +485,7 @@ def get_total_user_list():
     user_list = db.Users.find()
     user_dict = {}
     for u in user_list:
-        user_dict[u['userid']] = {'day_worktime':0, 'night_worktime':0, 'free_worktime':0, 'fatigue':0, 'work':u['work_list'], 'work_day_list':[]}
+        user_dict[u['user_id']] = {'day_worktime':0, 'night_worktime':0, 'free_worktime':0, 'fatigue':0, 'work':u['work_list'], 'work_day_list':[]}
     return user_dict
 
 def main():

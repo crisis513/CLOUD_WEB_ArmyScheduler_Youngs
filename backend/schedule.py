@@ -129,7 +129,7 @@ class Backtrack:
             end_time = event['end_time']
             work_id = event['work_id']
             day_worktime, night_worktime, free_worktime, fatigue = get_worktime_and_fatigue(start_time, end_time)
-            for uid in event['userid']:
+            for uid in event['user_id']:
                 self.user_list[work_id][uid]['day_worktime'] += day_worktime
                 self.user_list[work_id][uid]['night_worktime'] += night_worktime
                 self.user_list[work_id][uid]['free_worktime'] += free_worktime
@@ -187,7 +187,7 @@ class Backtrack:
                         exist = True
                         break
                 if exist:
-                    result_event_list[idx]['userid'].append(e1.userid[0])
+                    result_event_list[idx]['user_id'].append(e1.user_id[0])
                 else:
                     result_event_list.append(e1.asdict())
         client = MongoClient('mongodb://localhost:27017/') # for local test
@@ -212,7 +212,7 @@ class Backtrack:
             self.cnt = 0
             self.backtrack(work_id, 0)
             for i in range(self.total_events[work_id]):
-                self.event_list[work_id][i].userid.append(self.best_schedule[i])
+                self.event_list[work_id][i].user_id.append(self.best_schedule[i])
         self.set_event_list()
 
     def get_unfairness(self, work_id):
