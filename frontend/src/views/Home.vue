@@ -203,7 +203,7 @@ export default {
                 }
                 this.events[j].bars.push({
                   "event_id": eventsData[i].event_id, 
-                  "userid": eventsData[i].user_id,
+                  "userid": eventsData[i].userid,
                   "event_title": eventsData[i].event_title, 
                   "event_type": eventsData[i].event_type, 
                   "work_id": eventsData[i].work_id, 
