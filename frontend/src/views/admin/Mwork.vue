@@ -249,19 +249,22 @@
               align="center"
               justify="center"
             >
-              <v-btn class="between-blank-50" @click="deleteWork(work.work_id)">삭제</v-btn>
+              <v-btn class="between-blank-50" @click="result_alert = true">삭제</v-btn>
               <v-btn class="between-blank-50" @click="saveForm(work)" color="primary">
                 저장
               </v-btn>
+              <md-dialog-confirm
+                :md-active.sync="result_alert"
+                md-title="근무 삭제"
+                md-content="해당 근무 정말 삭제하시겠습니까?"
+                md-confirm-text="삭제"
+                md-cancel-text="취소"
+                @md-cancel="onCancel"
+                @md-confirm="deleteWork(work.work_id)" />
             </v-row>
           </div>
         </div>
       </div>
-      {{ works }}
-      <br><br>
-      {{ work }}
-      <br><br>
-      {{ counter }}
     </v-app>
   </v-app>
 </template>
@@ -283,6 +286,7 @@
       },
       counter: 0,
       addWorkDialog: false,
+      result_alert: false,
     }),
 
     created () {      

@@ -304,9 +304,6 @@
           </div>          
         </div>
       </div>
-      {{ currentData }}
-      <br>
-      {{ works }}
     </v-app>
   </v-app>
 </template>

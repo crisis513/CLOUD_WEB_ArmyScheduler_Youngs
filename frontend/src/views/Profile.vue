@@ -10,13 +10,7 @@
           <div class="md-layout">
             <div class="md-layout-item md-size-50 mx-auto">
               <div class="profile">
-                <div class="avatar">
-                  <img
-                    :src="img"
-                    alt="Circle Image"
-                    class="img-raised rounded-circle img-fluid"
-                  />
-                </div>
+
                 <div class="name">
                   <h3 class="title">Carla Hortensia</h3>
                   <h6>Designer</h6>
@@ -70,10 +64,6 @@ export default {
       type: String,
       default: require("@/assets/img/city-profile.jpg")
     },
-    img: {
-      type: String,
-      default: require("@/assets/img/faces/christian.jpg")
-    }
   },
   computed: {
     headerStyle() {
