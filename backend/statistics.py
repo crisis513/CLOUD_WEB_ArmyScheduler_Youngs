@@ -77,5 +77,10 @@ class Statistics:
         )
 
 if __name__ == '__main__':
-    s = Statistics('u8')
-    s.update_user_stat()
+    for i in range(50):
+        user_id = 'u' + str(i)
+        s = Statistics(user_id)
+        s.update_user_stat()
+    users = main.get_total_user_list()
+    for user in users.values():
+        print(user.user_id, user.name, user.prev_month_worked_time.asdict(), user.this_month_worked_time.asdict(), user.this_month_work_time_left.asdict(), user.total_worked_time.asdict())
