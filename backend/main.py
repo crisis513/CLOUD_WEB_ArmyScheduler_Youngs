@@ -150,9 +150,16 @@ class Users(object):
         position: str,
         work_list: List[int],
         vacation: List[Vacation],
-        total_work_time: WorkTime,
-        this_mon_work_time: WorkTime,
-        prev_mon_work_time: WorkTime
+        total_worked_time: WorkTime,
+        this_month_worked_time: WorkTime,
+        this_month_work_time_left: WorkTime,
+        prev_month_worked_time: WorkTime,
+        prev_day_worktime: int,
+        prev_night_worktime: int,
+        prev_free_worktime: int,
+        new_day_worktime: int,
+        new_night_worktime: int,
+        new_free_worktime: int
     ):
         self.user_id = user_id
         self.name = name
@@ -167,12 +174,16 @@ class Users(object):
         self.position = position
         self.work_list = work_list
         self.vacation = vacation
-        self.total_work_time = total_work_time
-        self.this_mon_work_time = this_mon_work_time
-        self.prev_mon_work_time = prev_mon_work_time
-        self.day_worktime: int = 0
-        self.night_worktime: int = 0
-        self.free_worktime: int = 0
+        self.total_worked_time = total_worked_time
+        self.this_month_worked_time = this_month_worked_time
+        self.this_month_work_time_left = this_month_work_time_left
+        self.prev_month_worked_time = prev_month_worked_time
+        self.prev_day_worktime = prev_day_worktime
+        self.prev_night_worktime = prev_night_worktime
+        self.prev_free_worktime = prev_free_worktime
+        self.new_day_worktime = new_day_worktime
+        self.new_night_worktime = new_night_worktime
+        self.new_free_worktime = new_free_worktime
         self.fatigue: int = 0
         self.last_work_day: int = -1
 
@@ -192,9 +203,16 @@ class Users(object):
             position = dict_item['position'],
             work_list = dict_item['work_list'],
             vacation = [Vacation.from_dict(v) for v in dict_item['vacation']],
-            total_work_time = WorkTime.from_dict(dict_item['total_work_time']),
-            this_mon_work_time = WorkTime.from_dict(dict_item['this_mon_work_time']),
-            prev_mon_work_time = WorkTime.from_dict(dict_item['prev_mon_work_time'])
+            total_worked_time = WorkTime.from_dict(dict_item['total_worked_time']),
+            this_month_worked_time = WorkTime.from_dict(dict_item['this_month_worked_time']),
+            this_month_work_time_left = WorkTime.from_dict(dict_item['this_month_work_time_left']),
+            prev_month_worked_time = WorkTime.from_dict(dict_item['prev_month_worked_time']),
+            prev_day_worktime = dict_item['prev_day_worktime'],
+            prev_night_worktime = dict_item['prev_night_worktime'],
+            prev_free_worktime = dict_item['prev_free_worktime'],
+            new_day_worktime = dict_item['new_day_worktime'],
+            new_night_worktime = dict_item['new_night_worktime'],
+            new_free_worktime = dict_item['new_free_worktime']
         )
     
     def asdict(self):
@@ -212,9 +230,16 @@ class Users(object):
             'position': self.position,
             'work_list': self.work_list,
             'vacation': [v.asdict() for v in self.vacation],
-            'total_work_time': self.total_work_time.asdict(),
-            'this_mon_work_time': self.this_mon_work_time.asdict(),
-            'prev_mon_work_time': self.prev_mon_work_time.asdict()
+            'total_worked_time': self.total_worked_time.asdict(),
+            'this_month_worked_time': self.this_month_worked_time.asdict(),
+            'this_month_work_time_left': self.this_month_work_time_left.asdict(),
+            'prev_month_worked_time': self.prev_month_worked_time.asdict(),
+            'prev_day_worktime': self.prev_day_worktime,
+            'prev_night_worktime': self.prev_night_worktime,
+            'prev_free_worktime': self.prev_free_worktime,
+            'new_day_worktime': self.new_day_worktime,
+            'new_night_worktime': self.new_night_worktime,
+            'new_free_worktime': self.new_free_worktime
         }
 
 class Tags(object):
@@ -436,73 +461,6 @@ def create_event(db, event_id, user_id, event_title, event_type, work_id, tags, 
 def insert_many_events(db, event_list):
     db.Events.insert_many(event_list)
 
-def dbtest():
-    clear_databases()
-    dbtest1()
-    dbtest2()
-
-def dbtest1():
-    # client = MongoClient('mongodb://crlee:myPassword@20.194.38.223:3306/army_scheduler_db') # test on VM
-    client = MongoClient('mongodb://localhost:27017/') # for local test
-    # print(client.list_database_names())
-    db = db_init(client)
-    # db, user_id, name, password, birth_date, en_date, de_date, now_class, unit_company, unit_platoon, unit_squad, position, work_list, vacation
-    create_user(db, 'test_id', '홍길동', 'test_pw', '2000-01-01', '2021-01-01', '2022-06-30', '상병', '1중대', '2소대', '3분대', '소총수', [1], [])
-    create_user(db, 'test_id2', '임꺽정', 'test_pw2', '2001-01-01', '2020-10-01', '2022-03-31', '상병', '1중대', '2소대', '3분대', '소총수', [1], [])
-    test_user = find_user(db, 'test_id2')
-    print(test_user)
-    test_user = find_user(db, 'test_id')
-    print(test_user)
-
-    update_user_on_userpage(db, 'test_id', '홍길동', 'test_pw', '2000-01-01', '2021-01-01', '2022-06-30', '병장', '1중대', '2소대', '3분대', '군사과학기술병', [], [])
-    test_user = find_user(db, 'test_id')
-    print(test_user)
-
-def dbtest2():
-    client = MongoClient('mongodb://localhost:27017/')
-    db = db_init(client)
-    create_work(db, 1, '불침번', [{'start_time':'22:00', 'end_time':'24:00', 'num_workers':2}], 1, 1, 1)
-    create_work(db, 2, '당직', [{'start_time':'09:00', 'end_time':'08:59', 'num_workers':1}], 2, 2, 2)
-    test_work = find_work(db, 1)
-    print(test_work)
-    test_work = find_work(db, 2)
-    print(test_work)
-
-    update_work(db, 1, '불침번', [{'start_time':'24:00', 'end_time':'02:00', 'num_workers':2}], 3, 3, 3)
-    test_work = find_work(db, 1)
-    print(test_work)
-
-def dbtest3():
-    client = MongoClient('mongodb://localhost:27017/')
-    db = db_init(client)
-    colors = ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1']
-    create_event(
-        db = db,
-        event_id = 1,
-        user_id = 1,
-        event_title = '위병소 근무',
-        event_type = EventType.Work,
-        work_id = 1,
-        tags = [{'tag_title': '위병소', 'tag_color': colors[0]}, {'tag_title': '주간', 'tag_color': colors[1]}],
-        event_date = '2021-10-13',
-        event_color = colors[2],
-        start_time = '10:00',
-        end_time = '12:00'
-    )
-    create_event(
-        db = db,
-        event_id = 2,
-        user_id = 2,
-        event_title = '불침번 근무',
-        event_type = EventType.Work,
-        work_id = 2,
-        tags = [{'tag_title': '불침번', 'tag_color': colors[3]}, {'tag_title': '야간', 'tag_color': colors[4]}],
-        event_date = '2021-10-15',
-        event_color = colors[5],
-        start_time = '22:00',
-        end_time = '24:00'
-    )
-
 def create_custom_db():
     clear_databases()
     client = MongoClient('mongodb://localhost:27017/') # for local test
@@ -515,7 +473,7 @@ def create_custom_db():
         work_name = '불침번',
         worker_list = [],
         work_setting = [
-            WorkSetting(start_time='22:00', end_time='24:00', num_workers=2),
+            WorkSetting(start_time='22:00', end_time='23:59', num_workers=2),
             WorkSetting(start_time='00:00', end_time='02:00', num_workers=2),
             WorkSetting(start_time='02:00', end_time='03:30', num_workers=2),
             WorkSetting(start_time='03:30', end_time='05:00', num_workers=2),
@@ -613,9 +571,16 @@ def create_custom_db():
             position = position,
             work_list = [work],
             vacation = [],
-            total_work_time = WorkTime(0, 0, 0),
-            this_mon_work_time = WorkTime(0, 0, 0),
-            prev_mon_work_time = WorkTime(0, 0, 0)
+            total_worked_time = WorkTime(0, 0, 0),
+            this_month_worked_time = WorkTime(0, 0, 0),
+            this_month_work_time_left = WorkTime(0, 0, 0),
+            prev_month_worked_time = WorkTime(0, 0, 0),
+            prev_day_worktime = 0,
+            prev_night_worktime = 0,
+            prev_free_worktime = 0,
+            new_day_worktime = 0,
+            new_night_worktime = 0,
+            new_free_worktime = 0
         )
         create_user(db, user)
     print('Users created')
