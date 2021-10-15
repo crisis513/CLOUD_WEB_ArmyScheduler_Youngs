@@ -275,7 +275,7 @@ class Events(object):
             event_title = dict_item['event_title'],
             event_type = EventType(dict_item['event_type']),
             work_id = dict_item['work_id'],
-            tags = [Tags(t) for t in dict_item['tags']],
+            tags = [Tags.from_dict(t) for t in dict_item['tags']],
             event_color = dict_item['event_color'],
             event_start_date = Date.from_dict(dict_item['event_start_date']),
             event_start_time = dict_item['event_start_time'],
