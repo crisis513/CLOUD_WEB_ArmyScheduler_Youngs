@@ -94,7 +94,7 @@ def date_to_int(date: str) -> int:
     
 class Scheduler:
     """
-    백트래킹 통한 근무표 산출
+    백트래킹 통한 공정한 근무표 산출
     """
     def __init__(self, consider_from_date: str, start_date: str, end_date: str):
         self.consider_from_date = date_to_int(consider_from_date)
@@ -172,7 +172,7 @@ class Scheduler:
                         end_date = self.date_list[idx + 1]
                     else:
                         end_date = date
-                    day_worktime, night_worktime, free_worktime, fatigue = get_worktime_and_fatigue(date, start_time, end_date, end_time)
+                    day_worktime, night_worktime, free_worktime, _ = get_worktime_and_fatigue(date, start_time, end_date, end_time)
                     tags = []
                     tags.append(main.Tags(self.total_work_list[work_id].work_name, '#00FF00'))
                     if day_worktime > 0:
