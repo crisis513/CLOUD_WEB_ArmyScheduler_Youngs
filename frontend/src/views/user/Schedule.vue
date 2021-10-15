@@ -598,7 +598,6 @@
           </v-dialog>
         </v-row>
       </div>
-      {{ events }}
     </v-app>
   </v-app>
 </template>

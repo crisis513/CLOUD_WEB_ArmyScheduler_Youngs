@@ -25,19 +25,24 @@
 
         <div class="md-collapse">
           <md-list>
-            <md-list-item href="/#/">
+            <md-list-item href="/#/admin">
               <md-icon>home</md-icon>
               <p>홈</p>
             </md-list-item>
 
-            <md-list-item href="/#/schedule">
+            <md-list-item href="/#/admin/schedule">
               <md-icon>schedule</md-icon>
               <p>일정</p>
             </md-list-item>
 
-            <md-list-item href="/#/statistics">
+            <md-list-item href="/#/admin/munit">
               <md-icon>person</md-icon>
-              <p>통계</p>
+              <p>부대관리</p>
+            </md-list-item>
+
+            <md-list-item href="/#/admin/mwork">
+              <md-icon>work</md-icon>
+              <p>근무관리</p>
             </md-list-item>
 
             <li class="md-list-item">
@@ -102,9 +107,10 @@ export default {
   computed: {
     showDownload() {
       const excludedRoutes = [
-        "index",
-        "schedule",
-        "statistics",
+        "admin-index",
+        "admin-schedule",
+        "admin-manage-unit",
+        "admin-manage-work",
         "login",
         "landing",
         "profile"

@@ -1,12 +1,20 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Index from "./views/Index.vue";
+
+import AdminIndex from "./views/admin/Index.vue";
+import AdminSchedule from "./views/admin/Schedule.vue";
+import AdminMunit from "./views/admin/Munit.vue";
+import AdminMwork from "./views/admin/Mwork.vue";
+
+import Index from "./views/user/Index.vue";
+import Schedule from "./views/user/Schedule.vue";
+import Statistics from "./views/user/Statistics.vue";
+
 import Landing from "./views/Landing.vue";
-import Schedule from "./views/Schedule.vue";
-import Munit from "./views/Munit.vue";
-import Mwork from "./views/Mwork.vue";
 import Login from "./views/Login.vue";
 import Profile from "./views/Profile.vue";
+
+import AdminMainNavbar from "./layout/AdminMainNavbar.vue";
 import MainNavbar from "./layout/MainNavbar.vue";
 import MainFooter from "./layout/MainFooter.vue";
 
@@ -33,18 +41,45 @@ export default new Router({
       }
     },
     {
-      path: "/munit",
-      name: "manage-unit",
-      components: { default: Munit, header: MainNavbar, footer: MainFooter },
+      path: "/statistics",
+      name: "statistics",
+      components: { default: Statistics, header: MainNavbar, footer: MainFooter },
       props: {
         header: { colorOnScroll: 400 },
         footer: { backgroundColor: "black" }
       }
     },
     {
-      path: "/mwork",
-      name: "manage-work",
-      components: { default: Mwork, header: MainNavbar, footer: MainFooter },
+      path: "/admin",
+      name: "admin-index",
+      components: { default: AdminIndex, header: AdminMainNavbar, footer: MainFooter },
+      props: {
+        header: { colorOnScroll: 400 },
+        footer: { backgroundColor: "black" }
+      }
+    },
+    {
+      path: "/admin/schedule",
+      name: "admin-schedule",
+      components: { default: AdminSchedule, header: AdminMainNavbar, footer: MainFooter },
+      props: {
+        header: { colorOnScroll: 400 },
+        footer: { backgroundColor: "black" }
+      }
+    },
+    {
+      path: "/admin/munit",
+      name: "admin-manage-unit",
+      components: { default: AdminMunit, header: AdminMainNavbar, footer: MainFooter },
+      props: {
+        header: { colorOnScroll: 400 },
+        footer: { backgroundColor: "black" }
+      }
+    },
+    {
+      path: "/admin/mwork",
+      name: "admin-manage-work",
+      components: { default: AdminMwork, header: AdminMainNavbar, footer: MainFooter },
       props: {
         header: { colorOnScroll: 400 },
         footer: { backgroundColor: "black" }

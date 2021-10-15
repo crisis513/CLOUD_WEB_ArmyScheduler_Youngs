@@ -100,9 +100,6 @@
           </tbody>
         </template>
       </v-simple-table>
-      {{ events }}
-      <br><br>
-      {{ users }}
     </div>
   </div>
 </template>
@@ -125,7 +122,7 @@ export default {
   props: {
     image: {
       type: String,
-      default: require("@/assets/img/vue-mk-header.jpg")
+      default: require("@/assets/img/vue-mk-header2.jpg")
     },
   },
   data() {

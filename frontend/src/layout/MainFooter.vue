@@ -20,8 +20,8 @@
             </a>
           </li>
           <li>
-            <a href="https://www.creative-tim.com/license">
-              Licenses
+            <a href="https://github.com/osamhack2021/CLOUD_WEB_ArmyScheduler_Youngs/blob/master/license.md">
+              License
             </a>
           </li>
         </ul>
