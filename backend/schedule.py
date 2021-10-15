@@ -42,14 +42,22 @@ def get_night_worktime(start_date: main.Date, start_time: str, end_date: main.Da
     t1 = parse_time(start_date, start_time)
     t2 = parse_time(end_date, end_time)
     assert(end_date.date == start_date.date or end_date.date == start_date.date + 1)
-    night_start = parse_time(start_date, '22:00')
-    if end_date.date == start_date.date:
-        night_end = parse_time(start_date, '24:00')
-    elif end_date.isHoliday:
-        night_end = parse_time(end_date, '07:00')
+    night1_start = parse_time(start_date, '00:00')
+    if start_date.isHoliday:
+        night1_end = parse_time(start_date, '07:00')
     else:
-        night_end = parse_time(end_date, '06:30')
-    return intersect_time(t1, t2, night_start, night_end)
+        night1_end = parse_time(start_date, '06:30')
+    night2_start = parse_time(start_date, '22:00')
+    if end_date.isHoliday:
+        night2_end = parse_time(end_date, '07:00')
+    else:
+        night2_end = parse_time(end_date, '06:30')
+    night3_start = parse_time(end_date, '22:00')
+    night3_end = parse_time(end_date, '24:00')
+    if end_date.date == start_date.date:
+        return intersect_time(t1, t2, night1_start, night1_end) + intersect_time(t1, t2, night3_start, night3_end)
+    else:
+        return intersect_time(t1, t2, night1_start, night1_end) + intersect_time(t1, t2, night2_start, night2_end) + intersect_time(t1, t2, night3_start, night3_end)
 
 # start_date의 start_time부터 end_date의 end_time까지 근무했을 때 개인정비시간에 근무한 시간 (분)
 def get_free_worktime(start_date: main.Date, start_time: str, end_date: main.Date, end_time: str) -> int:
@@ -94,7 +102,7 @@ def date_to_int(date: str) -> int:
     
 class Scheduler:
     """
-    백트래킹 통한 근무표 산출
+    백트래킹 통한 공정한 근무표 산출
     """
     def __init__(self, consider_from_date: str, start_date: str, end_date: str):
         self.consider_from_date = date_to_int(consider_from_date)
@@ -172,7 +180,7 @@ class Scheduler:
                         end_date = self.date_list[idx + 1]
                     else:
                         end_date = date
-                    day_worktime, night_worktime, free_worktime, fatigue = get_worktime_and_fatigue(date, start_time, end_date, end_time)
+                    day_worktime, night_worktime, free_worktime, _ = get_worktime_and_fatigue(date, start_time, end_date, end_time)
                     tags = []
                     tags.append(main.Tags(self.total_work_list[work_id].work_name, '#00FF00'))
                     if day_worktime > 0:
