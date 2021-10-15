@@ -77,7 +77,6 @@
                 
               </v-subheader>
               <v-list-item-group
-                v-model="selectedItem"
                 color="primary"
               >
                 <v-list-item
@@ -98,7 +97,7 @@
 
         <v-divider vertical></v-divider>
 
-        <div class="child2">
+        <div class="child2" v-if="work.work_id !== 0">
           <v-container fluid>
             <v-row align="center">
               <v-col cols="3">
@@ -158,7 +157,9 @@
                     <td><v-icon @click='deleteTableRow(index)'>delete</v-icon></td>
                   </tr>
                 </table>
-                <v-btn @click='addTableRow()'>근무 추가</v-btn>
+                <v-btn @click='addBlankTableRow()'>
+                  근무 추가
+                  </v-btn>
               </v-col>
             </v-row>
           </v-container>
@@ -248,8 +249,8 @@
               align="center"
               justify="center"
             >
-              <v-btn class="between-blank-50">삭제</v-btn>
-              <v-btn class="between-blank-50" color="primary">
+              <v-btn class="between-blank-50" @click="deleteWork(work.work_id)">삭제</v-btn>
+              <v-btn class="between-blank-50" @click="saveForm(work)" color="primary">
                 저장
               </v-btn>
             </v-row>
@@ -271,7 +272,6 @@
 
   export default {
     data: () => ({
-      selectedItem: 0,
       works: [],
       work: {
         "work_id": 0,
@@ -308,19 +308,23 @@
           "work_option3": work.work_option3,  
         }
         this.work = workForm
-        this.counter = 0
-        var count = work.work_setting.length
-        for(let i = 0; i < count; i++) {
-          addTableRow(work.work_setting)
-        }
       },
-      saveForm: function () {
-        
+      saveForm: function (work) {
+        const worksPath = baseUrl + '/api/v1/works/'
+        axios.put(worksPath + work.work_id, work)
+          .then((res) => {
+            console.log(res.data)
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+
+        this.addScheduleDialog = false
+        location.reload()
       },
       addWorkButton: function () {
-        console.log(Math.max[this.works.work_id] + 1)
         var workForm = {
-          "work_id": Math.max[this.works.work_id] + 1,
+          "work_id": this.works.length + 1,
           "work_name": document.getElementById('work_name').value,
           "work_setting": [{
             "start_time": "00:00", 
@@ -332,10 +336,31 @@
           "work_option3": 0, 
         }
         this.work = workForm
-        this.counter = 0
-        addTableRow(workForm.work_setting)
 
+        const worksPath = baseUrl + '/api/v1/works/'
+        axios.post(worksPath, workForm)
+          .then((res) => {
+            console.log(res.data)
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+
+        this.addBlankTableRow()
         this.addWorkDialog = false
+        location.reload()
+      },
+      deleteWork (work_id) {
+        const worksPath = baseUrl + '/api/v1/works/'
+        console.log(work_id)
+        axios.delete(worksPath + String(work_id), work_id)
+          .then((res) => {
+            console.log(res.data)
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+        location.reload()
       },
       addTableRow: function (work_setting) { 
         this.counter++;
@@ -343,11 +368,15 @@
           "start_time": work_setting.start_time, 
           "end_time": work_setting.end_time, 
           "num_workers": work_setting.num_workers
-        });
+        }); 
+      },
+      addBlankTableRow: function () { 
+        this.counter++;
+        this.work.work_setting.push({"start_time": "00:00", "end_time": "00:00", "num_workers": 0}); 
       },
       deleteTableRow: function (idx) { 
         this.counter--;
-        this.works.work_setting.splice(idx, 1);
+        this.work.work_setting.splice(idx, 1);
       }
     }
   }

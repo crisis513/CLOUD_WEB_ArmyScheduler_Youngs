@@ -374,7 +374,10 @@
 
     methods: {
       updateForm: function (item) {
-        if(item.length > 0)
+        if(item != null && item.length < 0) {
+          console.error("error!!")
+        }
+        else {
           this.currentData = item
 
           this.name = item[0].name
@@ -396,27 +399,10 @@
           this.total_work_time = item[0].total_work_time
           this.this_mon_work_time = item[0].this_mon_work_time
           this.prev_mon_work_time = item[0].prev_mon_work_time
+        }
       },
       saveForm: function () {
         const usersPath = baseUrl + '/api/v1/users/'
-        this.result = {
-          "name": this.name, 
-          "user_id": this.user_id, 
-          "password": this.password,
-          "en_date": this.en_date,
-          "birth_date": this.birth_date,
-          "de_date": this.de_date, 
-          "now_class": this.now_class,
-          "unit_company": this.unit_company, 
-          "unit_platoon": this.unit_platoon,
-          "unit_squad": this.unit_squad, 
-          "position": this.position,
-          "work_list": this.work_list, 
-          "vacation": this.vacation,
-          "total_work_time": this.total_work_time, 
-          "this_mon_work_time": this.this_mon_work_time, 
-          "prev_mon_work_time": this.prev_mon_work_time,
-        }
         axios.put(usersPath + this.user_id, {
             "name": this.name, 
             "user_id": this.user_id, 
@@ -435,12 +421,13 @@
             "this_mon_work_time": this.this_mon_work_time, 
             "prev_mon_work_time": this.prev_mon_work_time,
           }
-        ).then(response => {
-          console.info(response)
+        ).then(res => {
+          console.log(res)
           this.result_alert = true
         }).catch((ex) => {
           console.warn("Error: ", ex)
         })
+        location.reload()
       },
       addTableRow: function () { 
         this.counter++

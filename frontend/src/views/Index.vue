@@ -12,206 +12,113 @@
         </div>
       </div>
     </parallax>
-    <div class="main main-raised">
-      <div class="section section-basic">
-        <div class="container">
-          <div class="title">
-            <h2>Basic Elements</h2>
-          </div>
-          <basic-elements></basic-elements>
-        </div>
-      </div>
-      <div class="section section-navbars">
-        <div class="container">
-          <small-navigation></small-navigation>
-        </div>
-        <navigation></navigation>
-      </div>
-      <div class="section">
-        <div class="container">
-          <tabs></tabs>
-        </div>
-      </div>
-      <div class="section section-white">
-        <div class="container">
-          <nav-pills></nav-pills>
-        </div>
-      </div>
-      <div class="section section-notifications">
-        <div class="container">
-          <div class="title">
-            <h3>Notifications</h3>
-          </div>
-        </div>
-        <notifications></notifications>
-      </div>
-      <div class="section">
-        <div class="container">
-          <typography-images></typography-images>
-        </div>
-      </div>
-      <div class="section section-javascript">
-        <div class="container">
-          <javascript-components></javascript-components>
-        </div>
-      </div>
-      <div class="section">
-        <div class="container text-center">
-          <div class="md-layout">
-            <div
-              class="md-layout-item md-size-66 md-xsmall-size-100 ml-auto mr-auto text-center"
-            >
-              <h2>Completed with examples</h2>
-              <h4>
-                The kit comes with three pre-built pages to help you get started
-                faster. You can change the text and images and you're good to
-                go. More importantly, looking at them will give you a picture of
-                what you can built with this powerful kit.
-              </h4>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="section section-signup page-header" :style="signupImage">
-        <div class="container">
-          <div class="md-layout">
-            <div
-              class="md-layout-item md-size-33 md-medium-size-40 md-small-size-50 md-xsmall-size-70 mx-auto text-center"
-            >
-              <login-card header-color="green">
-                <h4 slot="title" class="card-title">Login</h4>
-                <md-button
-                  slot="buttons"
-                  href="javascript:void(0)"
-                  class="md-just-icon md-simple md-white"
-                >
-                  <i class="fab fa-facebook-square"></i>
-                </md-button>
-                <md-button
-                  slot="buttons"
-                  href="javascript:void(0)"
-                  class="md-just-icon md-simple md-white"
-                >
-                  <i class="fab fa-twitter"></i>
-                </md-button>
-                <md-button
-                  slot="buttons"
-                  href="javascript:void(0)"
-                  class="md-just-icon md-simple md-white"
-                >
-                  <i class="fab fa-google-plus-g"></i>
-                </md-button>
-                <p slot="description" class="description">Or Be Classical</p>
-                <md-field class="md-form-group" slot="inputs">
-                  <md-icon>face</md-icon>
-                  <label>First Name...</label>
-                  <md-input v-model="firstname"></md-input>
-                </md-field>
-                <md-field class="md-form-group" slot="inputs">
-                  <md-icon>email</md-icon>
-                  <label>Email...</label>
-                  <md-input v-model="email" type="email"></md-input>
-                </md-field>
-                <md-field class="md-form-group" slot="inputs">
-                  <md-icon>lock_outline</md-icon>
-                  <label>Password...</label>
-                  <md-input v-model="password"></md-input>
-                </md-field>
-                <md-button slot="footer" class="md-simple md-success md-lg">
-                  Get Started
-                </md-button>
-              </login-card>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="md-layout">
-        <div class="md-layout-item text-center">
-          <md-button href="#/login" class="md-simple md-success md-lg"
-            >View Login Page</md-button
-          >
-        </div>
-      </div>
-      <div class="section section-examples">
-        <div class="container-fluid text-center">
-          <div class="md-layout">
-            <div class="md-layout-item">
-              <a href="#/landing" target="_blank">
-                <img
-                  :src="landing"
-                  alt="Rounded Image"
-                  class="img-raised rounded img-fluid"
-                />
-              </a>
-              <md-button href="#/landing" class="md-simple md-success md-lg"
-                >View Landing Page</md-button
-              >
-            </div>
-            <div class="md-layout-item">
-              <a href="#/profile" target="_blank">
-                <img
-                  :src="profile"
-                  alt="Rounded Image"
-                  class="img-raised rounded img-fluid"
-                />
-              </a>
-              <md-button href="#/profile" class="md-simple md-success md-lg"
-                >View Profile Page</md-button
-              >
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="section section-download" id="downloadSection">
-        <div class="container">
-          <div class="sharing-area text-center">
-            <div class="md-layout">
-              <div class="md-layout-item">
-                <h3>Thank you for supporting us!</h3>
-              </div>
-            </div>
 
-            <md-button class="md-twitter"
-              ><i class="fab fa-twitter"></i>Tweet</md-button
-            >
-            <md-button class="md-facebook"
-              ><i class="fab fa-facebook-square"></i> Share</md-button
-            >
-            <md-button class="md-google"
-              ><i class="fab fa-google-plus"></i> Share</md-button
-            >
-            <md-button class="md-github"
-              ><i class="fab fa-github"></i> Star</md-button
-            >
-          </div>
-        </div>
+    <div class="main main-raised">
+      <div class="space-50"></div>
+
+      <div class="title-center">
+        <h2>스케줄 타임라인</h2>
       </div>
+      <br>
+
+      <v-tabs v-model="type">
+        <v-tab @click="type=0;changeTimeline()">6hours</v-tab>
+        <v-tab @click="type=1;changeTimeline()">12hours</v-tab>
+        <v-tab @click="type=2;changeTimeline()">1day</v-tab>
+        <v-tab @click="type=3;changeTimeline()">2day</v-tab>
+      </v-tabs>
+
+      <g-gantt-chart 
+        :chart-start="chartStart" 
+        :chart-end="chartEnd"
+        theme="creamy"
+        row-height="35"
+        :highlighted-hours="highlightedHours"
+        :grid="grid"
+      >
+        <g-gantt-row
+          v-for="(event, index) in events"
+          :key="index"
+          :label="event.event_title"
+          :bars="event.bars"
+          bar-start="start_time"
+          bar-end="end_time"
+        >
+          <template #bar-label="{bar}">
+            <h6>{{bar.label}}</h6>
+          </template>
+        </g-gantt-row>
+      </g-gantt-chart>
+
+      <div class="space-50"></div>
+      <md-divider md-inset></md-divider>
+      <div class="space-50"></div>
+
+      <div class="title-center">
+        <h2>차트 테스트</h2>
+      </div>
+      <br>
+      <mdb-container>
+        <mdb-bar-chart
+          :data="barChartData"
+          :options="barChartOptions"
+          :width="1000"
+          :height="300"
+        ></mdb-bar-chart>
+      </mdb-container>
+
+      <div class="space-50"></div>
+      <md-divider md-inset></md-divider>
+      <div class="space-50"></div>
+
+      <div class="title-center">
+        <h2>스케줄 로그</h2>
+      </div>
+      <v-simple-table
+        fixed-header
+        height="300px"
+      >
+        <template v-slot:default>
+          <thead>
+            <tr>
+              <th class="text-left">
+                Name
+              </th>
+              <th class="text-left">
+                Calories
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="d in desserts"
+              :key="d.name"
+            >
+              <td>{{ d.name }}</td>
+              <td>{{ d.calories }}</td>
+            </tr>
+          </tbody>
+        </template>
+      </v-simple-table>
+      {{ events }}
+      <br><br>
+      {{ users }}
     </div>
   </div>
 </template>
 
 <script>
-import BasicElements from "./components/BasicElementsSection";
-import Navigation from "./components/NavigationSection";
-import SmallNavigation from "./components/SmallNavigationSection";
-import Tabs from "./components/TabsSection";
-import NavPills from "./components/NavPillsSection";
-import Notifications from "./components/NotificationsSection";
-import TypographyImages from "./components/TypographyImagesSection";
-import JavascriptComponents from "./components/JavascriptComponentsSection";
-import { LoginCard } from "@/components";
+import { GGanttChart, GGanttRow } from "vue-ganttastic";
+import { mdbBarChart, mdbContainer } from "mdbvue";
+import axios from 'axios';
+const baseUrl = 'https://osamhack2021-cloud-web-armyscheduler-youngs-xr4vx9w4fvg7p-3000.githubpreview.dev'
 
 export default {
   components: {
-    BasicElements,
-    Navigation,
-    SmallNavigation,
-    Tabs,
-    NavPills,
-    Notifications,
-    TypographyImages,
-    JavascriptComponents,
-    LoginCard
+    GGanttChart,
+    GGanttRow,
+    mdbBarChart,
+    mdbContainer
   },
   name: "index",
   bodyClass: "index-page",
@@ -220,57 +127,301 @@ export default {
       type: String,
       default: require("@/assets/img/vue-mk-header.jpg")
     },
-    signup: {
-      type: String,
-      default: require("@/assets/img/city.jpg")
-    },
-    landing: {
-      type: String,
-      default: require("@/assets/img/landing.jpg")
-    },
-    profile: {
-      type: String,
-      default: require("@/assets/img/profile.jpg")
-    }
   },
   data() {
     return {
-      firstname: null,
-      email: null,
-      password: null,
-      leafShow: false
+      barChartData: {
+        labels: [
+          "Red",
+          "Blue",
+          "Yellow",
+          "Green",
+          "Purple",
+          "Orange",
+          "Red1",
+          "Blue1",
+          "Yellow1",
+          "Green1",
+          "Purple1",
+          "Orange1",
+          "Red2",
+          "Blue2",
+          "Yellow2",
+          "Green2",
+          "Purple2",
+          "Orange2"
+        ],
+        datasets: [
+          {
+            label: "# of Votes",
+            data: [12, 19, 3, 5, 2, 3, 12, 19, 3, 5, 2, 3, 12, 19, 3, 5, 2, 3],
+            backgroundColor: [
+              "rgba(255, 99, 132, 0.2)",
+              "rgba(54, 162, 235, 0.2)",
+              "rgba(255, 206, 86, 0.2)",
+              "rgba(75, 192, 192, 0.2)",
+              "rgba(153, 102, 255, 0.2)",
+              "rgba(255, 159, 64, 0.2)",
+              "rgba(255, 99, 132, 0.2)",
+              "rgba(54, 162, 235, 0.2)",
+              "rgba(255, 206, 86, 0.2)",
+              "rgba(75, 192, 192, 0.2)",
+              "rgba(153, 102, 255, 0.2)",
+              "rgba(255, 159, 64, 0.2)",
+              "rgba(255, 99, 132, 0.2)",
+              "rgba(54, 162, 235, 0.2)",
+              "rgba(255, 206, 86, 0.2)",
+              "rgba(75, 192, 192, 0.2)",
+              "rgba(153, 102, 255, 0.2)",
+              "rgba(255, 159, 64, 0.2)"
+            ],
+            borderColor: [
+              "rgba(255,99,132,1)",
+              "rgba(54, 162, 235, 1)",
+              "rgba(255, 206, 86, 1)",
+              "rgba(75, 192, 192, 1)",
+              "rgba(153, 102, 255, 1)",
+              "rgba(255, 159, 64, 1)",
+              "rgba(255, 99, 132, 0.2)",
+              "rgba(54, 162, 235, 0.2)",
+              "rgba(255, 206, 86, 0.2)",
+              "rgba(75, 192, 192, 0.2)",
+              "rgba(153, 102, 255, 0.2)",
+              "rgba(255, 159, 64, 0.2)",
+              "rgba(255, 99, 132, 0.2)",
+              "rgba(54, 162, 235, 0.2)",
+              "rgba(255, 206, 86, 0.2)",
+              "rgba(75, 192, 192, 0.2)",
+              "rgba(153, 102, 255, 0.2)",
+              "rgba(255, 159, 64, 0.2)"
+            ],
+            borderWidth: 2
+          }
+        ]
+      },
+      barChartOptions: {
+        responsive: false,
+        maintainAspectRatio: false,
+        scales: {
+          xAxes: [
+            {
+              barPercentage: 1,
+              gridLines: {
+                display: true,
+                color: "rgba(0, 0, 0, 0.1)"
+              }
+            }
+          ],
+          yAxes: [
+            {
+              gridLines: {
+                display: true,
+                color: "rgba(0, 0, 0, 0.1)"
+              }
+            }
+          ]
+        }
+      },
+      getNowDate: "2021-10-14",
+      getNowTime: "06:00",
+      chartStart: "2021-10-14 17:00",
+      chartEnd: "2021-10-15 05:00",
+      highlightedHours: [],
+      grid: true,
+      type: 0,
+      users: [],
+      events: [
+        {
+          "event_title": "당직",
+          "bars": [],
+        },
+        {
+          "event_title": "불침번",
+          "bars": [],
+        },
+        {
+          "event_title": "경계",
+          "bars": [],
+        },
+      ],
+      desserts: [
+        {
+          name: 'Frozen Yogurt',
+          calories: 159,
+        },
+        {
+          name: 'Ice cream sandwich',
+          calories: 237,
+        },
+        {
+          name: 'Eclair',
+          calories: 262,
+        },
+      ],
     };
   },
-  methods: {
-    leafActive() {
-      if (window.innerWidth < 768) {
-        this.leafShow = false;
-      } else {
-        this.leafShow = true;
-      }
-    }
+
+  created () {
+    var today = new Date();
+    var today2 = new Date(Date.now() - (1000 * 60 * 60 * 2));
+    var tomorrow = new Date(Date.now() + (1000 * 60 * 60 * 10));
+
+    var year = today.getFullYear();
+    var month = ('0' + (today.getMonth() + 1)).slice(-2);
+    var day = ('0' + today.getDate()).slice(-2);
+
+    var year2 = today2.getFullYear();
+    var month2 = ('0' + (today2.getMonth() + 1)).slice(-2);
+    var day2 = ('0' + today2.getDate()).slice(-2);
+
+    var tomorrow_month = ('0' + (tomorrow.getMonth() + 1)).slice(-2);
+    var tomorrow_day = ('0' + tomorrow.getDate()).slice(-2);
+
+    var dateString = year + '-' + month  + '-' + day;
+    var dateString2 = year2 + '-' + month2  + '-' + day2;
+    var tomorrow_dateString = year + '-' + tomorrow_month  + '-' + tomorrow_day;
+
+    var hours2 = ('0' + today2.getHours()).slice(-2);  
+    var minutes2 = ('0' + today2.getMinutes()).slice(-2);
+    var seconds2 = ('0' + today2.getSeconds()).slice(-2);
+
+    var hours = ('0' + today.getHours()).slice(-2);  
+    var minutes = ('0' + today.getMinutes()).slice(-2);
+    var seconds = ('0' + today.getSeconds()).slice(-2);
+
+    var hours6 = ('0' + tomorrow.getHours()).slice(-2);
+    
+    var minutes00 = "00"
+    var seconds00 = "00"
+
+    var timeString = hours + ':' + minutes  + ':' + seconds;
+    var timeString00 = hours + ':' + minutes00  + ':' + seconds00;
+    var timeString200 = hours2 + ':' + minutes00  + ':' + seconds00;
+    var timeString600 = hours6 + ':' + minutes00  + ':' + seconds00;
+
+    this.highlightedHours = [ Number(hours) ]
+
+    this.chartStart = dateString2 + " " + timeString200
+    this.chartEnd = tomorrow_dateString + " " + timeString600
+
+    const usersPath = baseUrl + '/api/v1/users/'    
+    axios.get(usersPath)
+      .then((res) => {
+        var usersData = res.data["data"][0]
+        this.users = usersData
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+    const eventsPath = baseUrl + '/api/v1/events/'    
+    axios.get(eventsPath)
+      .then((res) => {
+        var eventsData = res.data["data"][0]
+        
+        for (let i = 0; i < eventsData.length; i++) {
+          var start_datetime = eventsData[i].event_start_date + " " + eventsData[i].event_start_time
+          var end_datetime = eventsData[i].event_end_date + " " + eventsData[i].event_end_time
+
+          if(this.chartStart <= start_datetime || this.chartEnd >= end_datetime || (this.chartStart <= end_datetime && this.chartEnd >= start_datetime)) {
+            for (let j = 0; j < this.events.length; j++) {
+              if(this.events[j].event_title == eventsData[i].event_title) {
+                var user_list = []
+                
+                for(let k = 0; k < eventsData[i].user_id.length; k++) {
+                  for(let l = 0; l < this.users.length; l++) {
+                    if(eventsData[i].user_id[k] == this.users[l].user_id) {
+                      user_list.push(this.users[l].name)
+                      break
+                    }
+                  }
+                }
+                this.events[j].bars.push({
+                  "event_id": eventsData[i].event_id, 
+                  "user_id": eventsData[i].user_id,
+                  "event_title": eventsData[i].event_title, 
+                  "event_type": eventsData[i].event_type, 
+                  "work_id": eventsData[i].work_id, 
+                  "tags": eventsData[i].tags, 
+                  "event_color": eventsData[i].event_color, 
+                  "start_time": start_datetime,
+                  "end_time": end_datetime,
+                  "label": user_list.join(),
+                  "ganttBarConfig": {
+                    "color": "white", 
+                    "backgroundColor": eventsData[i].event_color, 
+                    "opacity": 0.9, 
+                    "pushOnOverlap": false,
+                    "immobile": true
+                  }
+                })
+              }
+            }
+          }
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   },
+
+  methods: {
+    changeTimeline () {
+      var time = 0
+      if (this.type == 0) {
+        time = 6
+      } else if (this.type == 1) {
+        time = 12
+      } else if (this.type == 2) {
+        time = 24
+      } else if (this.type == 3) {
+        time = 48
+      }
+      var today = new Date();
+      var today2 = new Date(Date.now() - (1000 * 60 * 60 * 2));
+      var tomorrow = new Date(Date.now() + (1000 * 60 * 60 * time));
+
+      var year = today.getFullYear();
+
+      var year2 = today2.getFullYear();
+      var month2 = ('0' + (today2.getMonth() + 1)).slice(-2);
+      var day2 = ('0' + today2.getDate()).slice(-2);
+
+      var tomorrow_month = ('0' + (tomorrow.getMonth() + 1)).slice(-2);
+      var tomorrow_day = ('0' + tomorrow.getDate()).slice(-2);
+
+      var dateString2 = year2 + '-' + month2  + '-' + day2;
+      var tomorrow_dateString = year + '-' + tomorrow_month  + '-' + tomorrow_day;
+
+      var hours = ('0' + today.getHours()).slice(-2);  
+      var hours2 = ('0' + today2.getHours()).slice(-2);  
+      var hours6 = ('0' + tomorrow.getHours()).slice(-2);
+      
+      var minutes00 = "00"
+      var seconds00 = "00"
+
+      var timeString200 = hours2 + ':' + minutes00  + ':' + seconds00;
+      var timeString600 = hours6 + ':' + minutes00  + ':' + seconds00;
+
+      this.highlightedHours = [ Number(hours) ]
+
+      this.chartStart = dateString2 + " " + timeString200
+      this.chartEnd = tomorrow_dateString + " " + timeString600
+    },
+  },
+
   computed: {
     headerStyle() {
       return {
         backgroundImage: `url(${this.image})`
       };
     },
-    signupImage() {
-      return {
-        backgroundImage: `url(${this.signup})`
-      };
-    }
   },
-  mounted() {
-    this.leafActive();
-    window.addEventListener("resize", this.leafActive);
-  },
-  beforeDestroy() {
-    window.removeEventListener("resize", this.leafActive);
-  }
+  mounted() {},
+  beforeDestroy() {}
 };
 </script>
+
 <style lang="scss">
 .section-download {
   .md-button + .md-button {

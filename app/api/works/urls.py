@@ -39,7 +39,7 @@ async def delete_work_data(id: int):
 
 
 @router.put("/{id}")
-async def update_work(id: str, req: UpdateWorkModel = Body(...)):
+async def update_work(id: int, req: UpdateWorkModel = Body(...)):
     updated_work = await update_work_data(id, req.dict())
     return ResponseModel("work with ID: {} name update is successful".format(id),
                          "work name updated successfully") \

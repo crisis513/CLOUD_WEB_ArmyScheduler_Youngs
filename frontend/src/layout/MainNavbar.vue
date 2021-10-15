@@ -25,7 +25,7 @@
 
         <div class="md-collapse">
           <md-list>
-            <md-list-item href="/#/home">
+            <md-list-item href="/#/">
               <md-icon>home</md-icon>
               <p>홈</p>
             </md-list-item>
@@ -107,7 +107,6 @@ export default {
   computed: {
     showDownload() {
       const excludedRoutes = [
-        "home",
         "schedule",
         "manage-unit",
         "manage-work",
