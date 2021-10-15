@@ -21,6 +21,45 @@ class Users(object):
         self.total_work_time = total_work_time
         self.this_mon_work_time = this_mon_work_time
         self.prev_mon_work_time = prev_mon_work_time
+    
+    @classmethod
+    def from_dict(cls, dict_item):
+        return cls(
+            userid = dict_item['userid'],
+            name = dict_item['name'],
+            password = dict_item['password'],
+            en_date = dict_item['en_date'],
+            de_date = dict_item['de_date'],
+            now_class = dict_item['now_class'],
+            unit_company = dict_item['unit_company'],
+            unit_platoon = dict_item['unit_platoon'],
+            unit_squad = dict_item['unit_squad'],
+            position = dict_item['position'],
+            work_list = dict_item['work_list'],
+            vacation = dict_item['vacation'],
+            total_work_time = dict_item['total_work_time'],
+            this_mon_work_time = dict_item['this_mon_work_time'],
+            prev_mon_work_time = dict_item['prev_mon_work_time']
+        )
+    
+    def asdict(self):
+        return {
+            'userid': self.userid,
+            'name': self.name,
+            'password': self.password,
+            'en_date': self.en_date,
+            'de_date': self.de_date,
+            'now_class': self.now_class,
+            'unit_company': self.unit_company,
+            'unit_platoon': self.unit_platoon,
+            'unit_squad': self.unit_squad,
+            'position': self.position,
+            'work_list': self.work_list,
+            'vacation': self.vacation,
+            'total_work_time': self.total_work_time,
+            'this_mon_work_time': self.this_mon_work_time,
+            'prev_mon_work_time': self.prev_mon_work_time
+        }
 
 class WorkTime(object):
     def __init__(self, day_worktime, night_worktime, free_worktime):
@@ -443,9 +482,9 @@ def get_total_event_list():
 def get_total_user_list():
     client = MongoClient('mongodb://localhost:27017/') # for local test
     db = db_init(client)
-    users = db.Users.find()
+    user_list = db.Users.find()
     user_dict = {}
-    for u in users:
+    for u in user_list:
         user_dict[u['userid']] = {'day_worktime':0, 'night_worktime':0, 'free_worktime':0, 'fatigue':0, 'work':u['work_list'], 'work_day_list':[]}
     return user_dict
 
