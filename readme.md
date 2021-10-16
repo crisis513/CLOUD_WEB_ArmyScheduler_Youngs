@@ -4,7 +4,6 @@
 </p>
 
 <h1 align="center">Army Scheduler Documentation</h1>
-<h2 align="center">Team Youngs</h2>
 
 <p align="center">
     <img src="https://img.shields.io/badge/version-v1.0.0-orange" alt="version"/>
@@ -62,7 +61,7 @@ $ yarn start or npm run start
 샘플 에디터 [https://stackedit.io/app#](https://stackedit.io/app#)
  
 
-## 팀 정보 (Team Information)
+## Team Youngs
 <table width="900">
 <thead>
     <tr>
