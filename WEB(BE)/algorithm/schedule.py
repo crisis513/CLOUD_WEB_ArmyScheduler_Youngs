@@ -202,7 +202,7 @@ class Scheduler:
                         )
                         self.event_id_postfix += 1
                         self.new_event_list[work_id].append(event)
-    
+
     def set_event_list(self):
         self.result_event_list = []
         for work_id in self.new_event_list:
@@ -219,11 +219,14 @@ class Scheduler:
         client = MongoClient('mongodb://localhost:27017/') # for local test
         db = form.db_init(client)
         form.insert_many_events(db, self.result_event_list)
-    
+
     def update_user_worktime(self):
         client = MongoClient('mongodb://localhost:27017/') # for local test
         db = form.db_init(client)
         for user in self.total_user_list.values():
+            fatigue = user.prev_day_worktime + user.new_day_worktime + \
+                      (user.prev_night_worktime + user.new_night_worktime) * 2 + \
+                      (user.prev_free_worktime + user.new_free_worktime) * 3
             db.Users.update_one(
                 { 'user_id': user.user_id },
                 {
@@ -233,7 +236,8 @@ class Scheduler:
                         'prev_free_worktime': user.prev_free_worktime,
                         'new_day_worktime': user.new_day_worktime,
                         'new_night_worktime': user.new_night_worktime,
-                        'new_free_worktime': user.new_free_worktime
+                        'new_free_worktime': user.new_free_worktime,
+                        'fatigue': fatigue
                     }
                 }
             )

@@ -29,7 +29,7 @@ class Vacation(object):
         self.start_date = start_date
         self.end_date = end_date
         self.description = description
-    
+
     @classmethod
     def from_dict(cls, dict_item: Dict):
         return cls(
@@ -50,7 +50,7 @@ class WorkTime(object):
         self.day_worktime = day_worktime
         self.night_worktime = night_worktime
         self.free_worktime = free_worktime
-    
+
     @classmethod
     def from_dict(cls, dict_item: Dict):
         return cls(
@@ -161,7 +161,8 @@ class Users(object):
         prev_free_worktime: int,
         new_day_worktime: int,
         new_night_worktime: int,
-        new_free_worktime: int
+        new_free_worktime: int,
+        fatigue: int
     ):
         self.user_id = user_id
         self.email = email
@@ -188,7 +189,7 @@ class Users(object):
         self.new_day_worktime = new_day_worktime
         self.new_night_worktime = new_night_worktime
         self.new_free_worktime = new_free_worktime
-        self.fatigue: int = 0
+        self.fatigue = fatigue
         self.last_work_day: int = -1
 
     @classmethod
@@ -218,9 +219,10 @@ class Users(object):
             prev_free_worktime = dict_item['prev_free_worktime'],
             new_day_worktime = dict_item['new_day_worktime'],
             new_night_worktime = dict_item['new_night_worktime'],
-            new_free_worktime = dict_item['new_free_worktime']
+            new_free_worktime = dict_item['new_free_worktime'],
+            fatigue = dict_item['fatigue']
         )
-    
+
     def asdict(self):
         return {
             'user_id': self.user_id,
@@ -247,21 +249,22 @@ class Users(object):
             'prev_free_worktime': self.prev_free_worktime,
             'new_day_worktime': self.new_day_worktime,
             'new_night_worktime': self.new_night_worktime,
-            'new_free_worktime': self.new_free_worktime
+            'new_free_worktime': self.new_free_worktime,
+            'fatigue': self.fatigue
         }
 
 class Tags(object):
     def __init__(self, tag_title: str, tag_color: str):
         self.tag_title = tag_title
         self.tag_color = tag_color
-    
+
     @classmethod
     def from_dict(cls, dict_item: Dict):
         return cls(
             tag_title = dict_item['tag_title'],
             tag_color = dict_item['tag_color']
         )
-    
+
     def asdict(self):
         return {
             'tag_title': self.tag_title,
@@ -299,7 +302,7 @@ class Events(object):
         self.event_start_time = event_start_time
         self.event_end_date = event_end_date
         self.event_end_time = event_end_time
-    
+
     @classmethod
     def from_dict(cls, dict_item: Dict):
         return cls(

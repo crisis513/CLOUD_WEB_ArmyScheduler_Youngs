@@ -43,7 +43,6 @@ class Statistics:
                 event.event_end_time
             )
             year, month, _ = get_ymd(event.event_start_date.date_string)
-            _, _, day = get_ymd(event.event_end_date.date_string)
             event_end = datetime.datetime.strptime(
                 event.event_end_date.date_string + ' ' + event.event_end_time,
                 '%Y-%m-%d %H:%M'
