@@ -12,8 +12,10 @@ import Statistics from "./views/user/Statistics.vue";
 
 import Landing from "./views/Landing.vue";
 import Login from "./views/Login.vue";
+import Signup from "./views/Signup.vue";
 import Profile from "./views/Profile.vue";
 
+import NoUserNavbar from "./layout/NoUserNavbar.vue";
 import AdminMainNavbar from "./layout/AdminMainNavbar.vue";
 import MainNavbar from "./layout/MainNavbar.vue";
 import MainFooter from "./layout/MainFooter.vue";
@@ -97,7 +99,15 @@ export default new Router({
     {
       path: "/login",
       name: "login",
-      components: { default: Login, header: MainNavbar, footer: MainFooter },
+      components: { default: Login, header: NoUserNavbar, footer: MainFooter },
+      props: {
+        header: { colorOnScroll: 400 }
+      }
+    },
+    {
+      path: "/signup",
+      name: "signup",
+      components: { default: Signup, header: NoUserNavbar, footer: MainFooter },
       props: {
         header: { colorOnScroll: 400 }
       }

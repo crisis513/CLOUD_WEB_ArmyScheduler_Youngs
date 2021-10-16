@@ -7,7 +7,7 @@ import MaterialKit from "./plugins/material-kit";
 import vuetify from "./plugins/vuetify";
 
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = 'http://localhost:5000/';  // the FastAPI backend
+axios.defaults.BASE_URL = 'http://localhost:5000/';  // the FastAPI backend
 
 Vue.config.productionTip = false;
 

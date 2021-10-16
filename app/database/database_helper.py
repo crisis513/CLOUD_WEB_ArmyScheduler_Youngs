@@ -41,3 +41,10 @@ def event_helper(event) -> dict:
         "event_end_date": event['event_end_date'],
         "event_end_time": event['event_end_time'],
     }
+
+def admin_helper(admin) -> dict:
+    return {
+        "id": str(admin['_id']),
+        "fullname": admin['fullname'],
+        "email": admin['email'],
+    }

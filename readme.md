@@ -1,4 +1,7 @@
-# Army Scheduler
+![Logo](frontend/src/assets/img/armyscheduler_logo.png)
+
+<h1 align="center">Youngs team, ArmyScheduler Documentation</h1>
+
 <p align="center">
     <img src="https://img.shields.io/badge/version-v1.0.0-orange" alt="version"/>
     <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT"></a>
@@ -6,13 +9,9 @@
 </p>
 <br/>
 
-![Logo](frontend/src/assets/img/armyscheduler_logo.png)
-
-
 ## 프로잭트 소개
 - 대한민국에 존재하는 대부분의 군부대에서는 미리 작성된 근무표를 통해 정해진 시간에 각자의 근무지에서 일을 합니다. 하지만 작성된 근무표가 얼마나 공정한지, 자신이 얼마나 근무를 서고 있는지, 개인정비시간 및 취침시간을 얼마나 침해받는지를 확인할 수 있는 시스템이 존재하지 않습니다. 그리고 용사들이 휴가를 나가거나 훈련 등 부대 행사가 계획될 때마다 근무표는 계속 수정되기 마련이며 순번도 계속 꼬이게 됩니다. 
 - Army Scheduler 웹 서비스에서 공정한 근무표를 도출함으로써 모든 인원들이 최대한의 휴식 여건을 보장받고, 과중한 업무 부담을 가지는 용사가 생기지 않도록 공정한 근무표를 자동으로 작성해주는 웹 서비스를 개발하고자 합니다.
-
 
 ## 기능 설명
  - 개발 중

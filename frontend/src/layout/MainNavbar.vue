@@ -105,9 +105,6 @@ export default {
         "index",
         "schedule",
         "statistics",
-        "login",
-        "landing",
-        "profile"
       ];
       return excludedRoutes.every(r => r !== this.$route.name);
     }

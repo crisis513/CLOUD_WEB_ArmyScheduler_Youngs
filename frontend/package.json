@@ -14,9 +14,11 @@
   "dependencies": {
     "axios": "^0.22.0",
     "core-js": "3.5.0",
+    "es6-promise": "^4.2.8",
     "mdbvue": "^6.7.3",
     "moment": "^2.29.1",
     "nouislider": "14.1.0",
+    "store": "^2.0.12",
     "v-tooltip": "2.0.2",
     "vue": "2.6.10",
     "vue-carousel": "0.18.0",

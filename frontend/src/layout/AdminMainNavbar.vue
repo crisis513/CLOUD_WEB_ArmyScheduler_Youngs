@@ -111,9 +111,6 @@ export default {
         "admin-schedule",
         "admin-manage-unit",
         "admin-manage-work",
-        "login",
-        "landing",
-        "profile"
       ];
       return excludedRoutes.every(r => r !== this.$route.name);
     }
