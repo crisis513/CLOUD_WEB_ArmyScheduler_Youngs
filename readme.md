@@ -1,6 +1,6 @@
 
 <p align="center">
-    <img src="frontend/src/assets/img/armyscheduler_logo.png" alt="logo" width="600" height="185"/>
+    <img src="WEB(FE)/src/assets/img/armyscheduler_logo.png" alt="logo" width="600" height="185"/>
 </p>
 
 <h1 align="center">Army Scheduler Documentation</h1>
@@ -31,27 +31,31 @@ Army Scheduler 웹 서비스는 근무표를 수정하느라 지친 간부와 �
 - 개인 근무 통계 확인 (to-do)
 
 ## 컴퓨터 구성 / 필수 조건 안내 (Prerequisites)
- - 권장: Google Chrome 버젼 77 이상
+ - 권장: Google Chrome 버전 77 이상
  - 
 
 ## 기술 스택 (Technique Used) 
 
-###  **Infra**
+### **Infra**
+<img alt="Docker" src ="https://img.shields.io/badge/docker-2496ED.svg?&style=for-the-badge&logo=docker&logoColor=white"/>
 
-|<a href = "https://www.docker.com/"><img src = "./doc/images/stack_icons/docker.png" height=70px></a>|
-|:--:|
-|Docker|
-### Server(back-end)
- - Python
- - Docker
- - MongoDB
- - FastAPI
- 
-### Front-end
- - Javascript
- - SCSS
- - Vue.js
- - 기타 사용한 라이브러리
+### **Server**
+<img alt="Python" src ="https://img.shields.io/badge/python-3776AB.svg?&style=for-the-badge&logo=python&logoColor=white"/>
+<img alt="FastAPI" src ="https://img.shields.io/badge/fastapi-009688.svg?&style=for-the-badge&logo=fastapi&logoColor=white"/>
+
+### **Front-end**
+<img alt="HTML5" src ="https://img.shields.io/badge/html5-E34F26.svg?&style=for-the-badge&logo=html5&logoColor=white"/>
+<img alt="JavaScript" src ="https://img.shields.io/badge/javascript-F7DF1E.svg?&style=for-the-badge&logo=javascript&logoColor=white"/>
+<img alt="CSS3" src ="https://img.shields.io/badge/css3-1572B6.svg?&style=for-the-badge&logo=css3&logoColor=white"/>
+<img alt="Vue.js" src ="https://img.shields.io/badge/vue.js-4FC08D.svg?&style=for-the-badge&logo=vue.js&logoColor=white"/>
+<img alt="Vuetify" src ="https://img.shields.io/badge/vuetify-1867C0.svg?&style=for-the-badge&logo=vuetify&logoColor=white"/>
+<img alt="Babel" src ="https://img.shields.io/badge/babel-F9DC3E.svg?&style=for-the-badge&logo=babel&logoColor=white"/>
+<img alt="ESLint" src ="https://img.shields.io/badge/eslint-4B32C3.svg?&style=for-the-badge&logo=eslint&logoColor=white"/>
+<img alt="JSON Web Tokens" src ="https://img.shields.io/badge/jwt-000000.svg?&style=for-the-badge&logo=jsonwebtokens&logoColor=white"/>
+<img alt="Jinja" src ="https://img.shields.io/badge/jinja-B41717.svg?&style=for-the-badge&logo=jinja&logoColor=white"/>
+
+### **Database**
+<img alt="MongoDB" src ="https://img.shields.io/badge/mongodb-47A248.svg?&style=for-the-badge&logo=mongodb&logoColor=white"/>
 
 ## 설치 안내 (Installation Process)
 ```bash
@@ -60,21 +64,58 @@ $ yarn or npm install
 $ yarn start or npm run start
 ```
 
-
 ## 프로젝트 사용법 (Getting Started)
 **마크다운 문법을 이용하여 자유롭게 기재**
-
-구글 검색 - 마크다운 문법
-[https://post.naver.com/viewer/postView.nhn?volumeNo=24627214&memberNo=42458017](https://post.naver.com/viewer/postView.nhn?volumeNo=24627214&memberNo=42458017)
 
 편한 마크다운 에디터를 찾아서 사용
 샘플 에디터 [https://stackedit.io/app#](https://stackedit.io/app#)
  
 
 ## 팀 정보 (Team Information)
-- Chang-rim Lee (lcr7324@gmail.com), Github ID: L1638
-- Han-gi Son (crisis51526@gmail.com), Github ID: crisis513
+<table width="900">
+<thead>
+    <tr>
+        <th width="100" align="center">Profile</th>
+        <th width="100" align="center">Name</th>
+        <th width="250" align="center">Role</th>
+        <th width="150" align="center">Github</th>
+        <th width="300" align="center">E-mail</th>
+    </tr> 
+</thead>
 
+<tbody>
+    <tr>
+        <td width="100" align="center"><img src="/image/PROFILE1.png" width="60" height="60"></td>
+        <td width="100" align="center">이창림</td>
+        <td width="250">Backend Developer</td>
+        <td width="150" align="center">	
+	        <a href="https://github.com/L1638">
+	            <img src="https://img.shields.io/badge/L1638-655ced?style=social&logo=github"/>
+	        </a>
+        </td>
+        <td width="300" align="center">
+            <a href="mailto:lcr7324@gmail.com">
+                <img src="https://img.shields.io/static/v1?label=&message=lcr7324@gmail.com&color=lightblue&style=flat-square&logo=gmail">
+            </a>
+        </td>
+    </tr>
+    <tr>
+        <td width="100" align="center"><img src="/image/PROFILE1.png" width="60" height="60"></td>
+        <td width="100" align="center">손한기</td>
+        <td width="250">Frontend Developer</td>
+        <td width="150" align="center">	
+	        <a href="https://github.com/crisis513">
+	            <img src="https://img.shields.io/badge/crisis513-655ced?style=social&logo=github"/>
+	        </a>
+        </td>
+        <td width="300" align="center">
+            <a href="mailto:crisis51526@gmail.com">
+                <img src="https://img.shields.io/static/v1?label=&message=crisis51526@gmail.com&color=lightblue&style=flat-square&logo=gmail">
+            </a>
+        </td>
+    </tr>
+</tbody>
+</table>
 
 ## 저작권 및 사용권 정보 (Copyleft / End User License)
  * [MIT](https://github.com/osamhack2021/CLOUD_WEB_ArmyScheduler_Youngs/blob/master/license.md)
