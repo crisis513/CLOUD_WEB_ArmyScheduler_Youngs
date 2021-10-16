@@ -23,3 +23,8 @@ uvicorn==0.13.3
 uvloop==0.14.0
 motor==2.5.1
 python-decouple==3.5
+
+PyJWT
+bcrypt
+pydantic[email]
+passlib

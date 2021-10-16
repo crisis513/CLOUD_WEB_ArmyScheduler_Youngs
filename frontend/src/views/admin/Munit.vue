@@ -310,7 +310,7 @@
 
 <script>
   import axios from 'axios';
-  const baseUrl = 'https://osamhack2021-cloud-web-armyscheduler-youngs-xr4vx9w4fvg7p-3000.githubpreview.dev'
+  const BASE_URL = 'https://osamhack2021-cloud-web-armyscheduler-youngs-xr4vx9w4fvg7p-3000.githubpreview.dev'
 
   export default {
     data: () => ({
@@ -348,7 +348,7 @@
     }),
 
     created () {
-      const usersPath = baseUrl + '/api/v1/users/';     
+      const usersPath = BASE_URL + '/api/v1/users/';     
       axios.get(usersPath)
         .then((res) => {
           let usersData = res.data["data"][0];
@@ -358,7 +358,7 @@
           console.error(error);
         });
       
-      const worksPath = baseUrl + '/api/v1/works/'
+      const worksPath = BASE_URL + '/api/v1/works/'
       axios.get(worksPath)
         .then((res) => {
           let worksData = res.data["data"][0];
@@ -399,7 +399,7 @@
         }
       },
       saveForm: function () {
-        const usersPath = baseUrl + '/api/v1/users/'
+        const usersPath = BASE_URL + '/api/v1/users/'
         axios.put(usersPath + this.user_id, {
             "name": this.name, 
             "user_id": this.user_id, 

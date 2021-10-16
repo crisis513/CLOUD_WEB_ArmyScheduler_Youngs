@@ -271,7 +271,7 @@
 
 <script>
   import axios from 'axios';
-  const baseUrl = 'https://osamhack2021-cloud-web-armyscheduler-youngs-xr4vx9w4fvg7p-3000.githubpreview.dev'
+  const BASE_URL = 'https://osamhack2021-cloud-web-armyscheduler-youngs-xr4vx9w4fvg7p-3000.githubpreview.dev'
 
   export default {
     data: () => ({
@@ -290,7 +290,7 @@
     }),
 
     created () {      
-      const worksPath = baseUrl + '/api/v1/works/'
+      const worksPath = BASE_URL + '/api/v1/works/'
       axios.get(worksPath)
         .then((res) => {
           let worksData = res.data["data"][0];
@@ -314,7 +314,7 @@
         this.work = workForm
       },
       saveForm: function (work) {
-        const worksPath = baseUrl + '/api/v1/works/'
+        const worksPath = BASE_URL + '/api/v1/works/'
         axios.put(worksPath + work.work_id, work)
           .then((res) => {
             console.log(res.data)
@@ -341,7 +341,7 @@
         }
         this.work = workForm
 
-        const worksPath = baseUrl + '/api/v1/works/'
+        const worksPath = BASE_URL + '/api/v1/works/'
         axios.post(worksPath, workForm)
           .then((res) => {
             console.log(res.data)
@@ -355,7 +355,7 @@
         location.reload()
       },
       deleteWork (work_id) {
-        const worksPath = baseUrl + '/api/v1/works/'
+        const worksPath = BASE_URL + '/api/v1/works/'
         console.log(work_id)
         axios.delete(worksPath + String(work_id), work_id)
           .then((res) => {

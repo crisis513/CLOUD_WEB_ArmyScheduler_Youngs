@@ -108,7 +108,7 @@
 import { GGanttChart, GGanttRow } from "vue-ganttastic";
 import { mdbBarChart, mdbContainer } from "mdbvue";
 import axios from 'axios';
-const baseUrl = 'https://osamhack2021-cloud-web-armyscheduler-youngs-xr4vx9w4fvg7p-3000.githubpreview.dev'
+const BASE_URL = 'https://osamhack2021-cloud-web-armyscheduler-youngs-xr4vx9w4fvg7p-3000.githubpreview.dev'
 
 export default {
   components: {
@@ -301,7 +301,7 @@ export default {
     this.chartStart = dateString2 + " " + timeString200
     this.chartEnd = tomorrow_dateString + " " + timeString600
 
-    const usersPath = baseUrl + '/api/v1/users/'    
+    const usersPath = BASE_URL + '/api/v1/users/'    
     axios.get(usersPath)
       .then((res) => {
         var usersData = res.data["data"][0]
@@ -311,7 +311,7 @@ export default {
         console.error(error);
       });
 
-    const eventsPath = baseUrl + '/api/v1/events/'    
+    const eventsPath = BASE_URL + '/api/v1/events/'    
     axios.get(eventsPath)
       .then((res) => {
         var eventsData = res.data["data"][0]

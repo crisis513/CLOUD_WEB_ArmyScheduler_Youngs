@@ -29,24 +29,30 @@
               >
                 <i class="fab fa-google-plus-g"></i>
               </md-button>
-              <p slot="description" class="description">Or Be Classical</p>
-              <md-field class="md-form-group" slot="inputs">
-                <md-icon>face</md-icon>
-                <label>First Name...</label>
-                <md-input v-model="firstname"></md-input>
-              </md-field>
               <md-field class="md-form-group" slot="inputs">
                 <md-icon>email</md-icon>
-                <label>Email...</label>
+                <label>이메일</label>
                 <md-input v-model="email" type="email"></md-input>
               </md-field>
               <md-field class="md-form-group" slot="inputs">
                 <md-icon>lock_outline</md-icon>
-                <label>Password...</label>
-                <md-input v-model="password"></md-input>
+                <label>비밀번호</label>
+                <md-input v-model="password" type="password"></md-input>
               </md-field>
-              <md-button slot="footer" class="md-simple md-success md-lg">
-                Get Started
+              <md-button 
+                slot="footer" 
+                class="md-simple md-success md-lg"
+                @click="$router.push('signup')"
+              >
+                회원가입
+              </md-button>
+              <md-button 
+                slot="footer" 
+                color="primary"
+                class="md-simple md-primary md-lg"
+                @click="requestLogin()"
+              >
+                로그인
               </md-button>
             </login-card>
           </div>
@@ -57,34 +63,52 @@
 </template>
 
 <script>
-import { LoginCard } from "@/components";
+  import { LoginCard } from "@/components";
+  import axios from 'axios';
+  const BASE_URL = 'https://osamhack2021-cloud-web-armyscheduler-youngs-xr4vx9w4fvg7p-3000.githubpreview.dev'
 
-export default {
-  components: {
-    LoginCard
-  },
-  bodyClass: "login-page",
-  data() {
-    return {
-      firstname: null,
+  export default {
+    components: {
+      LoginCard
+    },
+    bodyClass: "login-page",
+    data: () => ({
+      fullname: null,
       email: null,
       password: null
-    };
-  },
-  props: {
-    header: {
-      type: String,
-      default: require("@/assets/img/profile_city.jpg")
-    }
-  },
-  computed: {
-    headerStyle() {
-      return {
-        backgroundImage: `url(${this.header})`
-      };
-    }
-  }
-};
-</script>
+    }),
 
-<style lang="css"></style>
+    props: {
+      header: {
+        type: String,
+        default: require("@/assets/img/profile_city.jpg")
+      }
+    },
+    computed: {
+      headerStyle() {
+        return {
+          backgroundImage: `url(${this.header})`
+        };
+      }
+    },
+
+    methods: {
+      requestLogin () {
+        const loginPath = BASE_URL + '/jwt/admin/login'
+        axios.post(loginPath, {
+            "username": this.email, 
+            "password": this.password
+          })
+        .then((res) => {
+          console.log(res)
+          if(res.data["access_token"] !== null) {
+            this.$router.push('admin')
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      }
+    }
+  };
+</script>

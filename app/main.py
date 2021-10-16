@@ -1,23 +1,27 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Depends
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+
+from auth.jwt_bearer import JWTBearer
 
 import os
 from dotenv import load_dotenv
 load_dotenv() 
 
-import api.sample.urls as service_1
 import api.users.urls as users
 import api.works.urls as works
 import api.events.urls as events
+import api.admin as admin
 
 app = FastAPI()
 
-app.include_router(service_1.router, prefix="/api/v1/service_1")
+token_listener = JWTBearer()
+
 app.include_router(users.router, prefix="/api/v1/users")
 app.include_router(works.router, prefix="/api/v1/works")
 app.include_router(events.router, prefix="/api/v1/events")
+app.include_router(admin.router, prefix="/jwt/admin")
 
 # Mounting default Vue files after running npm run build 
 app.mount("/dist", StaticFiles(directory="dist/"), name="dist")

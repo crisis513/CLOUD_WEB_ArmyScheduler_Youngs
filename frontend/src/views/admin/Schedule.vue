@@ -625,7 +625,7 @@
 
 <script>
   import axios from 'axios';
-  const baseUrl = 'https://osamhack2021-cloud-web-armyscheduler-youngs-xr4vx9w4fvg7p-3000.githubpreview.dev'
+  const BASE_URL = 'https://osamhack2021-cloud-web-armyscheduler-youngs-xr4vx9w4fvg7p-3000.githubpreview.dev'
 
   export default {
     data: () => ({
@@ -678,7 +678,7 @@
     }),
 
     created () {
-      const eventsPath = baseUrl + '/api/v1/events/'    
+      const eventsPath = BASE_URL + '/api/v1/events/'    
       axios.get(eventsPath)
         .then((res) => {
           let eventsData = res.data["data"][0]
@@ -780,7 +780,7 @@
       },
       addSchedule () {
         this.addEvent.event_id = this.events.length + 1
-        const eventsPath = baseUrl + '/api/v1/events/'
+        const eventsPath = BASE_URL + '/api/v1/events/'
         axios.post(eventsPath, this.addEvent)
           .then((res) => {
             console.log(res.data)
@@ -804,7 +804,7 @@
         }
       },
       editCalendarComplete (event) {
-        const eventsPath = baseUrl + '/api/v1/events/'
+        const eventsPath = BASE_URL + '/api/v1/events/'
         axios.put(eventsPath + event.event_id, {
           "event_id": event.event_id,
           "user_id": event.user_id,
@@ -826,7 +826,7 @@
         location.reload()
       },
       deleteCalendar (event_id) {
-        const eventsPath = baseUrl + '/api/v1/events/'
+        const eventsPath = BASE_URL + '/api/v1/events/'
         axios.delete(eventsPath + String(event_id), event_id)
           .then((res) => {
             console.log(res.data)
