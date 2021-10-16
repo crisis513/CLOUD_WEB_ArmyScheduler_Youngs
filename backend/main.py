@@ -138,6 +138,8 @@ class Users(object):
     def __init__(
         self,
         user_id: str,
+        email: str,
+        is_admin: bool,
         name: str,
         password: str,
         birth_date: str,
@@ -162,6 +164,8 @@ class Users(object):
         new_free_worktime: int
     ):
         self.user_id = user_id
+        self.email = email
+        self.is_admin = is_admin
         self.name = name
         self.password = password
         self.birth_date = birth_date
@@ -191,6 +195,8 @@ class Users(object):
     def from_dict(cls, dict_item):
         return cls(
             user_id = dict_item['user_id'],
+            email = dict_item['email'],
+            is_admin = dict_item['is_admin'],
             name = dict_item['name'],
             password = dict_item['password'],
             birth_date = dict_item['birth_date'],
@@ -218,6 +224,8 @@ class Users(object):
     def asdict(self):
         return {
             'user_id': self.user_id,
+            'email': self.email,
+            'is_admin': self.is_admin,
             'name': self.name,
             'password': self.password,
             'birth_date': self.birth_date,
@@ -531,6 +539,8 @@ def create_custom_db():
         # user_id = 'uid' + str(f'{i:04d}')
         user_id = 'u'+str(i)
         name = name_list[i]
+        email = user_id + '@armyscheduler.com'
+        is_admin = False
         password = 'pwd' + str(f'{i:04d}')
         birth_date = int_to_date(random.randint(date_to_int('1992-01-01'), date_to_int('2001-12-31')))
         en_date_int = random.randint(date_to_int('2020-05-01'), date_to_int('2021-10-01'))
@@ -559,6 +569,8 @@ def create_custom_db():
             work = 3
         user = Users(
             user_id = user_id,
+            email = email,
+            is_admin = is_admin,
             name = name,
             password = password,
             birth_date = birth_date,
