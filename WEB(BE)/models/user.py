@@ -7,6 +7,8 @@ class UserModel(BaseModel):
     name: str = Field(...)
     user_id: str = Field(...)
     password: str = Field(...)
+    email: str = Field(...)
+    is_admin: bool = Field(...)
     en_date: str = Field(...)
     de_date: str = Field(...)
     birth_date: str = Field(...)
@@ -17,9 +19,16 @@ class UserModel(BaseModel):
     position: str = Field(...)
     work_list: list = Field(...)
     vacation: list = Field(...)
-    total_work_time: dict = Field(...)
-    this_mon_work_time: dict = Field(...)
-    prev_mon_work_time: dict = Field(...)
+    total_worked_time: dict = Field(...)
+    this_month_worked_time: dict = Field(...)
+    this_month_work_time_left: dict = Field(...)
+    prev_month_worked_time: dict = Field(...)
+    prev_day_worktime: int = Field(...)
+    prev_night_worktime: int = Field(...)
+    prev_free_worktime: int = Field(...)
+    new_day_worktime: int = Field(...)
+    new_night_worktime: int = Field(...)
+    new_free_worktime: int = Field(...)
 
     class Config:
         schema_extra = {
@@ -27,6 +36,8 @@ class UserModel(BaseModel):
                 "name": "홍길동",
                 "user_id": "gildong21",
                 "password": "gildongpasswd21",
+                "email": "gildong@test.com",
+                "is_admin": False,
                 "en_date": "2020-11-09",
                 "de_date": "2022-05-08",
                 "birth_date": "1995-05-26",
@@ -81,9 +92,15 @@ class UpdateUserModel(BaseModel):
     position: Optional[str]
     work_list: Optional[list]
     vacation: Optional[list]
-    total_work_time: Optional[dict]
-    this_mon_work_time: Optional[dict]
-    prev_mon_work_time: Optional[dict]
+    this_month_worked_time: Optional[dict]
+    this_month_work_time_left: Optional[dict]
+    prev_month_worked_time: Optional[dict]
+    prev_day_worktime: Optional[int]
+    prev_night_worktime: Optional[int]
+    prev_free_worktime: Optional[int]
+    new_day_worktime: Optional[int]
+    new_night_worktime: Optional[int]
+    new_free_worktime: Optional[int]
 
     class Config:
         schema_extra = {
@@ -91,6 +108,8 @@ class UpdateUserModel(BaseModel):
                 "name": "홍길동",
                 "user_id": "gildong21",
                 "password": "gildongpasswd21",
+                "email": "gildong@test.com",
+                "is_admin": False,
                 "en_date": "2020-11-09",
                 "de_date": "2022-05-08",
                 "birth_date": "1995-05-26",

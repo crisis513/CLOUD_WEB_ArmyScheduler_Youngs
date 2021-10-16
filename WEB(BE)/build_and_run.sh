@@ -1,9 +1,9 @@
 #!/bin/bash
 
-cd ../frontend
+cd ../'WEB(FE)'
 npm run build --fix 
-rm -rf ../app/dist/
-mv dist/ ../app/
+rm -rf ../'WEB(BE)'/dist/
+mv dist/ ../'WEB(BE)'/
 
-cd ../app
+cd ../'WEB(BE)'
 venv/bin/uvicorn main:app --reload --host 0.0.0.0 --port 3000

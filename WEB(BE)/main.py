@@ -13,6 +13,7 @@ import api.users.urls as users
 import api.works.urls as works
 import api.events.urls as events
 import api.admin as admin
+import api.schedule.urls as schedule
 
 app = FastAPI()
 
@@ -22,6 +23,7 @@ app.include_router(users.router, prefix="/api/v1/users")
 app.include_router(works.router, prefix="/api/v1/works")
 app.include_router(events.router, prefix="/api/v1/events")
 app.include_router(admin.router, prefix="/jwt/admin")
+app.include_router(schedule.router, prefix="/api/v1/schedule")
 
 # Mounting default Vue files after running npm run build 
 app.mount("/dist", StaticFiles(directory="dist/"), name="dist")

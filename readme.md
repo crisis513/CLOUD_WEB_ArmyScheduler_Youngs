@@ -1,6 +1,6 @@
 ![Logo](frontend/src/assets/img/armyscheduler_logo.png)
 
-<h1 align="center">Youngs team, ArmyScheduler Documentation</h1>
+<h1 align="center">ArmyScheduler by Youngs team</h1>
 
 <p align="center">
     <img src="https://img.shields.io/badge/version-v1.0.0-orange" alt="version"/>

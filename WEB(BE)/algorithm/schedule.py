@@ -1,17 +1,17 @@
 from copy import deepcopy
 import datetime
 import json
-import main
+from algorithm import form
 from pymongo import MongoClient
 from typing import Dict, List, Final, Tuple
 
-def parse_time(date: main.Date, time: str) -> int:
+def parse_time(date: form.Date, time: str) -> int:
     d = date.date
     h, m = map(int, time.split(':'))
     return d*60*24 + h*60 + m
 
 # start_date의 start_time부터 end_date의 end_time까지 근무했을 때 주간 근무 시간 (분)
-def get_day_worktime(start_date: main.Date, start_time: str, end_date: main.Date, end_time: str) -> int:
+def get_day_worktime(start_date: form.Date, start_time: str, end_date: form.Date, end_time: str) -> int:
     t = parse_time(end_date, end_time) - parse_time(start_date, start_time)
     return t - get_night_worktime(start_date, start_time, end_date, end_time) - get_free_worktime(start_date, start_time, end_date, end_time)
 
@@ -38,7 +38,7 @@ def is_intersect(t1_start: int, t1_end: int, t2_start: int, t2_end: int) -> bool
         return True
 
 # start_date의 start_time부터 end_date의 end_time까지 근무했을 때 야간 근무 시간 (분)
-def get_night_worktime(start_date: main.Date, start_time: str, end_date: main.Date, end_time: str) -> int:
+def get_night_worktime(start_date: form.Date, start_time: str, end_date: form.Date, end_time: str) -> int:
     t1 = parse_time(start_date, start_time)
     t2 = parse_time(end_date, end_time)
     assert(end_date.date == start_date.date or end_date.date == start_date.date + 1)
@@ -60,7 +60,7 @@ def get_night_worktime(start_date: main.Date, start_time: str, end_date: main.Da
         return intersect_time(t1, t2, night1_start, night1_end) + intersect_time(t1, t2, night2_start, night2_end) + intersect_time(t1, t2, night3_start, night3_end)
 
 # start_date의 start_time부터 end_date의 end_time까지 근무했을 때 개인정비시간에 근무한 시간 (분)
-def get_free_worktime(start_date: main.Date, start_time: str, end_date: main.Date, end_time: str) -> int:
+def get_free_worktime(start_date: form.Date, start_time: str, end_date: form.Date, end_time: str) -> int:
     t1 = parse_time(start_date, start_time)
     t2 = parse_time(end_date, end_time)
     assert(end_date.date == start_date.date or end_date.date == start_date.date + 1)
@@ -79,7 +79,7 @@ def get_free_worktime(start_date: main.Date, start_time: str, end_date: main.Dat
     else:
         return intersect_time(t1, t2, free1_start, free1_end) + intersect_time(t1, t2, free2_start, free2_end)
 
-def get_worktime_and_fatigue(start_date: main.Date, start_time: str, end_date: main.Date, end_time: str) -> Tuple[int, int, int, int]:
+def get_worktime_and_fatigue(start_date: form.Date, start_time: str, end_date: form.Date, end_time: str) -> Tuple[int, int, int, int]:
     day_worktime = get_day_worktime(start_date, start_time, end_date, end_time)
     night_worktime = get_night_worktime(start_date, start_time, end_date, end_time)
     free_worktime = get_free_worktime(start_date, start_time, end_date, end_time)
@@ -112,14 +112,14 @@ class Scheduler:
         self.INF: Final[int] = 987654321987654321 # arbitrary large number
         # self.result_schedule_list: List = []
         self.best_schedule: List[int] = [] # idx: event_idx, value: user_id
-        self.best_worktime: Dict[str, main.WorkTime] = {} # key: user_id
+        self.best_worktime: Dict[str, form.WorkTime] = {} # key: user_id
         self.cur_schedule: List[int] = [] # idx: event_idx, value: user_id
 
-        self.date_list = main.get_date_list(self.start_date, self.end_date + 1)
-        self.total_work_list = main.get_total_work_list() # key: work_id
-        self.prev_event_list = main.get_event_list_within(self.consider_from_date, self.start_date)
-        self.new_event_list: Dict[int, List[main.Events]] = {} # key: work_id
-        self.total_user_list = main.get_total_user_list() # key: user_id
+        self.date_list = form.get_date_list(self.start_date, self.end_date + 1)
+        self.total_work_list = form.get_total_work_list() # key: work_id
+        self.prev_event_list = form.get_event_list_within(self.consider_from_date, self.start_date)
+        self.new_event_list: Dict[int, List[form.Events]] = {} # key: work_id
+        self.total_user_list = form.get_total_user_list() # key: user_id
         self.num_events: Dict[int, int] = {} # key: work_id, value: number of events
         self.best_unfairness: int = self.INF
         self.stop_backtracking: bool = False
@@ -139,7 +139,7 @@ class Scheduler:
         self.event_id_postfix = 0
 
     def init_user_list(self):
-        self.user_list: Dict[int, Dict[str, main.Users]] = {}
+        self.user_list: Dict[int, Dict[str, form.Users]] = {}
         for work_id in self.total_work_list:
             self.user_list[work_id] = {}
             for uid, user in self.total_user_list.items():
@@ -149,7 +149,7 @@ class Scheduler:
     def get_prev_fatigue(self):
         for event in self.prev_event_list:
             assert(self.consider_from_date <= event.event_start_date.date < self.start_date)
-            if event.event_type != main.EventType.Work:
+            if event.event_type != form.EventType.Work:
                 continue
             work_id = event.work_id
             day_worktime, night_worktime, free_worktime, fatigue = get_worktime_and_fatigue(
@@ -180,18 +180,18 @@ class Scheduler:
                         end_date = date
                     day_worktime, night_worktime, free_worktime, _ = get_worktime_and_fatigue(date, start_time, end_date, end_time)
                     tags = []
-                    tags.append(main.Tags(self.total_work_list[work_id].work_name, '#00FF00'))
+                    tags.append(form.Tags(self.total_work_list[work_id].work_name, '#00FF00'))
                     if day_worktime > 0:
-                        tags.append(main.Tags('주간근무', '#FFA500'))
+                        tags.append(form.Tags('주간근무', '#FFA500'))
                     if night_worktime > 0:
-                        tags.append(main.Tags('야간근무', '#FFA500'))
+                        tags.append(form.Tags('야간근무', '#FFA500'))
                     if free_worktime > 0:
-                        tags.append(main.Tags('개인정비시간근무', '#FFA500'))
-                    tags.append(main.Tags(f'{work_setting.num_workers}명', "#0000FF"))
+                        tags.append(form.Tags('개인정비시간근무', '#FFA500'))
+                    tags.append(form.Tags(f'{work_setting.num_workers}명', "#0000FF"))
                     # self.base_fatigue[work_id] += fatigue * work_setting['num_workers']
                     for _ in range(work_setting.num_workers):
                         event_id = self.event_id_prefix * self.max_events_per_schedule + self.event_id_postfix
-                        event = main.Events.from_scheduler(
+                        event = form.Events.from_scheduler(
                             event_id = event_id,
                             start_date = date,
                             end_date = end_date,
@@ -204,25 +204,25 @@ class Scheduler:
                         self.new_event_list[work_id].append(event)
     
     def set_event_list(self):
-        result_event_list = []
+        self.result_event_list = []
         for work_id in self.new_event_list:
             for e1 in self.new_event_list[work_id]:
                 exist = False
-                for idx, e2 in enumerate(result_event_list):
+                for idx, e2 in enumerate(self.result_event_list):
                     if e1.event_start_date.date == e2['event_start_date']['date'] and e1.event_start_time == e2['event_start_time']:
                         exist = True
                         break
                 if exist:
-                    result_event_list[idx]['user_id'].append(e1.user_id[0])
+                    self.result_event_list[idx]['user_id'].append(e1.user_id[0])
                 else:
-                    result_event_list.append(e1.asdict())
+                    self.result_event_list.append(e1.asdict())
         client = MongoClient('mongodb://localhost:27017/') # for local test
-        db = main.db_init(client)
-        main.insert_many_events(db, result_event_list)
+        db = form.db_init(client)
+        form.insert_many_events(db, self.result_event_list)
     
     def update_user_worktime(self):
         client = MongoClient('mongodb://localhost:27017/') # for local test
-        db = main.db_init(client)
+        db = form.db_init(client)
         for user in self.total_user_list.values():
             db.Users.update_one(
                 { 'user_id': user.user_id },
@@ -291,7 +291,7 @@ class Scheduler:
                 self.best_unfairness = self.unfairness
                 self.best_schedule = deepcopy(self.cur_schedule)
                 for user in self.user_list[work_id].values():
-                    self.best_worktime[user.user_id] = main.WorkTime(
+                    self.best_worktime[user.user_id] = form.WorkTime(
                         day_worktime = user.new_day_worktime,
                         night_worktime = user.new_night_worktime,
                         free_worktime = user.new_free_worktime
@@ -315,11 +315,11 @@ class Scheduler:
             # work_option1: 2일 연속 근무 여부
             # work_option2: 하루 쉬고 근무 여부 (e.g. 퐁당퐁당)
             # work_option3: 하루 2회 이상 근무 여부
-            if work.work_option1 == main.WorkOptionType.Never and user.last_work_day >= event_start_date.date - 1:
+            if work.work_option1 == form.WorkOptionType.Never and user.last_work_day >= event_start_date.date - 1:
                 continue
-            if work.work_option2 == main.WorkOptionType.Never and user.last_work_day >= event_start_date.date - 2:
+            if work.work_option2 == form.WorkOptionType.Never and user.last_work_day >= event_start_date.date - 2:
                 continue
-            if work.work_option3 == main.WorkOptionType.Never and user.last_work_day == event_start_date.date:
+            if work.work_option3 == form.WorkOptionType.Never and user.last_work_day == event_start_date.date:
                 continue
 
             # 휴가에 의해 근무 불가능한 경우 배제
@@ -340,11 +340,11 @@ class Scheduler:
             # 근무 옵션에 의해 선호되지 않는 근무의 경우 fatigue 추가
             # To-do: avoid hard-coded number?
             additional_fatigue = 0
-            if work.work_option1 == main.WorkOptionType.NotPreferred and user.last_work_day >= event_start_date.date - 1:
+            if work.work_option1 == form.WorkOptionType.NotPreferred and user.last_work_day >= event_start_date.date - 1:
                 additional_fatigue += 50
-            if work.work_option2 == main.WorkOptionType.NotPreferred and user.last_work_day >= event_start_date.date - 2:
+            if work.work_option2 == form.WorkOptionType.NotPreferred and user.last_work_day >= event_start_date.date - 2:
                 additional_fatigue += 50
-            if work.work_option3 == main.WorkOptionType.NotPreferred and user.last_work_day == event_start_date.date:
+            if work.work_option3 == form.WorkOptionType.NotPreferred and user.last_work_day == event_start_date.date:
                 additional_fatigue += 50
 
             self.cur_schedule.append(uid)

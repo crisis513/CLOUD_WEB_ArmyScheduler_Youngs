@@ -2,18 +2,18 @@ version: '3.3'
 
 services:
 
-  backend:
-    build: ./backend_test/
+  WEB(BE):
+    build: ./'WEB(BE)'/
     ports:
       - 5000:5000
     volumes:
-      - ./backend_test:/app
+      - ./'WEB(BE)':/app
     command: uvicorn src.main:app --reload --host 0.0.0.0 --port 5000
 
-  frontend:
-    build: ./frontend
+  WEB(FE):
+    build: ./'WEB(FE)'
     volumes:
-      - './frontend:/app'
+      - './'WEB(FE)':/app'
       - '/app/node_modules'
     ports:
       - 8080:8080

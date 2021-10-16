@@ -11,9 +11,9 @@ class EventModel(BaseModel):
     work_id: int = Field(...)
     tags: list = Field(...)
     event_color: str = Field(...)
-    event_start_date: str = Field(...)
+    event_start_date: dict = Field(...)
     event_start_time: str = Field(...)
-    event_end_date: str = Field(...)
+    event_end_date: dict = Field(...)
     event_end_time: str = Field(...)
 
     class Config:
@@ -38,9 +38,17 @@ class EventModel(BaseModel):
                     "tag_color": "blue",        # blue
                 }],
                 "event_color": "deep-purple",
-                "event_start_date" : "2021-10-13",
+                "event_start_date" : {
+                    "date": 1633046400000,
+                    "date_string": "2021-10-01" ,
+                    "isHoliday": True
+                },
                 "event_start_time" : "22:00",
-                "event_end_date" : "2021-10-13",
+                "event_end_date" : {
+                    "date": 1633058200000,
+                    "date_string": "2021-10-12",
+                    "isHoliday": False
+                },
                 "event_end_time" : "24:00"
             }
         }
@@ -54,9 +62,9 @@ class UpdateEventModel(BaseModel):
     work_id: Optional[int]
     tags: Optional[list]
     event_color: Optional[str]
-    event_start_date: Optional[str]
+    event_start_date: Optional[dict]
     event_start_time: Optional[str]
-    event_end_date: Optional[str]
+    event_end_date: Optional[dict]
     event_end_time: Optional[str]
 
     class Config:
@@ -81,9 +89,17 @@ class UpdateEventModel(BaseModel):
                     "tag_color": "blue",        # blue
                 }],
                 "event_color": "deep-purple",
-                "event_start_date" : "2021-10-13",
+                "event_start_date" : {
+                    "date": 1633046400000,
+                    "date_string": "2021-10-01" ,
+                    "isHoliday": True
+                },
                 "event_start_time" : "22:00",
-                "event_end_date" : "2021-10-13",
+                "event_end_date" : {
+                    "date": 1633058200000,
+                    "date_string": "2021-10-12",
+                    "isHoliday": False
+                },
                 "event_end_time" : "24:00"
             }
         }

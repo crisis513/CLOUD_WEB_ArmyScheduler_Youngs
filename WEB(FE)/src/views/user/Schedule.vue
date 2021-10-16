@@ -113,7 +113,7 @@
                   <v-btn icon @click="editCalendar()">
                     <v-icon>mdi-pencil</v-icon>
                   </v-btn>
-                  <v-btn icon @click="result_alert = true">
+                  <v-btn icon @click="result_alert = true" v-if="isWork">
                     <v-icon>mdi-minus-circle</v-icon>
                   </v-btn>
                   <md-dialog-confirm
@@ -383,22 +383,6 @@
                   <v-row align="center">
                     <v-col cols="3">
                       <v-subheader>
-                        제목색깔
-                      </v-subheader>
-                    </v-col>
-                    <v-col cols="6">
-                      <v-text-field
-                        v-model="addEvent.event_color"
-                        placeholder="#RRGGBB"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-container>
-
-                <v-container fluid>
-                  <v-row align="center">
-                    <v-col cols="3">
-                      <v-subheader>
                         일시
                       </v-subheader>
                     </v-col>
@@ -410,7 +394,7 @@
                             label="시작일자"
                             placeholder="2021-01-01"
                             prepend-icon="mdi-calendar"
-                            v-model="addEvent.event_start_date"
+                            v-model="addEvent.event_start_date.date_string"
                           ></v-text-field>
                         </td>
                         <td>
@@ -428,7 +412,7 @@
                             label="종료일자"
                             placeholder="2021-01-01"
                             prepend-icon="mdi-calendar"
-                            v-model="addEvent.event_end_date"
+                            v-model="addEvent.event_end_date.date_string"
                           ></v-text-field>
                         </td>
                         <td>
@@ -523,21 +507,30 @@
       selectedEvent: {},
       selectedElement: null,
       selectedOpen: false,
+      user_id: "u10",
       events: [],
       addEvent: {
         "event_id": null,
-        "user_id": -1,
+        "user_id": [],
         "event_title": null,
-        "event_type": 1,
+        "event_type": 2,
         "work_id": -1,
         "tags": [{
           "tag_title": null,
           "tag_color": null,
         }],
         "event_color": null,
-        "event_start_date": null,
+        "event_start_date": {
+          "date": 0,
+          "date_string": null,
+          "isHoliday": false
+        },
         "event_start_time": null,
-        "event_end_date": null,
+        "event_end_date": {
+          "date": 0,
+          "date_string": null,
+          "isHoliday": false
+        },
         "event_end_time": null
       },
 
@@ -551,17 +544,25 @@
       addScheduleDialog: false,
       loadingDialog: false,
       result_alert: false,
-      event_start_date: null,
+      event_start_date: {
+        "date": 0,
+        "date_string": null,
+        "isHoliday": false
+      },
       event_start_time: null,
-      event_end_date: null,
+      event_end_date: {
+        "date": 0,
+        "date_string": null,
+        "isHoliday": false
+      },
       event_end_time: null,
       counter: 1,
+      isWork: true,
     }),
 
     created () {
       const eventsPath = BASE_URL + '/api/v1/events/'    
-      let user_id = "10"
-      axios.get(eventsPath + user_id, user_id)
+      axios.get(eventsPath + this.user_id, this.user_id)
         .then((res) => {
           let eventsData = res.data["data"][0]
           let event_list = []
@@ -575,10 +576,10 @@
               "work_id": eventsData[i].work_id, 
               "tags": eventsData[i].tags, 
               "event_color": eventsData[i].event_color, 
-              "start": new Date(eventsData[i].event_start_date + "T" + eventsData[i].event_start_time), 
-              "end": new Date(eventsData[i].event_end_date + "T" + eventsData[i].event_end_time),
-              "str_start_date": eventsData[i].event_start_date,
-              "str_end_date": eventsData[i].event_end_date,
+              "start": new Date(eventsData[i].event_start_date.date_string + "T" + eventsData[i].event_start_time), 
+              "end": new Date(eventsData[i].event_end_date.date_string + "T" + eventsData[i].event_end_time),
+              "str_start_date": eventsData[i].event_start_date.date_string,
+              "str_end_date": eventsData[i].event_end_date.date_string,
               "str_start_time": eventsData[i].event_start_time,
               "str_end_time": eventsData[i].event_end_time,
               "timed": true 
@@ -630,6 +631,12 @@
           open()
         }
         nativeEvent.stopPropagation()
+
+        if(this.selectedEvent.event_type == 0) {
+          this.isWork = false
+        } else if(this.selectedEvent.event_type == 1) {
+          this.isWork = true
+        }
       },
 
       addTagButton () {
@@ -641,7 +648,11 @@
       },
       addSchedule () {
         this.addEvent.event_id = this.events.length + 1
+        this.addEvent.user_id.push(this.user_id)
+        this.addEvent.event_start_date.date = new Date(this.addEvent.event_start_date.date_string).getTime()
+        this.addEvent.event_end_date.date = new Date(this.addEvent.event_end_date.date_string).getTime()
         const eventsPath = BASE_URL + '/api/v1/events/'
+
         axios.post(eventsPath, this.addEvent)
           .then((res) => {
             console.log(res.data)
@@ -674,9 +685,17 @@
           "work_id": event.work_id,
           "tags": event.tags,
           "event_color": event.event_color,
-          "event_start_date": event.str_start_date,
+          "event_start_date": {
+            "date": new Date(event.str_start_date).getTime(),
+            "date_string": event.str_start_date,
+            "isHoliday": false
+          },
           "event_start_time": event.str_start_time,
-          "event_end_date": event.str_end_date,
+          "event_end_date": {
+            "date": new Date(event.str_end_date).getTime(),
+            "date_string": event.str_end_date,
+            "isHoliday": false
+          },
           "event_end_time": event.str_end_time
         })
         .then(res => {
@@ -684,7 +703,7 @@
         }).catch((ex) => {
           console.warn("Error: ", ex)
         })
-        location.reload()
+        //location.reload()
       },
       deleteCalendar (event_id) {
         const eventsPath = BASE_URL + '/api/v1/events/'
@@ -708,7 +727,6 @@
         this.counter--;
         this.addEvent["tags"].splice(idx, 1);
       },
-      
     },
   }
 </script>
