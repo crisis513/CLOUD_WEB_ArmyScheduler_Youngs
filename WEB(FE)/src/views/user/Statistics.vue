@@ -5,40 +5,206 @@
       <div class="title-center">
         <h2>통계</h2>
       </div>
-      <br>
-      <v-row class="fill-height">
-        <v-col>
-              
-        </v-col>
+      <v-row
+        justify="center"
+      >
+        <div class="left">
+          <h3>총 근무시간</h3>
+          <mdb-container>
+            <mdb-bar-chart
+              :data="barChartData"
+              :options="barChartOptions"
+              :width="400"
+              :height="400"
+            ></mdb-bar-chart>
+          </mdb-container>
+        </div>
+        <div class="center">
+        </div>
+        <div class="right">
+          <h3>기준별 근무시간</h3>
+          <mdb-container>
+            <mdb-bar-chart
+              :data="barChartData2"
+              :options="barChartOptions"
+              :width="700"
+              :height="400"
+            ></mdb-bar-chart>
+          </mdb-container>
+        </div>
       </v-row>
-      
-      <div class="title-center">
-        <v-row
-          align="center"
-          justify="center"
-        >
 
-        </v-row>
-      </div>
     </v-app>
   </v-app>
 </template>
 
 <script>
-  import axios from 'axios';
-  const BASE_URL = 'https://osamhack2021-cloud-web-armyscheduler-youngs-xr4vx9w4fvg7p-3000.githubpreview.dev'
+import { mdbBarChart, mdbContainer } from "mdbvue";
+import axios from 'axios';
+const BASE_URL = 'https://osamhack2021-cloud-web-armyscheduler-youngs-xr4vx9w4fvg7p-3000.githubpreview.dev'
 
-  export default {
-    data: () => ({
- 
-    }),
-
-    created () {
-  
+export default {
+  components: {
+    mdbBarChart,
+    mdbContainer
+  },
+  data: () => ({
+    user_id: "u18",
+    barChartData: {},
+    barChartData2: {},
+    barChartOptions: {
+      responsive: false,
+      maintainAspectRatio: false,
+      scales: {
+        xAxes: [
+          {
+            barPercentage: 0.8,
+            gridLines: {
+              display: true,
+              color: "rgba(0, 0, 0, 0.1)"
+            }
+          }
+        ],
+        yAxes: [
+          {
+            gridLines: {
+              display: true,
+              color: "rgba(0, 0, 0, 0.1)"
+            },
+            ticks: {
+              beginAtZero: true
+            }
+          }
+        ]
+      }
     },
+  }),
 
-    methods: {
-  
-    },
-  }
+  created () {
+    const userssPath = BASE_URL + '/api/v1/users/'    
+      axios.get(userssPath + this.user_id, this.user_id)
+        .then((res) => {
+          let eventsData = res.data["data"][0]
+          this.barChartData = {
+            labels: [
+              "총 근무시간",
+            ],
+            datasets: [
+              {
+                label: "개인정비근무",
+                data: [
+                  eventsData.total_worked_time.free_worktime/60,
+                ],
+                backgroundColor: [
+                  "rgba(255, 206, 86, 0.5)",
+                ],
+                borderColor: [
+                  "rgba(255, 206, 86, 1)",
+                ],
+                borderWidth: 1
+              },
+              {
+                label: "주간근무",
+                data: [
+                  eventsData.total_worked_time.day_worktime/60,
+                ],
+                backgroundColor: [
+                  "rgba(255, 99, 132, 0.5)",
+                ],
+                borderColor: [
+                  "rgba(255, 99, 132, 1)",
+                ],
+                borderWidth: 1
+              },
+              {
+                label: "야간근무",
+                data: [
+                  eventsData.total_worked_time.night_worktime/60,
+                ],
+                backgroundColor: [
+                  "rgba(54, 162, 235, 0.5)",
+                ],
+                borderColor: [
+                  "rgba(54, 162, 235, 1)",
+                ],
+                borderWidth: 1
+              },
+            ]
+          }
+          this.barChartData2 = {
+            labels: [
+              "저번달 총 근무시간",
+              "이번달 총 근무시간",
+              "이번달 남은 근무시간",
+            ],
+            datasets: [
+              {
+                label: "개인정비근무",
+                data: [
+                  eventsData.prev_month_worked_time.free_worktime/60,
+                  eventsData.this_month_worked_time.free_worktime/60,
+                  eventsData.this_month_work_time_left.free_worktime/60,
+                ],
+                backgroundColor: [
+                  "rgba(255, 206, 86, 0.5)",
+                  "rgba(255, 206, 86, 0.5)",
+                  "rgba(255, 206, 86, 0.5)",
+                ],
+                borderColor: [
+                  "rgba(255, 206, 86, 1)",
+                  "rgba(255, 206, 86, 1)",
+                  "rgba(255, 206, 86, 1)",
+                ],
+                borderWidth: 1
+              },
+              {
+                label: "주간근무",
+                data: [
+                  eventsData.prev_month_worked_time.day_worktime/60,
+                  eventsData.this_month_worked_time.day_worktime/60,
+                  eventsData.this_month_work_time_left.day_worktime/60,
+                ],
+                backgroundColor: [
+                  "rgba(255, 99, 132, 0.5)",
+                  "rgba(255, 99, 132, 0.5)",
+                  "rgba(255, 99, 132, 0.5)",
+                ],
+                borderColor: [
+                  "rgba(255, 99, 132, 1)",
+                  "rgba(255, 99, 132, 1)",
+                  "rgba(255, 99, 132, 1)",
+                ],
+                borderWidth: 1
+              },
+              {
+                label: "야간근무",
+                data: [
+                  eventsData.prev_month_worked_time.night_worktime/60,
+                  eventsData.this_month_worked_time.night_worktime/60,
+                  eventsData.this_month_work_time_left.night_worktime/60,
+                ],
+                backgroundColor: [
+                  "rgba(54, 162, 235, 0.5)",
+                  "rgba(54, 162, 235, 0.5)",
+                  "rgba(54, 162, 235, 0.5)",
+                ],
+                borderColor: [
+                  "rgba(54, 162, 235, 1)",
+                  "rgba(54, 162, 235, 1)",
+                  "rgba(54, 162, 235, 1)",
+                ],
+                borderWidth: 1
+              },
+            ]
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+  },
+
+  methods: {
+
+  },
+}
 </script>

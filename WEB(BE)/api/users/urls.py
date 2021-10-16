@@ -31,7 +31,7 @@ async def add_user_data(user: UserModel = Body(...)):
 
 
 @router.delete("/{id}", response_description="user data deleted from the database")
-async def delete_user_data(id: int):
+async def delete_user_data(id: str):
     deleted_user = await delete_user(id)
     return ResponseModel("user with ID: {} removed".format(id), "user deleted successfully") \
         if deleted_user \
@@ -39,7 +39,7 @@ async def delete_user_data(id: int):
 
 
 @router.put("/{id}")
-async def update_user(id: int, req: UpdateUserModel = Body(...)):
+async def update_user(id: str, req: UpdateUserModel = Body(...)):
     updated_user = await update_user_data(id, req.dict())
     return ResponseModel("user with ID: {} name update is successful".format(id),
                          "user name updated successfully") \

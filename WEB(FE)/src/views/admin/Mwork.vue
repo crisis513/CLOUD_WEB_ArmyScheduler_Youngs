@@ -279,6 +279,7 @@
       work: {
         "work_id": 0,
         "work_name": null,
+        "worker_list": [],
         "work_setting": [],
         "work_option1": 0,
         "work_option2": 0,
@@ -306,6 +307,7 @@
         var workForm = {
           "work_id": work.work_id,
           "work_name": work.work_name,
+          "worker_list": work.worker_list,
           "work_setting": work.work_setting,
           "work_option1": work.work_option1,
           "work_option2": work.work_option2,
@@ -330,6 +332,7 @@
         var workForm = {
           "work_id": this.works.length + 1,
           "work_name": document.getElementById('work_name').value,
+          "worker_list": [],
           "work_setting": [{
             "start_time": "00:00", 
             "end_time": "00:00", 

@@ -3,6 +3,8 @@ def user_helper(user) -> dict:
         "name": user['name'],
         "user_id": user['user_id'],
         "password": user['password'],
+        "email": user['email'],
+        "is_admin": user['is_admin'],
         "en_date": user['en_date'],
         "de_date": user['de_date'],
         "now_class": user['now_class'],
@@ -12,15 +14,23 @@ def user_helper(user) -> dict:
         "position": user['position'],
         "work_list": user['work_list'],
         "vacation": user['vacation'],
-        "total_work_time": user['total_work_time'],
-        "this_mon_work_time": user['this_mon_work_time'],
-        "prev_mon_work_time": user['prev_mon_work_time']
+        "total_worked_time": user['total_worked_time'],
+        "this_month_worked_time": user['this_month_worked_time'],
+        "this_month_work_time_left": user['this_month_work_time_left'],
+        "prev_month_worked_time": user['prev_month_worked_time'],
+        "prev_day_worktime": user['prev_day_worktime'],
+        "prev_night_worktime": user['prev_night_worktime'],
+        "prev_free_worktime": user['prev_free_worktime'],
+        "new_day_worktime": user['new_day_worktime'],
+        "new_night_worktime": user['new_night_worktime'],
+        "new_free_worktime": user['new_free_worktime'],
     }
 
 def work_helper(work) -> dict:
     return {
         "work_id": work['work_id'],
         "work_name": work['work_name'],
+        "worker_list": work['worker_list'],
         "work_setting": work['work_setting'],
         "work_option1": work['work_option1'],
         "work_option2": work['work_option2'],

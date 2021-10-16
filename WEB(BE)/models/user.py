@@ -59,21 +59,32 @@ class UserModel(BaseModel):
                         "description": "청원휴가",
                     }
                 ],
-                "total_work_time": {
-                    "work_time": 0,
-                    "sleep_time": 0,
-                    "personal_time": 0
+                "total_worked_time": {
+                    "day_worktime": 0,
+                    "night_worktime": 0,
+                    "free_worktime": 0
                 },
-                "this_mon_work_time": {
-                    "work_time": 0,
-                    "sleep_time": 0,
-                    "personal_time": 0
+                "this_month_worked_time": {
+                    "day_worktime": 0,
+                    "night_worktime": 0,
+                    "free_worktime": 0
                 },
-                "prev_mon_work_time": {
-                    "work_time": 0,
-                    "sleep_time": 0,
-                    "personal_time": 0
+                "this_month_work_time_left": {
+                    "day_worktime": 0,
+                    "night_worktime": 0,
+                    "free_worktime": 0
                 },
+                "prev_month_worked_time": {
+                    "day_worktime": 0,
+                    "night_worktime": 0,
+                    "free_worktime": 0
+                },
+                "prev_day_worktime": 0,
+                "prev_night_worktime": 0,
+                "prev_free_worktime": 0,
+                "new_day_worktime": 0,
+                "new_night_worktime": 0,
+                "new_free_worktime": 0,
             }
         }
 
@@ -82,6 +93,8 @@ class UpdateUserModel(BaseModel):
     name: Optional[str]
     user_id: Optional[str]
     password: Optional[str]
+    email: Optional[str]
+    is_admin: Optional[bool]
     en_date: Optional[str]
     de_date: Optional[str]
     birth_date: Optional[str]
@@ -92,6 +105,7 @@ class UpdateUserModel(BaseModel):
     position: Optional[str]
     work_list: Optional[list]
     vacation: Optional[list]
+    total_worked_time: Optional[dict]
     this_month_worked_time: Optional[dict]
     this_month_work_time_left: Optional[dict]
     prev_month_worked_time: Optional[dict]
@@ -131,21 +145,32 @@ class UpdateUserModel(BaseModel):
                         "description": "청원휴가",
                     }
                 ],
-                "total_work_time": {
-                    "work_time": 0, 
-                    "sleep_time": 0, 
-                    "personal_time": 0
+                "total_worked_time": {
+                    "day_worktime": 0,
+                    "night_worktime": 0,
+                    "free_worktime": 0
                 },
-                "this_mon_work_time": {
-                    "work_time": 0, 
-                    "sleep_time": 0, 
-                    "personal_time": 0
+                "this_month_worked_time": {
+                    "day_worktime": 0,
+                    "night_worktime": 0,
+                    "free_worktime": 0
                 },
-                "prev_mon_work_time": {
-                    "work_time": 0, 
-                    "sleep_time": 0, 
-                    "personal_time": 0
+                "this_month_work_time_left": {
+                    "day_worktime": 0,
+                    "night_worktime": 0,
+                    "free_worktime": 0
                 },
+                "prev_month_worked_time": {
+                    "day_worktime": 0,
+                    "night_worktime": 0,
+                    "free_worktime": 0
+                },
+                "prev_day_worktime": 0,
+                "prev_night_worktime": 0,
+                "prev_free_worktime": 0,
+                "new_day_worktime": 0,
+                "new_night_worktime": 0,
+                "new_free_worktime": 0,
             }
         }
 

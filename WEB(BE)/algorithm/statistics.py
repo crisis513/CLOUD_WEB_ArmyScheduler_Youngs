@@ -1,6 +1,6 @@
 import datetime
 from pytz import timezone
-import main
+from algorithm import form
 import schedule
 from pymongo import MongoClient
 from typing import List, Tuple
@@ -21,17 +21,17 @@ class Statistics:
         self.now = datetime.datetime.now(timezone('Asia/Seoul'))
         self.last_month = get_last_month(self.now)
 
-    def get_user(self) -> main.Users:
-        user = main.Users.from_dict(self.db.Users.find_one({'user_id': self.user_id}))
-        user.prev_month_worked_time = main.WorkTime(0, 0, 0)
-        user.this_month_worked_time = main.WorkTime(0, 0, 0)
-        user.this_month_work_time_left = main.WorkTime(0, 0, 0)
-        user.total_worked_time = main.WorkTime(0, 0, 0)
+    def get_user(self) -> form.Users:
+        user = form.Users.from_dict(self.db.Users.find_one({'user_id': self.user_id}))
+        user.prev_month_worked_time = form.WorkTime(0, 0, 0)
+        user.this_month_worked_time = form.WorkTime(0, 0, 0)
+        user.this_month_work_time_left = form.WorkTime(0, 0, 0)
+        user.total_worked_time = form.WorkTime(0, 0, 0)
         return user
 
-    def get_event_list(self) -> List[main.Events]:
+    def get_event_list(self) -> List[form.Events]:
         events = self.db.Events.find({'user_id': self.user_id})
-        return [main.Events.from_dict(e) for e in events]
+        return [form.Events.from_dict(e) for e in events]
 
     def update_user_stat(self):
         event_list = self.get_event_list()
@@ -43,6 +43,7 @@ class Statistics:
                 event.event_end_time
             )
             year, month, _ = get_ymd(event.event_start_date.date_string)
+            _, _, day = get_ymd(event.event_end_date.date_string)
             event_end = datetime.datetime.strptime(
                 event.event_end_date.date_string + ' ' + event.event_end_time,
                 '%Y-%m-%d %H:%M'
@@ -56,9 +57,9 @@ class Statistics:
                 self.user.this_month_work_time_left.night_worktime += night_worktime
                 self.user.this_month_work_time_left.free_worktime += free_worktime
             if year == self.last_month.year and month == self.last_month.month:
-                self.user.prev_mon_work_time.day_worktime += day_worktime
-                self.user.prev_mon_work_time.night_worktime += night_worktime
-                self.user.prev_mon_work_time.free_worktime += free_worktime
+                self.user.prev_month_worked_time.day_worktime += day_worktime
+                self.user.prev_month_worked_time.night_worktime += night_worktime
+                self.user.prev_month_worked_time.free_worktime += free_worktime
             if event_end < self.now:
                 self.user.total_worked_time.day_worktime += day_worktime
                 self.user.total_worked_time.night_worktime += night_worktime
@@ -80,6 +81,6 @@ if __name__ == '__main__':
         user_id = 'u' + str(i)
         s = Statistics(user_id)
         s.update_user_stat()
-    users = main.get_total_user_list()
+    users = form.get_total_user_list()
     for user in users.values():
         print(user.user_id, user.name, user.prev_month_worked_time.asdict(), user.this_month_worked_time.asdict(), user.this_month_work_time_left.asdict(), user.total_worked_time.asdict())

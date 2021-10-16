@@ -320,6 +320,8 @@
       name: null,
       user_id: null,
       password: null,
+      email: null,
+      is_admin: false,
       en_date: null,
       de_date: null,
       birth_date: null,
@@ -332,9 +334,15 @@
       works: [],
       work_list: [],
       vacation: [],
-      total_work_time: {"work_time": 0, "sleep_time": 0, "personal_time": 0},
-      this_mon_work_time: {"work_time": 0, "sleep_time": 0, "personal_time": 0},
-      prev_mon_work_time: {"work_time": 0, "sleep_time": 0, "personal_time": 0},
+      this_month_worked_time: {},
+      this_month_work_time_left: {},
+      prev_month_worked_time: {},
+      prev_day_worktime: 0,
+      prev_night_worktime: 0,
+      prev_free_worktime: 0,
+      new_day_worktime: 0,
+      new_night_worktime: 0,
+      new_free_worktime: 0,
 
       start_date: null,
       end_date: null,
@@ -353,6 +361,7 @@
         .then((res) => {
           let usersData = res.data["data"][0];
           this.treeData = usersData;
+          console.log(usersData)
         })
         .catch((error) => {
           console.error(error);
@@ -380,6 +389,8 @@
           this.name = item[0].name
           this.user_id = item[0].user_id
           this.password = item[0].password
+          this.email = item[0].email
+          this.is_admin = item[0].is_admin
           this.en_date = item[0].en_date
           this.de_date = item[0].de_date
           this.birth_date = item[0].birth_date
@@ -393,9 +404,15 @@
           this.position = item[0].position
           this.work_list = item[0].work_list
           this.vacation = item[0].vacation
-          this.total_work_time = item[0].total_work_time
-          this.this_mon_work_time = item[0].this_mon_work_time
-          this.prev_mon_work_time = item[0].prev_mon_work_time
+          this.this_month_worked_time = item[0].this_month_worked_time
+          this.this_month_work_time_left = item[0].this_month_work_time_left
+          this.prev_month_worked_time = item[0].prev_month_worked_time
+          this.prev_day_worktime = item[0].prev_day_worktime
+          this.prev_night_worktime = item[0].prev_night_worktime
+          this.prev_free_worktime = item[0].prev_free_worktime
+          this.new_day_worktime = item[0].new_day_worktime
+          this.new_night_worktime = item[0].new_night_worktime
+          this.new_free_worktime = item[0].new_free_worktime
         }
       },
       saveForm: function () {
@@ -404,6 +421,8 @@
             "name": this.name, 
             "user_id": this.user_id, 
             "password": this.password,
+            "email": this.email,
+            "is_admin": this.is_admin,
             "en_date": this.en_date,
             "birth_date": this.birth_date,
             "de_date": this.de_date, 
@@ -414,9 +433,15 @@
             "position": this.position,
             "work_list": this.work_list, 
             "vacation": this.vacation,
-            "total_work_time": this.total_work_time, 
-            "this_mon_work_time": this.this_mon_work_time, 
-            "prev_mon_work_time": this.prev_mon_work_time,
+            "this_month_worked_time": this.this_month_worked_time,
+            "this_month_work_time_left": this.this_month_work_time_left,
+            "prev_month_worked_time": this.prev_month_worked_time,
+            "prev_day_worktime": this.prev_day_worktime,
+            "prev_night_worktime": this.prev_night_worktime,
+            "prev_free_worktime": this.prev_free_worktime,
+            "new_day_worktime": this.new_day_worktime,
+            "new_night_worktime": this.new_night_worktime,
+            "new_free_worktime": this.new_free_worktime,
           }
         ).then(res => {
           console.log(res)

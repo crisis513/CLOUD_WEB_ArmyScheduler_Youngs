@@ -162,3 +162,17 @@
     margin-right: 50px;
 }
 
+div.left {
+    width: 30%;
+    float: left;
+    text-align: center;
+}
+div.center {
+    width: 20%;
+    text-align: center;
+}
+div.right {
+    width: 50%;
+    float: right;
+    text-align: center;
+}

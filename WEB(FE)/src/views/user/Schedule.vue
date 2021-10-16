@@ -644,7 +644,7 @@
       },
       createWorkSchedule () {
         this.loadingDialog = true
-        //this.autoScheduleDialog = false
+        this.autoScheduleDialog = false
       },
       addSchedule () {
         this.addEvent.event_id = this.events.length + 1
