@@ -1,6 +1,10 @@
-![Logo](frontend/src/assets/img/armyscheduler_logo.png)
 
-<h1 align="center">ArmyScheduler by Youngs team</h1>
+<p align="center">
+    <img src="frontend/src/assets/img/armyscheduler_logo.png" alt="logo" width="600" height="185"/>
+</p>
+
+<h1 align="center">Army Scheduler Documentation</h1>
+<h2 align="center">Team Youngs</h2>
 
 <p align="center">
     <img src="https://img.shields.io/badge/version-v1.0.0-orange" alt="version"/>
@@ -9,26 +13,44 @@
 </p>
 <br/>
 
-## 프로잭트 소개
-- 대한민국에 존재하는 대부분의 군부대에서는 미리 작성된 근무표를 통해 정해진 시간에 각자의 근무지에서 일을 합니다. 하지만 작성된 근무표가 얼마나 공정한지, 자신이 얼마나 근무를 서고 있는지, 개인정비시간 및 취침시간을 얼마나 침해받는지를 확인할 수 있는 시스템이 존재하지 않습니다. 그리고 용사들이 휴가를 나가거나 훈련 등 부대 행사가 계획될 때마다 근무표는 계속 수정되기 마련이며 순번도 계속 꼬이게 됩니다. 
-- Army Scheduler 웹 서비스에서 공정한 근무표를 도출함으로써 모든 인원들이 최대한의 휴식 여건을 보장받고, 과중한 업무 부담을 가지는 용사가 생기지 않도록 공정한 근무표를 자동으로 작성해주는 웹 서비스를 개발하고자 합니다.
+## 프로젝트 소개
+대한민국의 거의 모든 군부대에서는 정해진 순번에 따라 미리 작성된 근무표를 통해 정해진 시간에 각자의 근무지에서 일을 합니다. 하지만 용사들의 휴가와 부대 훈련 등으로 근무표가 변경될 때마다 순번은 꼬이기 마련이고 자칫하면 남들보다 근무에 과중하게 투입되는 용사가 발생할 수 있습니다.
+
+Army Scheduler 웹 서비스는 근무표를 수정하느라 지친 간부와 불공정한 근무에 속앓이하는 용사의 목소리를 듣고 세상에 나오게 되었습니다.
 
 ## 기능 설명
- - 개발 중
+### 간부
+- 부대 인원 관리 및 휴가 설정
+- 부대 일정 관리
+- 부대 근무 모니터링
+- 부대 전체 근무 통계 확인 (to-do)
+- 원클릭 근무표 작성
+### 용사
+- 나의 근무 확인
+- 개인 일정 추가
+- 개인 근무 통계 확인 (to-do)
 
 ## 컴퓨터 구성 / 필수 조건 안내 (Prerequisites)
  - 권장: Google Chrome 버젼 77 이상
  - 
 
 ## 기술 스택 (Technique Used) 
+
+###  **Infra**
+
+|<a href = "https://www.docker.com/"><img src = "./doc/images/stack_icons/docker.png" height=70px></a>|
+|:--:|
+|Docker|
 ### Server(back-end)
- - nodejs, php, java 등 서버 언어 버전 
- - express, laravel, sptring boot 등 사용한 프레임워크 
- - DB 등 사용한 다른 프로그램 
+ - Python
+ - Docker
+ - MongoDB
+ - FastAPI
  
 ### Front-end
- - react.js, vue.js 등 사용한 front-end 프레임워크 
- - UI framework
+ - Javascript
+ - SCSS
+ - Vue.js
  - 기타 사용한 라이브러리
 
 ## 설치 안내 (Installation Process)
