@@ -34,6 +34,91 @@
         </div>
       </v-row>
 
+      <v-row
+        justify="center"
+      >
+        <div class="left">
+          <v-simple-table
+            fixed-header
+            height="300px"
+          >
+            <template v-slot:default>
+              <thead>
+                <tr>
+                  <th class="text-center">
+                    근무기준
+                  </th>
+                  <th class="text-center">
+                    {{ barChartData.labels[0] }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr background-color="rgba(255, 206, 86, 0.5)">
+                  <td>{{ barChartData.datasets[0].label }}</td>
+                  <td>{{ barChartData.datasets[0].data[0] }}</td>
+                </tr>
+                <tr background-color="rgba(255, 206, 86, 1)">
+                  <td>{{ barChartData.datasets[1].label }}</td>
+                  <td>{{ barChartData.datasets[1].data[0] }}</td>
+                </tr>
+                <tr background-color="rgba(255, 99, 132, 0.5)">
+                  <td>{{ barChartData.datasets[2].label }}</td>
+                  <td>{{ barChartData.datasets[2].data[0] }}</td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+        </div>
+        <div class="center">
+        </div>
+        <div class="right">
+          <v-simple-table
+            fixed-header
+            height="300px"
+          >
+            <template v-slot:default>
+              <thead>
+                <tr>
+                  <th class="text-center">
+                    근무기준
+                  </th>
+                  <th class="text-center">
+                    {{ barChartData2.labels[0] }}
+                  </th>
+                  <th class="text-center">
+                    {{ barChartData2.labels[1] }}
+                  </th>
+                  <th class="text-center">
+                    {{ barChartData2.labels[2] }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr background-color="rgba(255, 206, 86, 0.5)">
+                  <td>{{ barChartData2.datasets[0].label }}</td>
+                  <td>{{ barChartData2.datasets[0].data[0] }}</td>
+                  <td>{{ barChartData2.datasets[0].data[1] }}</td>
+                  <td>{{ barChartData2.datasets[0].data[2] }}</td>
+                </tr>
+                <tr background-color="rgba(255, 206, 86, 1)">
+                  <td>{{ barChartData2.datasets[1].label }}</td>
+                  <td>{{ barChartData2.datasets[1].data[0] }}</td>
+                  <td>{{ barChartData2.datasets[1].data[1] }}</td>
+                  <td>{{ barChartData2.datasets[1].data[2] }}</td>
+                </tr>
+                <tr background-color="rgba(255, 99, 132, 0.5)">
+                  <td>{{ barChartData2.datasets[2].label }}</td>
+                  <td>{{ barChartData2.datasets[2].data[0] }}</td>
+                  <td>{{ barChartData2.datasets[2].data[1] }}</td>
+                  <td>{{ barChartData2.datasets[2].data[2] }}</td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+        </div>
+        
+      </v-row>
     </v-app>
   </v-app>
 </template>
@@ -79,7 +164,7 @@ export default {
       }
     },
   }),
-
+  
   created () {
     const userssPath = BASE_URL + '/api/v1/users/'    
       axios.get(userssPath + this.user_id, this.user_id)

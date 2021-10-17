@@ -29,6 +29,7 @@ class UserModel(BaseModel):
     new_day_worktime: int = Field(...)
     new_night_worktime: int = Field(...)
     new_free_worktime: int = Field(...)
+    fatigue: int = Field(...)
 
     class Config:
         schema_extra = {
@@ -85,6 +86,7 @@ class UserModel(BaseModel):
                 "new_day_worktime": 0,
                 "new_night_worktime": 0,
                 "new_free_worktime": 0,
+                "fatigue": 0
             }
         }
 
@@ -115,6 +117,7 @@ class UpdateUserModel(BaseModel):
     new_day_worktime: Optional[int]
     new_night_worktime: Optional[int]
     new_free_worktime: Optional[int]
+    fatigue: Optional[int]
 
     class Config:
         schema_extra = {
@@ -171,6 +174,7 @@ class UpdateUserModel(BaseModel):
                 "new_day_worktime": 0,
                 "new_night_worktime": 0,
                 "new_free_worktime": 0,
+                "fatigue": 0
             }
         }
 

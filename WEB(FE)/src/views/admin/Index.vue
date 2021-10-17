@@ -71,9 +71,6 @@
       <md-divider md-inset></md-divider>
       <div class="space-50"></div>
 
-      <div class="title-center">
-        <h2>스케줄 로그</h2>
-      </div>
       <v-simple-table
         fixed-header
         height="300px"
@@ -214,6 +211,7 @@ export default {
       .then((res) => {
         var usersData = res.data["data"][0]
         this.users = usersData
+        console.log(this.users)
       })
       .catch((error) => {
         console.error(error);
@@ -225,8 +223,8 @@ export default {
         var eventsData = res.data["data"][0]
         
         for (let i = 0; i < eventsData.length; i++) {
-          var start_datetime = eventsData[i].event_start_date + " " + eventsData[i].event_start_time
-          var end_datetime = eventsData[i].event_end_date + " " + eventsData[i].event_end_time
+          var start_datetime = eventsData[i].event_start_date.date_string + " " + eventsData[i].event_start_time
+          var end_datetime = eventsData[i].event_end_date.date_string + " " + eventsData[i].event_end_time
 
           if(this.chartStart <= start_datetime || this.chartEnd >= end_datetime || (this.chartStart <= end_datetime && this.chartEnd >= start_datetime)) {
             for (let j = 0; j < this.events.length; j++) {

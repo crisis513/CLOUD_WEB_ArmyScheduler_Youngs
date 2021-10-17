@@ -24,6 +24,7 @@ def user_helper(user) -> dict:
         "new_day_worktime": user['new_day_worktime'],
         "new_night_worktime": user['new_night_worktime'],
         "new_free_worktime": user['new_free_worktime'],
+        "fatigue": user['fatigue'],
     }
 
 def work_helper(work) -> dict:

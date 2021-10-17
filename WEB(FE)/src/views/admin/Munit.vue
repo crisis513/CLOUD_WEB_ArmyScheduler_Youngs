@@ -32,12 +32,21 @@
                 activatable 
                 selected-color="blue"
                 @update:active="updateForm" 
-                :items="treeData">
+                :items="nowTreeData">
               </v-treeview>
               <template slot-scope="{ item }">
                 <a @click="updateForm(item)">{{ item.name }}</a>
               </template>
             </v-card-text>
+            <template>
+              <div class="text-center">
+                <v-pagination
+                  v-model="page"
+                  :length="page_length"
+                  @input="pageClickEvent(page)"
+                ></v-pagination>
+              </div>
+            </template>
           </v-card>
         </div>
 
@@ -316,6 +325,7 @@
     data: () => ({
       currentData: null,
       treeData: null,
+      nowTreeData: [],
 
       name: null,
       user_id: null,
@@ -343,6 +353,7 @@
       new_day_worktime: 0,
       new_night_worktime: 0,
       new_free_worktime: 0,
+      fatigue: 0,
 
       start_date: null,
       end_date: null,
@@ -353,6 +364,8 @@
       result: null,
 
       counter: 2,
+      page: 1,
+      page_length: 1,
     }),
 
     created () {
@@ -361,7 +374,14 @@
         .then((res) => {
           let usersData = res.data["data"][0];
           this.treeData = usersData;
-          console.log(usersData)
+
+          this.page_length = Math.floor(this.treeData.length / 15)
+          for(let i = (this.page * 15) - 1; i < (this.page * 15) + 14; i++) {
+            if(this.treeData[i].length < i) {
+              break;
+            }
+            this.nowTreeData.push(this.treeData[i])
+          }
         })
         .catch((error) => {
           console.error(error);
@@ -413,6 +433,7 @@
           this.new_day_worktime = item[0].new_day_worktime
           this.new_night_worktime = item[0].new_night_worktime
           this.new_free_worktime = item[0].new_free_worktime
+          this.fatigue = item[0].fatigue
         }
       },
       saveForm: function () {
@@ -442,6 +463,7 @@
             "new_day_worktime": this.new_day_worktime,
             "new_night_worktime": this.new_night_worktime,
             "new_free_worktime": this.new_free_worktime,
+            "fatigue": this.fatigue,
           }
         ).then(res => {
           console.log(res)
@@ -462,6 +484,15 @@
       deleteTableRow: function (idx) { 
         this.counter--
         this.vacation.splice(idx, 1)
+      },
+      pageClickEvent (page) {
+        this.nowTreeData = []
+        for(let i = (page * 15) - 1; i < (page * 15) + 14; i++) {
+          if(this.treeData[i].length < i) {
+            break;
+          }
+          this.nowTreeData.push(this.treeData[i])
+        }
       }
     },
   }

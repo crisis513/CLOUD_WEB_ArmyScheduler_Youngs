@@ -396,7 +396,7 @@
                         label="시작일*"
                         required
                         hint="2021-10-01"
-                        v-model="event_start_date"
+                        v-model="event_start_date.date_string"
                       ></v-text-field>
                     </v-col>
                     <v-col
@@ -408,7 +408,7 @@
                         label="종료일*"
                         required
                         hint="2021-10-31"
-                        v-model="event_end_date"
+                        v-model="event_end_date.date_string"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -778,10 +778,16 @@
       createWorkSchedule () {
         this.loadingDialog = true
         const schedulePath = BASE_URL + '/api/v1/schedule/'
+        
+        var consider_date = new Date(this.event_start_date.date_string) - (1000 * 60 * 60 * 24 * 30);  // 30일
+        var considerString = consider_date.getFullYear() + '-' 
+            + ('0' + (consider_date.getMonth() + 1)).slice(-2)  
+            + '-' + ('0' + consider_date.getDate()).slice(-2);
+        
         axios.post(schedulePath, {
-            "consider_from_date": '2021-10-01',
-            "start_date": '2021-10-13',
-            "end_date": '2021-11-12'
+            "consider_from_date": considerString,
+            "start_date": this.event_start_date.date_string,
+            "end_date": this.event_end_date.date_string
           })
           .then((res) => {
             console.log(res)
