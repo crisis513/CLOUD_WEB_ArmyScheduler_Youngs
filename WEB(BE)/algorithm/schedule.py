@@ -177,7 +177,7 @@ class Scheduler:
                 self.user_list[work_id][uid].prev_free_worktime += free_worktime
                 self.user_list[work_id][uid].fatigue += fatigue
                 # self.base_fatigue[work_id] += fatigue
-                self.user_list[work_id][uid].work_day_list.append(event.event_start_date.date)
+                self.user_list[work_id][uid].last_work_day = max(self.user_list[work_id][uid].last_work_day, event.event_start_date.date)
 
     def create_empty_event_list(self):
         for work_id, work in self.total_work_list.items():

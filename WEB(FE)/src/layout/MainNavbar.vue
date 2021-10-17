@@ -8,7 +8,7 @@
   >
     <div class="md-toolbar-row">
       <div class="md-toolbar-section-start">
-        <a href="/">
+        <a href="/#/user/">
           <img
             class="navbar-logo"
             src="../assets/img/armyscheduler_logo.png"
@@ -25,17 +25,17 @@
 
         <div class="md-collapse">
           <md-list>
-            <md-list-item href="/#/">
+            <md-list-item href="/#/user/">
               <md-icon>home</md-icon>
               <p>홈</p>
             </md-list-item>
 
-            <md-list-item href="/#/schedule">
+            <md-list-item href="/#/user/schedule">
               <md-icon>schedule</md-icon>
               <p>일정</p>
             </md-list-item>
 
-            <md-list-item href="/#/statistics">
+            <md-list-item href="/#/user/statistics">
               <md-icon>person</md-icon>
               <p>통계</p>
             </md-list-item>
