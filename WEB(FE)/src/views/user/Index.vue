@@ -20,12 +20,22 @@
         <h2>뭐넣지</h2>
       </div>
 
+      <div class="left49">
+        <h3>오늘의 근무</h3>
+      </div>
+      <md-divider class="vertical-divider"></md-divider>
+      <div class="right49">
+        <h3>전역일 계산</h3>
+      </div>
 
+      <div class="space-50"></div>
+      <div class="space-50"></div>
       <div class="space-50"></div>
       <md-divider md-inset></md-divider>
-      <div class="space-50"></div>
+      <div class="space-50">
 
 
+      </div>
     </div>
   </div>
 </template>
@@ -33,7 +43,6 @@
 <script>
 import axios from 'axios';
 const BASE_URL = 'https://osamhack2021-cloud-web-armyscheduler-youngs-xr4vx9w4fvg7p-3000.githubpreview.dev'
-
 export default {
   components: {
   },
@@ -42,7 +51,7 @@ export default {
   props: {
     image: {
       type: String,
-      default: require("@/assets/img/vue-mk-header.jpg")
+      default: require("@/assets/img/vue-mk-header2.jpg")
     },
   },
   flag: true,
@@ -51,14 +60,10 @@ export default {
       
     };
   },
-
   created () {
   },
-
   methods: {
-
   },
-
   computed: {
     headerStyle() {
       return {
@@ -72,12 +77,17 @@ export default {
 </script>
 
 <style lang="scss">
+.vertical-divider {
+  border-top-width: 0;
+  border-right-width: 1px;
+  border-right-style: solid;
+  height: 100%;
+}
 .section-download {
   .md-button + .md-button {
     margin-left: 5px;
   }
 }
-
 @media all and (min-width: 991px) {
   .btn-container {
     display: flex;

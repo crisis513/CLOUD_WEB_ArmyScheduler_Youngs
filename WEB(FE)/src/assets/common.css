@@ -176,3 +176,14 @@ div.right {
     float: right;
     text-align: center;
 }
+
+.left49 {
+    width: 49%;
+    float: left;
+    text-align: center;
+}
+.right49 {
+    width: 49%;
+    float: right;
+    text-align: center;
+}

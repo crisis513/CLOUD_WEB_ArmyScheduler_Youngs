@@ -2,19 +2,18 @@ import Vue from "vue";
 import Router from "vue-router";
 
 import AdminIndex from "./views/admin/Index.vue";
-import AdminSchedule from "./views/admin/Schedule.vue";
 import AdminMunit from "./views/admin/Munit.vue";
 import AdminMwork from "./views/admin/Mwork.vue";
 
-import Index from "./views/user/Index.vue";
-import Schedule from "./views/user/Schedule.vue";
-import Statistics from "./views/user/Statistics.vue";
+import UserIndex from "./views/user/Index.vue";
+import UserSchedule from "./views/user/Schedule.vue";
+import UserStatistics from "./views/user/Statistics.vue";
 
-import Landing from "./views/Landing.vue";
+import Index from "./views/Index.vue";
 import Login from "./views/Login.vue";
 import Signup from "./views/Signup.vue";
-import Profile from "./views/Profile.vue";
 
+import CleanNavbar from "./layout/CleanNavbar.vue";
 import NoUserNavbar from "./layout/NoUserNavbar.vue";
 import AdminMainNavbar from "./layout/AdminMainNavbar.vue";
 import MainNavbar from "./layout/MainNavbar.vue";
@@ -25,27 +24,27 @@ Vue.use(Router);
 export default new Router({
   routes: [
     {
-      path: "/",
+      path: "/user/",
       name: "index",
-      components: { default: Index, header: MainNavbar, footer: MainFooter },
+      components: { default: UserIndex, header: MainNavbar, footer: MainFooter },
       props: {
         header: { colorOnScroll: 400 },
         footer: { backgroundColor: "black" }
       }
     },
     {
-      path: "/schedule",
+      path: "/user/schedule",
       name: "schedule",
-      components: { default: Schedule, header: MainNavbar, footer: MainFooter },
+      components: { default: UserSchedule, header: MainNavbar, footer: MainFooter },
       props: {
         header: { colorOnScroll: 400 },
         footer: { backgroundColor: "black" }
       }
     },
     {
-      path: "/statistics",
+      path: "/user/statistics",
       name: "statistics",
-      components: { default: Statistics, header: MainNavbar, footer: MainFooter },
+      components: { default: UserStatistics, header: MainNavbar, footer: MainFooter },
       props: {
         header: { colorOnScroll: 400 },
         footer: { backgroundColor: "black" }
@@ -55,15 +54,6 @@ export default new Router({
       path: "/admin",
       name: "admin-index",
       components: { default: AdminIndex, header: AdminMainNavbar, footer: MainFooter },
-      props: {
-        header: { colorOnScroll: 400 },
-        footer: { backgroundColor: "black" }
-      }
-    },
-    {
-      path: "/admin/schedule",
-      name: "admin-schedule",
-      components: { default: AdminSchedule, header: AdminMainNavbar, footer: MainFooter },
       props: {
         header: { colorOnScroll: 400 },
         footer: { backgroundColor: "black" }
@@ -88,9 +78,9 @@ export default new Router({
       }
     },
     {
-      path: "/landing",
-      name: "landing",
-      components: { default: Landing, header: MainNavbar, footer: MainFooter },
+      path: "/",
+      name: "index",
+      components: { default: Index, header: NoUserNavbar, footer: MainFooter },
       props: {
         header: { colorOnScroll: 400 },
         footer: { backgroundColor: "black" }
@@ -99,7 +89,7 @@ export default new Router({
     {
       path: "/login",
       name: "login",
-      components: { default: Login, header: NoUserNavbar, footer: MainFooter },
+      components: { default: Login, header: CleanNavbar, footer: MainFooter },
       props: {
         header: { colorOnScroll: 400 }
       }
@@ -107,18 +97,9 @@ export default new Router({
     {
       path: "/signup",
       name: "signup",
-      components: { default: Signup, header: NoUserNavbar, footer: MainFooter },
+      components: { default: Signup, header: CleanNavbar, footer: MainFooter },
       props: {
         header: { colorOnScroll: 400 }
-      }
-    },
-    {
-      path: "/profile",
-      name: "profile",
-      components: { default: Profile, header: MainNavbar, footer: MainFooter },
-      props: {
-        header: { colorOnScroll: 400 },
-        footer: { backgroundColor: "black" }
       }
     }
   ],
