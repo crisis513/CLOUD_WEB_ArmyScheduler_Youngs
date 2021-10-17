@@ -595,7 +595,8 @@ def create_custom_db():
             prev_free_worktime = 0,
             new_day_worktime = 0,
             new_night_worktime = 0,
-            new_free_worktime = 0
+            new_free_worktime = 0,
+            fatigue = 0
         )
         create_user(db, user)
     print('Users created')

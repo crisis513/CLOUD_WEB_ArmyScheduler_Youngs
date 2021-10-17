@@ -128,8 +128,21 @@ class Scheduler:
         self.max_events_per_schedule: Final[int] = 100000
         self.unfairness_threshold: Final[int] = 0 # To-do: any good heuristics?
         self.cnt: int = 0
+        self.remove_future_works()
         self.init_event_id()
         self.init_user_list()
+    
+    def remove_future_works(self):
+        client = MongoClient('mongodb://localhost:27017/') # for local test
+        db = form.db_init(client)
+        db.Events.delete_many(
+            {
+                '$and': [
+                    {'event_start_date.date': { '$gte': self.start_date } },
+                    {'event_type': 0}
+                ]
+            }
+        )
 
     def init_event_id(self):
         max_event_id = 0
