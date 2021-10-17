@@ -177,13 +177,17 @@ div.right {
     text-align: center;
 }
 
-.left49 {
-    width: 49%;
+.left45 {
+    width: 45%;
     float: left;
     text-align: center;
 }
-.right49 {
-    width: 49%;
+.right45 {
+    width: 45%;
     float: right;
     text-align: center;
+}
+
+.table-padding {
+    padding-right: 30px;
 }

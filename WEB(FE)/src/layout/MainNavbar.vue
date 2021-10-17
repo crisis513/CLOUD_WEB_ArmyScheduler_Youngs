@@ -30,11 +30,6 @@
               <p>홈</p>
             </md-list-item>
 
-            <md-list-item href="/#/user/schedule">
-              <md-icon>schedule</md-icon>
-              <p>일정</p>
-            </md-list-item>
-
             <md-list-item href="/#/user/statistics">
               <md-icon>person</md-icon>
               <p>통계</p>

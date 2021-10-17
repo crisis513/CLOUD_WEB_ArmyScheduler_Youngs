@@ -6,7 +6,6 @@ import AdminMunit from "./views/admin/Munit.vue";
 import AdminMwork from "./views/admin/Mwork.vue";
 
 import UserIndex from "./views/user/Index.vue";
-import UserSchedule from "./views/user/Schedule.vue";
 import UserStatistics from "./views/user/Statistics.vue";
 
 import Index from "./views/Index.vue";
@@ -27,15 +26,6 @@ export default new Router({
       path: "/user/",
       name: "index",
       components: { default: UserIndex, header: MainNavbar, footer: MainFooter },
-      props: {
-        header: { colorOnScroll: 400 },
-        footer: { backgroundColor: "black" }
-      }
-    },
-    {
-      path: "/user/schedule",
-      name: "schedule",
-      components: { default: UserSchedule, header: MainNavbar, footer: MainFooter },
       props: {
         header: { colorOnScroll: 400 },
         footer: { backgroundColor: "black" }

@@ -412,6 +412,7 @@
                 v-on="on"
                 max-width="150px"
                 color="warning"
+                @click="autoCreateWorkButtonClik()"
               >
                 근무표 자동 생성
               </v-btn>
@@ -429,7 +430,7 @@
                       md="4"
                     >
                       <v-text-field
-                        label="시작일*"
+                        label="시작일자*"
                         required
                         hint="2021-10-01"
                         v-model="event_start_date.date_string"
@@ -441,7 +442,7 @@
                       md="4"
                     >
                       <v-text-field
-                        label="종료일*"
+                        label="종료일자*"
                         required
                         hint="2021-10-31"
                         v-model="event_end_date.date_string"
@@ -937,15 +938,11 @@
         this.loadingDialog = true
         const schedulePath = BASE_URL + '/api/v1/schedule/'
         
-        var consider_date = new Date(Date.now() + (1000 * 60 * 60 * 30));  // 30일전
+        var consider_date = new Date(Date.now() - (1000 * 60 * 60 * 24 * 30));  // 30일전
         var considerString = consider_date.getFullYear() + '-' 
             + ('0' + (consider_date.getMonth() + 1)).slice(-2)  
             + '-' + ('0' + consider_date.getDate()).slice(-2);
-        console.log({
-            "consider_from_date": considerString,
-            "start_date": this.event_start_date.date_string,
-            "end_date": this.event_end_date.date_string
-          })
+
         axios.post(schedulePath, {
             "consider_from_date": considerString,
             "start_date": this.event_start_date.date_string,
@@ -967,6 +964,7 @@
         this.addEvent.event_start_date.date = new Date(this.addEvent.event_start_date.date_string).getTime()
         this.addEvent.event_end_date.date = new Date(this.addEvent.event_end_date.date_string).getTime()
         const eventsPath = BASE_URL + '/api/v1/events/'
+
         axios.post(eventsPath, this.addEvent)
           .then((res) => {
             console.log(res.data)
@@ -1083,6 +1081,20 @@
         this.chartStart = dateString2 + " " + timeString200
         this.chartEnd = tomorrow_dateString + " " + timeString600
       },
+      autoCreateWorkButtonClik () {
+        var today = new Date();
+        var year = today.getFullYear();
+        var month = ('0' + (today.getMonth() + 1)).slice(-2);
+        var day = ('0' + today.getDate()).slice(-2);
+
+        var today30 = new Date(Date.now() + (1000 * 60 * 60 * 24 * 30));  // 30일후
+        var year30 = today30.getFullYear();
+        var month30 = ('0' + (today30.getMonth() + 1)).slice(-2);
+        var day30 = ('0' + today30.getDate()).slice(-2);
+
+        this.event_start_date.date_string = year + '-' + month  + '-' + day;
+        this.event_end_date.date_string = year30 + '-' + month30  + '-' + day30;
+      }
     },
   }
 </script>

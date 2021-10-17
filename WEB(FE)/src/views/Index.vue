@@ -6,12 +6,9 @@
           <div
             class="md-layout-item md-size-50 md-small-size-70 md-xsmall-size-100"
           >
-            <h1 class="title">Your Story Starts With Us.</h1>
+            <h1 class="title">원클릭 근무표</h1>
             <h4>
-              Every landing page needs a small description after the big bold
-              title, that's why we added this text here. Add here all the
-              information that can make you or your product create the first
-              impression.
+              Army Scheduler는 근무표를 수정하느라 지친 간부와 불공정한 근무에 속앓이하는 용사들의 문제를 해결하고자 세상에 나오게 되었습니다.
             </h4>
             <br />
             <md-button
@@ -34,8 +31,8 @@
               <h2 class="title text-center">Army Scheduler 소개</h2>
               <h5 class="description">
                 대한민국의 거의 모든 군부대에서는 정해진 순번에 따라 미리 작성된 근무표를 통해 정해진 시간에 각자의 근무지에서 일을 합니다.
-                하지만 용사들의 휴가와 부대 훈련 등으로 근무표가 변경될 때마다 순번은 꼬이기 마련이고 자칫하면 남들보다 근무에 과중하게 투입되는 용사가 발생할 수 있습니다.
-                Army Scheduler 웹 서비스는 근무표를 수정하느라 지친 간부와 불공정한 근무에 속앓이하는 용사의 목소리를 듣고 세상에 나오게 되었습니다.
+                하지만 용사들의 휴가와 부대 훈련 등으로 근무표가 변경될 때마다 순번은 꼬이기 마련이고 자칫하면 남들보다 과중하게 근무 투입되는 용사가 발생하는 경우가 많습니다.
+                Army Scheduler을 통해 간편하고 공정한 근무를 생성하여 이러한 문제들을 해결할 수 있습니다.
               </h5>
             </div>
           </div>
@@ -83,7 +80,7 @@
       </div>
       <div class="section text-center">
         <div class="container">
-          <h2 class="title">Youngs team</h2>
+          <h2 class="title text-center">개발인력</h2>
           <div class="team">
             <div class="md-layout">
               <div class="md-layout-item md-medium-size-33 md-small-size-100">
@@ -97,10 +94,10 @@
                       />
                     </div>
                     <h4 class="card-title">
-                      Chang-rim Lee
+                      이창림
                       <br />
                       <small class="card-description text-muted">
-                        Backend, Database
+                        백엔드, 데이터베이스
                       </small>
                     </h4>
 
@@ -147,10 +144,10 @@
                       />
                     </div>
                     <h4 class="card-title">
-                      Han-gi Son
+                      손한기
                       <br />
                       <small class="card-description text-muted">
-                        Frontend, Infra
+                        프론트엔드, 인프라
                       </small>
                     </h4>
 
@@ -194,7 +191,7 @@ export default {
   props: {
     header: {
       type: String,
-      default: require("@/assets/img/bg3.jpg")
+      default: require("@/assets/img/bg6.jpg")
     },
     teamImg1: {
       type: String,
@@ -202,12 +199,8 @@ export default {
     },
     teamImg2: {
       type: String,
-      default: require("@/assets/img/young-man.png")
+      default: require("@/assets/img/young-man2.png")
     },
-    teamImg3: {
-      type: String,
-      default: require("@/assets/img/young-man.png")
-    }
   },
   data() {
     return {

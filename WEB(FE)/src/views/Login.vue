@@ -101,8 +101,10 @@
           })
         .then((res) => {
           console.log(res)
-          if(res.data["access_token"] !== null) {
+          if(res.data == "Incorrect email or password") {
             this.$router.push('admin')
+          } else {
+            this.$router.push('user')
           }
         })
         .catch((error) => {
