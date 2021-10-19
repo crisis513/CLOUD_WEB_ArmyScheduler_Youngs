@@ -102,9 +102,9 @@
         .then((res) => {
           console.log(res)
           if(res.data == "Incorrect email or password") {
-            this.$router.push('admin')
-          } else {
             this.$router.push('user')
+          } else {
+            this.$router.push('admin')
           }
         })
         .catch((error) => {

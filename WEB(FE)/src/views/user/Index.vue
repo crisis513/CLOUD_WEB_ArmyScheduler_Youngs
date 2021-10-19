@@ -383,6 +383,22 @@
                   <v-row align="center">
                     <v-col cols="3">
                       <v-subheader>
+                        제목색깔
+                      </v-subheader>
+                    </v-col>
+                    <v-col cols="6">
+                      <v-text-field
+                        v-model="addEvent.event_color"
+                        placeholder="#RRGGBB"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-container>
+
+                <v-container fluid>
+                  <v-row align="center">
+                    <v-col cols="3">
+                      <v-subheader>
                         일시
                       </v-subheader>
                     </v-col>
@@ -703,7 +719,7 @@
         }).catch((ex) => {
           console.warn("Error: ", ex)
         })
-        //location.reload()
+        location.reload()
       },
       deleteCalendar (event_id) {
         const eventsPath = BASE_URL + '/api/v1/events/'

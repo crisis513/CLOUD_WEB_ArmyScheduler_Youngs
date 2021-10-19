@@ -532,6 +532,22 @@
                     </v-col>
                   </v-row>
                 </v-container>
+                
+                <v-container fluid>
+                  <v-row align="center">
+                    <v-col cols="3">
+                      <v-subheader>
+                        제목색깔
+                      </v-subheader>
+                    </v-col>
+                    <v-col cols="6">
+                      <v-text-field
+                        v-model="addEvent.event_color"
+                        placeholder="#RRGGBB"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-container>
 
                 <v-container fluid>
                   <v-row align="center">
@@ -894,7 +910,7 @@
       loadingDialog (val) {
         if (!val) return
 
-        setTimeout(() => (this.loadingDialog = false), 3000)
+        setTimeout(() => (this.loadingDialog = false), 5000)
       },
     },
 
@@ -950,13 +966,13 @@
           })
           .then((res) => {
             console.log(res)
+            location.reload()
           })
           .catch((error) => {
             console.error(error);
           });
 
         this.addScheduleDialog = false
-        //location.reload()
       },
       addSchedule () {
         this.addEvent.event_id = this.events.length + 1
