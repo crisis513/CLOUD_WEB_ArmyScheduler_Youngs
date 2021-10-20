@@ -361,7 +361,10 @@ class Events(object):
 
 def int_to_date(date: int) -> str:
     base_date = datetime.datetime.fromisoformat('1970-01-01')
-    cur_date = base_date + datetime.timedelta(days=date)
+    try:
+        cur_date = base_date + datetime.timedelta(days=date)
+    except:
+        print(date)
     return datetime.datetime.strftime(cur_date, '%Y-%m-%d')
 
 def date_to_int(date: str) -> int:

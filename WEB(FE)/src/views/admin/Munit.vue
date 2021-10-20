@@ -344,6 +344,7 @@
       works: [],
       work_list: [],
       vacation: [],
+      total_worked_time: {},
       this_month_worked_time: {},
       this_month_work_time_left: {},
       prev_month_worked_time: {},
@@ -424,6 +425,7 @@
           this.position = item[0].position
           this.work_list = item[0].work_list
           this.vacation = item[0].vacation
+          this.total_worked_time = item[0].total_worked_time
           this.this_month_worked_time = item[0].this_month_worked_time
           this.this_month_work_time_left = item[0].this_month_work_time_left
           this.prev_month_worked_time = item[0].prev_month_worked_time
@@ -454,6 +456,7 @@
             "position": this.position,
             "work_list": this.work_list, 
             "vacation": this.vacation,
+            "total_worked_time": this.total_worked_time,
             "this_month_worked_time": this.this_month_worked_time,
             "this_month_work_time_left": this.this_month_work_time_left,
             "prev_month_worked_time": this.prev_month_worked_time,

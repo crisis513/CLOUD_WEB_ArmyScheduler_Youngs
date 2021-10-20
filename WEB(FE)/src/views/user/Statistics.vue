@@ -134,7 +134,7 @@ export default {
     mdbContainer
   },
   data: () => ({
-    user_id: "u19",
+    user_id: "u20",
     barChartData: {},
     barChartData2: {},
     barChartOptions: {

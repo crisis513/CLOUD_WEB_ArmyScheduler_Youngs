@@ -494,6 +494,16 @@
               </v-card-text>
             </v-card>
           </v-dialog>
+
+          <v-alert
+            dense
+            text
+            type="success"
+            v-if="success"
+            @click=""
+          >
+            I'm a dense alert with the <strong>text</strong> prop and a <strong>type</strong> of success
+          </v-alert>
           
           <v-dialog
             v-model="addScheduleDialog"
@@ -757,6 +767,7 @@
       counter: 1,
       switch1: false,
       scheduleResponse: [],
+      success: false,
     }),
 
     created () {
@@ -1014,13 +1025,13 @@
           "tags": event.tags,
           "event_color": event.event_color,
           "event_start_date": {
-            "date": new Date(event.str_start_date).getTime(),
+            "date": Math.floor(new Date(event.str_start_date).getTime() / (1000 * 60 * 60 * 24)),
             "date_string": event.str_start_date,
             "isHoliday": false
           },
           "event_start_time": event.str_start_time,
           "event_end_date": {
-            "date": new Date(event.str_end_date).getTime(),
+            "date": Math.floor(new Date(event.str_end_date).getTime() / (1000 * 60 * 60 * 24)),
             "date_string": event.str_end_date,
             "isHoliday": false
           },
@@ -1031,7 +1042,7 @@
         }).catch((ex) => {
           console.warn("Error: ", ex)
         })
-        location.reload()
+        //location.reload()
       },
       deleteCalendar (event_id) {
         const eventsPath = BASE_URL + '/api/v1/events/'

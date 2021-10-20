@@ -523,7 +523,7 @@
       selectedEvent: {},
       selectedElement: null,
       selectedOpen: false,
-      user_id: "u10",
+      user_id: "u20",
       events: [],
       addEvent: {
         "event_id": null,
@@ -665,8 +665,8 @@
       addSchedule () {
         this.addEvent.event_id = this.events.length + 1
         this.addEvent.user_id.push(this.user_id)
-        this.addEvent.event_start_date.date = new Date(this.addEvent.event_start_date.date_string).getTime()
-        this.addEvent.event_end_date.date = new Date(this.addEvent.event_end_date.date_string).getTime()
+        this.addEvent.event_start_date.date = Math.floor(new Date(this.addEvent.event_start_date.date_string).getTime() / (1000 * 60 * 60 * 24))
+        this.addEvent.event_end_date.date = Math.floor(new Date(this.addEvent.event_end_date.date_string).getTime() / (1000 * 60 * 60 * 24))
         const eventsPath = BASE_URL + '/api/v1/events/'
 
         axios.post(eventsPath, this.addEvent)
@@ -702,13 +702,13 @@
           "tags": event.tags,
           "event_color": event.event_color,
           "event_start_date": {
-            "date": new Date(event.str_start_date).getTime(),
+            "date": Math.floor(new Date(event.str_start_date).getTime() / (1000 * 60 * 60 * 24)),
             "date_string": event.str_start_date,
             "isHoliday": false
           },
           "event_start_time": event.str_start_time,
           "event_end_date": {
-            "date": new Date(event.str_end_date).getTime(),
+            "date": Math.floor(new Date(event.str_end_date).getTime() / (1000 * 60 * 60 * 24)),
             "date_string": event.str_end_date,
             "isHoliday": false
           },

@@ -2,6 +2,8 @@ from copy import deepcopy
 import datetime
 import json
 from algorithm import form
+# import form
+import sys
 from pymongo import MongoClient
 from typing import Dict, List, Final, Tuple
 
@@ -382,9 +384,10 @@ class Scheduler:
             user.last_work_day = tmp
 
 def main2():
-    consider_from_date = '2021-10-01'
-    start_date = '2021-10-13'
-    end_date = '2021-11-12'
+    sys.setrecursionlimit(1000000)
+    consider_from_date = '2021-09-01'
+    start_date = '2021-09-01'
+    end_date = '2021-10-20'
     sch = Scheduler(consider_from_date, start_date, end_date)
     sch.schedule()
     # print(sch.best_schedule)
