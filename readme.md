@@ -82,7 +82,7 @@
     <tbody>
 		<tr>
 			<td width="100%" align="center">
-				<b>개인 근무 통계 확인</b>
+				<b>🏆 개인 근무 통계 확인 🏆</b>
 			</td>
 		</tr>
 		<tr>
