@@ -10,6 +10,12 @@
     <a href="https://github.com/osamhack2021/CLOUD_WEB_ArmyScheduler_Youngs/graphs/contributors"><img alt="Github contributors" src="https://img.shields.io/github/contributors/osamhack2021/CLOUD_WEB_ArmyScheduler_Youngs?color=success"></a>
 </p>
 
+<p align="center">
+    <a href="https://youtu.be/9AgTzQxvgFw"><img src="docs/youtube_icon.png" alt="Youtube에서 보기" width="70px" /></a>
+</p>
+
+
+
 <br/>
 
 ## 🎪 프로젝트 소개
@@ -24,7 +30,7 @@ Army Scheduler는 매번 일일이 근무표를 고치는 간부의 스트레스
 
 <br/>
 
-## 🎯 기능 설명
+## 🎯 기능 소개
 
 ### **간부**
 
@@ -180,7 +186,7 @@ Army Scheduler는 매번 일일이 근무표를 고치는 간부의 스트레스
 
 <br />
 
-## 개발 환경
+## 💻 개발 환경
 
 <table>
     <tbody>
