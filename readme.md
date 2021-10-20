@@ -23,26 +23,25 @@
 
 ### 간부
 
-- 부대 인원 관리 및 휴가 설정
-
 <table>
         <tbody>
-		<tr width="">
-			<td width="50%" align="center">
-				<b>Browser</b>
+		<tr>
+			<td width="200" align="center">
+				<b>부대 일정 관리</b>
 			</td>
             <td width="50%" align="center">
-				<b>Chrome</b>
+				<b>부대 근무 모니터링</b>
 			</td>
 		</tr>
 		<tr>
             <td width="50%" align="center"><img src="docs/t1.jpg"></td>
-            <td width="50%" align="center">✅</td>
+            <td width="50%" align="center"><img src="docs/t2.jpg"></td>
         </tr>
    </tbody>
 </table>
+<br />
 
-- 부대 일정 관리
+- 부대 인원 관리 및 휴가 설정
 - 부대 근무 모니터링
 - 원클릭 근무표 작성
 
