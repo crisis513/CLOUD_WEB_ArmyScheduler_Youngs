@@ -26,7 +26,7 @@
 <table>
         <tbody>
 		<tr>
-			<td width="200" align="center">
+			<td width="50%" align="center">
 				<b>부대 일정 관리</b>
 			</td>
             <td width="50%" align="center">
@@ -39,11 +39,42 @@
         </tr>
    </tbody>
 </table>
+
 <br />
 
-- 부대 인원 관리 및 휴가 설정
-- 부대 근무 모니터링
-- 원클릭 근무표 작성
+<table>
+        <tbody>
+		<tr>
+			<td width="50%" align="center">
+				<b>부대 인원 관리</b>
+			</td>
+            <td width="50%" align="center">
+				<b>휴가 설정</b>
+			</td>
+		</tr>
+		<tr>
+            <td width="50%" align="center"><img src="docs/t3.jpg"></td>
+            <td width="50%" align="center"><img src="docs/t4.jpg"></td>
+        </tr>
+   </tbody>
+</table>
+
+<br />
+
+<table>
+        <tbody>
+		<tr>
+			<td width="100%" align="center">
+				<b>🏆 원클릭 근무표 작성 🏆</b>
+			</td>
+		</tr>
+		<tr>
+            <td width="100%" align="center"><img src="docs/t5.jpg"></td>
+        </tr>
+   </tbody>
+</table>
+
+<br />
 
 ### 용사
 
