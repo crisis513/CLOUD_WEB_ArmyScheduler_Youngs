@@ -175,13 +175,19 @@
 
 <br />
 
-## 서비스 흐름도
+## 🚀 서비스 흐름도
 
 <div align="center"><a href="https://raw.githubusercontent.com/osamhack2021/CLOUD_WEB_ArmyScheduler_Youngs/master/docs/serviceflow.png"><img src="docs/serviceflow.png"></a></div>
 
 <br />
 
-## 설치 안내 (Installation Process)
+## 💾 데이터베이스 설계
+
+<div align="center"><a href="https://raw.githubusercontent.com/osamhack2021/CLOUD_WEB_ArmyScheduler_Youngs/master/docs/db.png"><img src="docs/db.png"></a></div>
+
+<br />
+
+## ⚡ 설치 안내 (Installation Process)
 
 1. Army Scheduler Git 다운로드
 
@@ -221,7 +227,7 @@
     ```
 <br />
 
-## Team Youngs
+## 🗽 Team Youngs
 
 <table width="900">
 <thead>
@@ -270,6 +276,6 @@
 
 <br />
 
-## 저작권 및 사용권 정보 (Copyleft / End User License)
+## ⚠ 저작권 및 사용권 정보 (License)
 
 [MIT](https://github.com/osamhack2021/CLOUD_WEB_ArmyScheduler_Youngs/blob/master/license.md) License Copyright (c) 2021 Army Scheduler
