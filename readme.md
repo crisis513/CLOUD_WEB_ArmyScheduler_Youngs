@@ -24,7 +24,22 @@
 ### 간부
 
 <table>
-        <tbody>
+    <tbody>
+		<tr>
+			<td width="100%" align="center">
+				<b>🏆 원클릭 근무표 작성 🏆</b>
+			</td>
+		</tr>
+		<tr>
+            <td width="100%" align="center"><img src="docs/t5.jpg"></td>
+        </tr>
+   </tbody>
+</table>
+
+<br />
+
+<table>
+    <tbody>
 		<tr>
 			<td width="50%" align="center">
 				<b>부대 일정 관리</b>
@@ -43,7 +58,7 @@
 <br />
 
 <table>
-        <tbody>
+    <tbody>
 		<tr>
 			<td width="50%" align="center">
 				<b>부대 인원 관리</b>
@@ -61,33 +76,42 @@
 
 <br />
 
+### 용사
+
 <table>
-        <tbody>
+    <tbody>
 		<tr>
 			<td width="100%" align="center">
-				<b>🏆 원클릭 근무표 작성 🏆</b>
+				<b>개인 근무 통계 확인</b>
 			</td>
 		</tr>
 		<tr>
-            <td width="100%" align="center"><img src="docs/t5.jpg"></td>
+            <td width="100%" align="center"><img src="docs/t6.jpg"></td>
         </tr>
    </tbody>
 </table>
 
 <br />
 
-### 용사
-
-- 나의 근무 확인
-- 개인 일정 추가
-- 개인 근무 통계 확인
+<table>
+    <tbody>
+		<tr>
+			<td width="100%" align="center">
+				<b>개인 일정 관리</b>
+			</td>
+		</tr>
+		<tr>
+            <td width="100%" align="center"><img src="docs/t7.jpg"></td>
+        </tr>
+   </tbody>
+</table>
 
 <br />
 
 ## 📣 컴퓨터 구성 / 필수 조건 안내 (Prerequisites)
 
 <table>
-        <tbody>
+    <tbody>
 		<tr>
 			<td>
 				<b>Browser</b><br />
