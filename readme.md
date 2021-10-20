@@ -86,7 +86,7 @@
 			</td>
 		</tr>
 		<tr>
-            <td width="100%" align="center"><img src="docs/t6.jpg"></td>
+            <td width="100%" align="center"><img src="docs/x6.jpg"></td>
         </tr>
    </tbody>
 </table>
@@ -101,7 +101,7 @@
 			</td>
 		</tr>
 		<tr>
-            <td width="100%" align="center"><img src="docs/t7.jpg"></td>
+            <td width="100%" align="center"><img src="docs/x7.jpg"></td>
         </tr>
    </tbody>
 </table>
