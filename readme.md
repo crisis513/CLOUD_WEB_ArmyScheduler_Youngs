@@ -24,9 +24,26 @@
 ### 간부
 
 - 부대 인원 관리 및 휴가 설정
+
+<table>
+        <tbody>
+		<tr width="">
+			<td width="50%" align="center">
+				<b>Browser</b>
+			</td>
+            <td width="50%" align="center">
+				<b>Chrome</b>
+			</td>
+		</tr>
+		<tr>
+            <td width="50%" align="center"><img src="docs/t1.jpg"></td>
+            <td width="50%" align="center">✅</td>
+        </tr>
+   </tbody>
+</table>
+
 - 부대 일정 관리
 - 부대 근무 모니터링
-- 부대 전체 근무 통계 확인
 - 원클릭 근무표 작성
 
 ### 용사
@@ -39,8 +56,44 @@
 
 ## 📣 컴퓨터 구성 / 필수 조건 안내 (Prerequisites)
 
- - 권장: Google Chrome 버전 77 이상
- - 향후 테스트 예정
+<table>
+        <tbody>
+		<tr>
+			<td>
+				<b>Browser</b><br />
+                <b>Version</b>
+			</td>
+            <td>
+				<b>Chrome</b><br />
+                <b>87</b>
+			</td>
+            <td>
+				<b>Edge</b><br />
+                <b>87</b>
+			</td>
+            <td>
+				<b>Firefox</b><br />
+                <b>85</b>
+			</td>
+            <td>
+				<b>Opera</b><br />
+                <b>72</b>
+			</td>
+            <td>
+				<b>IE</b><br />
+                <b>11</b>
+			</td>
+		</tr>
+		<tr>
+            <td>기능 지원</td>
+            <td>✅</td>
+            <td>✅</td>
+            <td>✅</td>
+            <td>✅</td>
+            <td>❌</td>
+        </tr>
+   </tbody>
+</table>
 
 <br />
 
