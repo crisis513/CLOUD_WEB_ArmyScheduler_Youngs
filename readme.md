@@ -1,7 +1,7 @@
 <h1 align="center">Army Scheduler Documentation</h1>
 
 <p align="center">
-    <img src="WEB(FE)/src/assets/img/armyscheduler_logo.png" alt="logo" width="600" height="185"/>
+    <img src="WEB(FE)/src/assets/img/armyscheduler_logo.png" alt="logo" width="650" height="200"/>
 </p>
 
 <p align="center">
@@ -12,14 +12,14 @@
 
 <br/>
 
-# 프로젝트 소개
+## 🎪 프로젝트 소개
 대한민국에 존재하는 대부분의 군부대에서는 정해진 순번에 따라 미리 작성된 근무표를 통해 주어진 시간에 각자의 근무지에서 일을 합니다. 하지만 용사들의 휴가와 부대 훈련 등 근무표가 변경될 때마다 순번은 꼬이기 마련이고 이러한 일이 반복되다보면 남들보다 더 많은 근무에 투입되는 용사가 많이 발생하곤 합니다.
 
 **Army Scheduler**는 일일히 반복적으로 근무표를 생성하고 수정하고 있는 간부와 불공정한 근무로 인해 속앓이하는 용사들의 문제점을 해소하고 모두에게 도움될 수 있는 **원클릭 근무표 작성** 웹 서비스를 개발하게 되었습니다.
 
 <br/>
 
-# 기능 설명
+## 🎯 기능 설명
 
 ### 간부
 
@@ -37,14 +37,18 @@
 
 <br />
 
-# 컴퓨터 구성 / 필수 조건 안내 (Prerequisites)
+## 📣 컴퓨터 구성 / 필수 조건 안내 (Prerequisites)
 
  - 권장: Google Chrome 버전 77 이상
  - 향후 테스트 예정
 
 <br />
 
-# 기술 스택 (Technique Used) 
+## 💡 기술 스택 (Technique Used) 
+
+<div align="center"><a href="https://raw.githubusercontent.com/osamhack2021/CLOUD_WEB_ArmyScheduler_Youngs/master/docs/architecture.png"><img src="docs/architecture.png"></a></div>
+
+<br />
 
 ### **Infra**
 
@@ -64,7 +68,13 @@
 
 <br />
 
-# 설치 안내 (Installation Process)
+## 서비스 흐름도
+
+<div align="center"><a href="https://raw.githubusercontent.com/osamhack2021/CLOUD_WEB_ArmyScheduler_Youngs/master/docs/serviceflow.png"><img src="docs/serviceflow.png"></a></div>
+
+<br />
+
+## 설치 안내 (Installation Process)
 
 1. Army Scheduler Git 다운로드
 
@@ -104,7 +114,7 @@
     ```
 <br />
 
-# Team Youngs
+## Team Youngs
 
 <table width="900">
 <thead>
@@ -119,7 +129,7 @@
 
 <tbody>
     <tr>
-        <td width="100" align="center"><img src="/image/profile1.png" width="60" height="60"></td>
+        <td width="100" align="center"><img src="docs/profile_L1638.png" width="60" height="60"></td>
         <td width="100" align="center">이창림</td>
         <td width="250">백엔드 개발<br>데이터베이스 개발<br>문서작업 등</td>
         <td width="150" align="center">	
@@ -134,7 +144,7 @@
         </td>
     </tr>
     <tr>
-        <td width="100" align="center"><img src="/image/profile2.png" width="60" height="60"></td>
+        <td width="100" align="center"><img src="docs/profile_crisis513.png" width="60" height="60"></td>
         <td width="100" align="center">손한기</td>
         <td width="250">프론트엔드 개발<br>인프라 구축<br>문서작업 등</td>
         <td width="150" align="center">	
@@ -153,6 +163,6 @@
 
 <br />
 
-# 저작권 및 사용권 정보 (Copyleft / End User License)
+## 저작권 및 사용권 정보 (Copyleft / End User License)
 
 [MIT](https://github.com/osamhack2021/CLOUD_WEB_ArmyScheduler_Youngs/blob/master/license.md) License Copyright (c) 2021 Army Scheduler
